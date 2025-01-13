@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
+    <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex, nofollow">
+        @if (App::environment('production') || App::environment('staging'))
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        @endif
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name', 'Volta Asia') }}</title>
+        
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico')}}">
+        <link rel="apple-touch-icon" href="{{ asset('favicon.ico')}}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

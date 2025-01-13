@@ -2,9 +2,12 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { IconMail } from '@tabler/icons-vue';
+import InputIconWrapper from '@/Components/InputIconWrapper.vue';
+
 
 defineProps({
     status: {
@@ -15,6 +18,7 @@ defineProps({
 const form = useForm({
     email: '',
 });
+
 
 const submit = () => {
     form.post(route('password.email'));
@@ -39,29 +43,47 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+            <div class="grid gap-6 py-2">
+                <div class="space-y-2">
+                    <InputIconWrapper>
+                        <template #icon>
+                            <IconMail :size="20"/>
+                        </template>
+                        <InputText
+                            id="email"
+                            type="email"
+                            class="pl-10 mt-1 block w-full"
+                            v-model="form.email"
+                            autofocus
+                            placeholder="Email"
+                            autocomplete="username"
+                            :invalid="form.errors.email"
+                        />
+                    </InputIconWrapper>
+                
+                    <InputError class="mt-2" :message="form.errors.email" />
+                </div>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                <div class="flex items-center justify-between gap-3">
+                    <Button
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        class="w-full text-center font-semibold text-primary-500"
+                        type="button"
+                        outlined
+                    >
+                        <Link :href="route('login')">Cancel</Link>
+                    </Button>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Email Password Reset Link
-                </PrimaryButton>
+                    <Button
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        class="w-full text-center font-semibold dark:text-surface-ground text-white"
+                        type="submit"
+                    >
+                       Submit
+                    </Button>
+                </div>
             </div>
         </form>
     </GuestLayout>

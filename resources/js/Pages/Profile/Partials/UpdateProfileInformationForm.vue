@@ -2,7 +2,7 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputText from 'primevue/inputtext';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -41,14 +41,14 @@ const form = useForm({
             <div>
                 <InputLabel for="name" value="Name" />
 
-                <TextInput
+                <InputText
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
                     autofocus
                     autocomplete="name"
+                    :invalid="form.errors.name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
@@ -57,12 +57,12 @@ const form = useForm({
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <InputText
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
+                    :invalid="form.errors.email"
                     autocomplete="username"
                 />
 
