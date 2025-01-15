@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     //wallet
     Route::prefix('wallet')->group(function () {
         Route::get('/get_wallet_history', [WalletController::class, 'getWalletHistory'])->name('wallet.getWalletHistory');
+        Route::get('/get_wallet_history_data', [WalletController::class, 'getWalletHistoryData'])->name('wallet.getWalletHistoryData');
     });
 });
 

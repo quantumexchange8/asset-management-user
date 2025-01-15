@@ -5,23 +5,17 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { IconCopy } from '@tabler/icons-vue';
 import { useToast } from "primevue/usetoast";
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
 import Image from 'primevue/image';
 import Tag from 'primevue/tag';
 import Tooltip from 'primevue/tooltip';
 import DashboardWallets from './Profile/Dashboard/DashboardWallets.vue';
+import dayjs from 'dayjs';
 
 const props = defineProps({
     user_wallet_count: Number,
+    wallet_transaction_history: Object,
 });
-
-const transactions = [
-    { code: "TRX001", name: "Item A", category: "Category 1" },
-    { code: "TRX002", name: "Item B", category: "Category 2" },
-    { code: "TRX003", name: "Item C", category: "Category 1" },
-    { code: "TRX003", name: "Item C", category: "Category 1" },
-    { code: "TRX003", name: "Item C", category: "Category 1" },
-];
 
 const user = usePage().props.auth.user
 
@@ -51,10 +45,10 @@ const copyReferralCode = () => {
     <AuthenticatedLayout :title="'Dashboard'">
         <div class="flex flex-col lg:flex-row gap-5">
             <!-- Left Section: Overview, Affiliate Program, and Wallets -->
-            <div class="flex flex-col items-stretch gap-5 w-full">
+            <div class="flex flex-col items-stretch gap-5 w-full lg:w-[90%]">
                 <div class="flex flex-col 2xl:flex-row gap-5 w-full">
                     <!-- Overview Card -->
-                    <div class="p-1 w-full flex flex-col flex-grow">
+                    <div class="w-full flex flex-col flex-grow">
                         <Card class="h-full">
                             <template #content>
                                 <div class="flex flex-col gap-4 sm:flex-row sm:justify-between">
@@ -86,7 +80,7 @@ const copyReferralCode = () => {
                     </div>
 
                     <!-- Affiliate Program Card -->
-                    <div class="p-1 w-full flex flex-col flex-grow">
+                    <div class="w-full flex flex-col flex-grow">
                         <Card class="h-full">
                             <template #content>
                                 <div class="p-1 w-full flex flex-col gap-4 justify-center overflow-hidden h-full">
@@ -134,19 +128,85 @@ const copyReferralCode = () => {
             </div>
 
             <!-- Right Section: Transaction History -->
-            <div class="flex flex-col gap-5 w-full sm:w-[480px] lg:pl-5 lg:border-l-2 lg:border-gray-300 h-full">
+            <div class="flex flex-col gap-5 w-full sm:w-[480px] lg:pl-5 lg:border-l-2 lg:border-surface-300 dark:lg:border-surface-500 h-full">
                 <Card>
                     <template #content>
-                        <DataTable :value="transactions" :rows="5">
+                        <DataTable :value="props.wallet_transaction_history" :rows="5">
                             <template #header>
                                 Transaction History
                             </template>
-                            <template>
-                                <Column field="code" header="Code" />
-                                <Column field="name" header="Name" />
-                                <Column field="category" header="Category" />
+
+                            <template #empty>
+                                <div class="flex flex-col items-center">
+                                    <span>No data</span>
+                                </div>
+                            </template>
+
+                            <template v-if="props.wallet_transaction_history?.length > 0">
+                                <Column
+                                    field="approval_at"
+                                    sortable
+                                >
+                                    <template #header>
+                                        <span class="block">wallet type</span>
+                                    </template>
+                                    <template #body="{ data }">
+                                        
+                                        <span v-if="data.from_wallet">
+                                            {{ data.from_wallet.type.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase()) }}
+                                        </span>
+
+                                        <span v-else>
+                                            {{ data.to_wallet.type.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase()) }}
+                                        </span>
+
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            {{ dayjs(data.approval_at).format('YYYY-MM-DD') }}
+                                        </div>
+
+                                    </template>
+                                </Column>
+
+                                <Column
+                                    field="amount"
+                                >
+                                    <template #header>
+                                        <span class="text-center">amount</span>
+                                    </template>
+                                    <template #body="{ data }">
+                                        <span 
+                                            v-if="data.transaction_type === 'withdrawal'"
+                                            class="text-red-500"
+                                        >
+                                            <span v-if="data.to_wallet">
+                                               - {{ data.to_wallet.currency_symbol }}{{ data.amount }}
+                                            </span>
+                                            <span v-else>
+                                               - {{ data.from_wallet.currency_symbol }}{{ data.amount }}
+                                            </span>
+                                        </span>
+
+                                        <span v-else class="text-green-500">
+                                            <span v-if="data.to_wallet">
+                                               + {{ data.to_wallet.currency_symbol }}{{ data.amount }}
+                                            </span>
+                                            <span v-else>
+                                               + {{ data.from_wallet.currency_symbol }}{{ data.amount }}
+                                            </span>
+                                        </span>
+                                    </template>
+                                </Column>
                             </template>
                         </DataTable>
+                        <div v-if="props.wallet_transaction_history?.length > 0" class="flex justify-center mt-2">
+                            <Link
+                                :href="route('wallet.getWalletHistory')"
+                                class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
+                            >
+                                Show More
+                            </Link>
+                        </div>
+
                     </template>
                 </Card>
             </div>

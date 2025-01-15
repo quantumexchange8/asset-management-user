@@ -1,11 +1,10 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import Card from 'primevue/card';
-import { onMounted, ref, watchEffect } from 'vue';
 import Skeleton from 'primevue/skeleton';
-import { IconCopy } from '@tabler/icons-vue';
 import { useToast } from "primevue/usetoast";
-import WalletAction from './WalletAction.vue';
+import { onMounted, ref, watchEffect } from 'vue';
+import { IconCopy } from '@tabler/icons-vue';
 
 const props = defineProps({
     user_wallet_count: Number,
@@ -58,27 +57,26 @@ watchEffect(() => {
 </script>
 
 <template>
-    <div v-if="isLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
-        <Card v-for="index in user_wallet_count" class="col-span-1 border-t-8">
+    <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 w-full gap-3 md:gap-5">
+        <Card v-for="index in user_wallet_count">
             <template #content>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col  gap-2">
                     <div class="text-lg text-gray-600 dark:text-gray-400 font-bold">
                         <Skeleton width="10rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
+                        <Skeleton width="20rem" class="my-[11px]"></Skeleton>
+                        <Skeleton width="20rem" class="my-[11px]"></Skeleton>
+                        <Skeleton width="20rem" class="my-[11px]"></Skeleton>
                     </div>
                 </div>
             </template>
         </Card>
     </div>
 
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 w-full gap-3 md:gap-5">
         <Card 
             v-for="wallet in wallets" 
             class="col-span-1 border-t-8"
-            :class="[ 
+            :class="[
                 { 'border-t-primary-600 dark:border-t-primary-400': wallet.type === 'cash_wallet' },
                 { 'border-t-purple-500 dark:border-t-[#D3AAFB]': wallet.type === 'bonus_wallet' },
             ]"
@@ -102,11 +100,6 @@ watchEffect(() => {
                     <div class="text-xl font-semibold">
                         {{ wallet.currency_symbol }} {{ wallet.balance }}
                     </div>
-
-                    <WalletAction 
-                        :wallet="wallet"
-                    />
-
                 </div>
             </template>
 

@@ -48,7 +48,7 @@ export default {
 
             // Primary Button
             {
-                'text-primary-contrast': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
+                'text-surface-ground dark:text-white': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'bg-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'border border-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
             },
