@@ -64,10 +64,10 @@ watchEffect(() => {
                 <div class="flex flex-col gap-2">
                     <div class="text-lg text-gray-600 dark:text-gray-400 font-bold">
                         <Skeleton width="10rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
-                        <Skeleton width="23rem" class="my-[11px]"></Skeleton>
+                        <Skeleton width="23rem md:w-10" class="my-[11px]"></Skeleton>
+                        <Skeleton width="23rem md:w-10" class="my-[11px]"></Skeleton>
+                        <Skeleton width="23rem md:w-10" class="my-[11px]"></Skeleton>
+                        <Skeleton width="23rem md:w-10" class="my-[11px] "></Skeleton>
                     </div>
                 </div>
             </template>

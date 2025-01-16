@@ -11,8 +11,8 @@ const props = defineProps({
     <div class="flex flex-col gap-2">
         <template v-if="wallet.type === 'cash_wallet'">
             <div class="flex justify-between w-full gap-2">
-                <Deposit />
-                <
+                <Deposit :wallet="wallet"/>
+
                 <Button
                     class="w-full flex justify-center gap-1"
                 >
@@ -30,11 +30,7 @@ const props = defineProps({
 
         <template v-if="wallet.type === 'bonus_wallet'">
             <div class="flex justify-between w-full gap-2">
-                <Button
-                    class="w-full flex justify-center gap-1"
-                >
-                    Deposit
-                </Button>
+                <Deposit :wallet="wallet"/>
                 <Button
                     class="w-full flex justify-center gap-1"
                 >
