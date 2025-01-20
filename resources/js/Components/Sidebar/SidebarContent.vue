@@ -49,8 +49,8 @@ import ScrollPanel from 'primevue/scrollpanel';
 
 
         <SidebarCollapsibleItem
-            :title="'Trade Rebate'"
-            href=""
+            :title="'Lot Commission'"
+            :href="route('report.lot_comission')"
         />
     </SidebarCollapsible>
     </ScrollPanel>

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\ReportController;
+
 
 Route::get('/', function () {
     return Redirect::route('login');
@@ -36,6 +38,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_wallet_history', [WalletController::class, 'getWalletHistory'])->name('wallet.getWalletHistory');
         Route::get('/get_wallet_history_data', [WalletController::class, 'getWalletHistoryData'])->name('wallet.getWalletHistoryData');
     });
+
+    /**
+     * ==============================
+     *           Reports
+     * ==============================
+     */
+    Route::prefix('report')->group(function () {
+        Route::get('/lot_comission', [ReportController::class, 'lot_commission'])->name('report.lot_comission');
+        Route::get('/fetchHelloWorld', [ReportController::class, 'fetchHelloWorld'])->name('report.fetchHelloWorld');
+    });
 });
+        
 
 require __DIR__ . '/auth.php';
