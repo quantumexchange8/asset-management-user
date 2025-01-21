@@ -1,215 +1,197 @@
+<template>
+    <AuthenticatedLayout :title="'Dashboard'">
+        <div class="flex flex-col gap-5">
+            <div class="flex flex-col lg:flex-row gap-5">
+                <!-- Left Section: User Overview and Wallets -->
+                <div class="flex flex-col w-full lg:w-[70%] gap-5">
+                    <!-- User Overview -->
+                    <Card class="h-full">
+                        <template #content>
+                            <div class="flex justify-between items-center">
+                                <!-- User Info -->
+                                <div class="flex items-center gap-4">
+                                    <Image
+                                        class="w-16 h-16 rounded-full object-cover"
+                                        :src="user.profile_photo || 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
+                                        alt="User Profile"
+                                    />
+                                    <div>
+                                        <div class="text-lg font-semibold text-gray-800">Welcome Back, {{ user.username }}!</div>
+                                    </div>
+                                </div>
+                                <!-- Total Assets Balance -->
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-gray-800">$297,981.00</div>
+                                    <div class="text-sm text-gray-500">Total Assets Balance</div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Overview Metrics -->
+                            <div class="grid grid-cols-2 gap-4 mt-5">
+                                <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                                    <div class="text-sm text-gray-600">Total Deposit</div>
+                                    <div class="text-xl font-semibold text-gray-800">$10,000</div>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                                    <div class="text-sm text-gray-600">Total Group Sales</div>
+                                    <div class="text-xl font-semibold text-gray-800">$50,000</div>
+                                </div>
+                            </div>
+                        </template>
+                    </Card>
+
+          <!-- Wallet Section -->
+<Card>
+    <template #content>
+        <div class="flex justify-between items-center">
+            <div>
+                <div class="text-lg font-semibold text-gray-800">My Wallet</div>
+                <div class="text-sm text-gray-500">Manage your wallet</div>
+            </div>
+            <Button label="Manage Wallet" class="p-button-outlined" />
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+            <!-- Cash Wallet -->
+            <Card class="bg-white shadow-md rounded-md">
+                <template #content>
+                    <div class="flex items-center gap-2 p-4 border-b border-gray-200">
+                        <i class="pi pi-wallet text-2xl text-gray-700"></i>
+                        <span class="text-lg font-bold text-gray-800">Cash Wallet (CW0000030)</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-2xl font-bold text-gray-900 mt-2">$ 0.00</div>
+                        <div class="flex gap-2 mt-4">
+                            <Button
+                                label="Deposit"
+                                icon="pi pi-plus"
+                                class="p-button-sm"
+                                style="background-color: #28a745; color: white; border: none"
+                            />
+                            <Button
+                                label="Withdrawal"
+                                icon="pi pi-minus"
+                                class="p-button-sm"
+                                style="background-color: #dc3545; color: white; border: none"
+                            />
+                            <Button
+                                label="Internal Transfer"
+                                icon="pi pi-exchange"
+                                class="p-button-sm"
+                                style="background-color: #007bff; color: white; border: none"
+                            />
+                        </div>
+                    </div>
+                </template>
+            </Card>
+
+            <!-- Bonus Wallet -->
+            <Card class="bg-white shadow-md rounded-md">
+                <template #content>
+                    <div class="flex items-center gap-2 p-4 border-b border-gray-200">
+                        <i class="pi pi-gift text-2xl text-gray-700"></i>
+                        <span class="text-lg font-bold text-gray-800">Bonus Wallet (BW0000030)</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-2xl font-bold text-gray-900 mt-2">$ 137.63</div>
+                        <div class="flex gap-2 mt-4">
+                            <Button
+                                label="Internal Transfer"
+                                icon="pi pi-exchange"
+                                class="p-button-sm"
+                                style="background-color: #007bff; color: white; border: none"
+                            />
+                        </div>
+                    </div>
+                </template>
+            </Card>
+        </div>
+    </template>
+</Card>
+
+
+                    <!-- Last Transactions -->
+                    <Card>
+                        <template #content>
+                            <div class="text-lg font-semibold text-gray-800">Last Transactions</div>
+                            <DataTable :value="wallet_transaction_history" paginator :rows="5" class="mt-4">
+                                <Column field="date" header="Date" />
+                                <Column field="description" header="Description" />
+                                <Column field="amount" header="Amount" />
+                            </DataTable>
+                        </template>
+                    </Card>
+                </div>
+
+                <!-- Right Section: Transfers, Investments, and Referral Code -->
+                <div class="flex flex-col w-full lg:w-[30%] gap-5">
+                    <!-- Transfers -->
+                    <Card>
+                        <template #content>
+                            <div class="text-lg font-semibold text-gray-800">Transfer</div>
+                            <div class="flex flex-col gap-2 mt-4">
+                                <Button label="Domestic Transfer" class="p-button-outlined" />
+                                <Button label="Internal Bank Transfer" class="p-button-outlined" />
+                                <Button label="Foreign Transfer" class="p-button-outlined" />
+                            </div>
+                        </template>
+                    </Card>
+
+                    <!-- Investments -->
+                    <Card>
+                        <template #content>
+                            <div class="text-lg font-semibold text-gray-800">Investments</div>
+                            <div class="text-sm text-gray-600 mt-4">Revenue: $18,752</div>
+                            <div class="h-24 bg-gray-200 rounded-md mt-2 flex items-center justify-center">
+                                Graph Placeholder
+                            </div>
+                        </template>
+                    </Card>
+
+                    <!-- Referral Code -->
+                    <Card>
+                        <template #content>
+                            <div class="text-lg font-semibold text-gray-800">Referral Code</div>
+                            <div class="bg-gray-50 p-4 rounded-lg shadow-sm mt-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-800 font-medium">{{ user.referral_code || 'ABC123' }}</span>
+                                    <Button label="Copy" class="p-button-outlined p-button-sm" @click="copyReferralCode" />
+                                </div>
+                                <div class="text-sm text-gray-500 mt-2">Share your referral code to earn rewards.</div>
+                            </div>
+                        </template>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
+
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { IconCopy } from '@tabler/icons-vue';
-import { useToast } from "primevue/usetoast";
-import { usePage, Link } from '@inertiajs/vue3';
+import Button from 'primevue/button';
 import Image from 'primevue/image';
-import Tag from 'primevue/tag';
-import Tooltip from 'primevue/tooltip';
-import DashboardWallets from './Profile/Dashboard/DashboardWallets.vue';
-import dayjs from 'dayjs';
+import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
-const props = defineProps({
-    user_wallet_count: Number,
-    wallet_transaction_history: Object,
-});
+// Mock Data
+const user = usePage().props.auth.user;
+const wallet_transaction_history = ref([
+    { date: '2023-01-01', description: 'Deposit', amount: '$1000' },
+    { date: '2023-01-02', description: 'Withdrawal', amount: '-$500' },
+    { date: '2023-01-03', description: 'Transfer', amount: '$200' },
+]);
 
-const user = usePage().props.auth.user
-
-const toast = useToast();
-
+// Copy referral code
 const copyReferralCode = () => {
-    const referralCode = document.querySelector('#userReferralCode').textContent;
-
-    const tempInput = document.createElement('input');
-    tempInput.value = referralCode;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-
-    toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Referral Code Copied!',
-        life: 3000,
-    });
-}
-
+    navigator.clipboard.writeText(user.referral_code || 'ABC123').then(() => {
+        alert('Referral code copied!');
+    });g
+};
 </script>
 
-<template>
-    <AuthenticatedLayout :title="'Dashboard'">
-        <div class="flex flex-col lg:flex-row gap-5">
-            <!-- Left Section: Overview, Affiliate Program, and Wallets -->
-            <div class="flex flex-col items-stretch gap-5 w-full lg:w-[90%]">
-                <div class="flex flex-col 2xl:flex-row gap-5 w-full">
-                    <!-- Overview Card -->
-                    <div class="w-full flex flex-col flex-grow">
-                        <Card class="h-full">
-                            <template #content>
-                                <div class="flex flex-col gap-4 sm:flex-row sm:justify-between">
-                                    <div class="flex gap-3 items-center justify-start w-full pr-4">
-                                        <Image class="object-cover w-14 h-14 rounded-full"
-                                            :src="user.profile_photo ? user.profile_photo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
-                                            alt="userPic" />
-                                        <div>
-                                            <div class="text-lg font-semibold text-gray-600 dark:text-gray-400">
-                                                {{ user.username }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w-full flex justify-end items-start">
-                                        <Tag severity="info" :value="'rank'" />
-                                    </div>
-                                </div>
-
-                                <div class="flex flex-col gap-2 mt-5">
-                                    <div class="text-lg pb-2 border-b">
-                                        Overview
-                                    </div>
-                                    <div class="grid grid-cols-6 gap-4 w-full mt-4">
-                                        <!-- Add overview-specific content here -->
-                                    </div>
-                                </div>
-                            </template>
-                        </Card>
-                    </div>
-
-                    <!-- Affiliate Program Card -->
-                    <div class="w-full flex flex-col flex-grow">
-                        <Card class="h-full">
-                            <template #content>
-                                <div class="p-1 w-full flex flex-col gap-4 justify-center overflow-hidden h-full">
-                                    <div class="flex flex-col">
-                                        <div class="text-lg">
-                                            Affiliate Program
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-5 w-full">
-                                        <div class="flex flex-col justify-center gap-5 w-full">
-                                            <div class="flex flex-col gap-2 items-center justify-center w-full">
-                                                QR code placeholder
-                                                <div class="flex items-center gap-3">
-                                                    <span class="text-lg">Referral Code:</span> 
-                                                    <span class="text-xl" id="userReferralCode">{{ user.referral_code }}</span>
-                                                    <div>
-                                                        <IconCopy :size="20" stroke-width="1.5"
-                                                            class="w-5 hover:cursor-pointer"
-                                                            @click.prevent="copyReferralCode" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="flex flex-col gap-1">
-                                                <div class="text-gray-400 text-sm dark:text-gray-500">
-                                                    Share your referral link through a QR code
-                                                </div>
-                                                <div class="flex w-full rounded-md">
-                                                    QR link placeholder
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </Card>
-                    </div>
-                </div>
-
-                <!-- Wallets Section -->
-                <DashboardWallets 
-                    :user_wallet_count = "user_wallet_count"
-                />
-            </div>
-
-            <!-- Right Section: Transaction History -->
-            <div class="flex flex-col gap-5 w-full sm:w-[480px] lg:pl-5 lg:border-l-2 lg:border-surface-300 dark:lg:border-surface-500 h-full">
-                <Card>
-                    <template #content>
-                        <DataTable :value="props.wallet_transaction_history" :rows="5">
-                            <template #header>
-                                Transaction History
-                            </template>
-
-                            <template #empty>
-                                <div class="flex flex-col items-center">
-                                    <span>No data</span>
-                                </div>
-                            </template>
-
-                            <template v-if="props.wallet_transaction_history?.length > 0">
-                                <Column
-                                    field="approval_at"
-                                    sortable
-                                >
-                                    <template #header>
-                                        <span class="block">wallet type</span>
-                                    </template>
-                                    <template #body="{ data }">
-                                        
-                                        <span v-if="data.from_wallet">
-                                            {{ data.from_wallet.type.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase()) }}
-                                        </span>
-
-                                        <span v-else>
-                                            {{ data.to_wallet.type.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase()) }}
-                                        </span>
-
-                                        <div class="text-xs text-gray-500 mt-1">
-                                            {{ dayjs(data.approval_at).format('YYYY-MM-DD') }}
-                                        </div>
-
-                                    </template>
-                                </Column>
-
-                                <Column
-                                    field="amount"
-                                >
-                                    <template #header>
-                                        <span class="text-center">amount</span>
-                                    </template>
-                                    <template #body="{ data }">
-                                        <span 
-                                            v-if="data.transaction_type === 'withdrawal'"
-                                            class="text-red-500"
-                                        >
-                                            <span v-if="data.to_wallet">
-                                               - {{ data.to_wallet.currency_symbol }}{{ data.amount }}
-                                            </span>
-                                            <span v-else>
-                                               - {{ data.from_wallet.currency_symbol }}{{ data.amount }}
-                                            </span>
-                                        </span>
-
-                                        <span v-else class="text-green-500">
-                                            <span v-if="data.to_wallet">
-                                               + {{ data.to_wallet.currency_symbol }}{{ data.amount }}
-                                            </span>
-                                            <span v-else>
-                                               + {{ data.from_wallet.currency_symbol }}{{ data.amount }}
-                                            </span>
-                                        </span>
-                                    </template>
-                                </Column>
-                            </template>
-                        </DataTable>
-                        <div v-if="props.wallet_transaction_history?.length > 0" class="flex justify-center mt-2">
-                            <Link
-                                :href="route('wallet.getWalletHistory')"
-                                class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
-                            >
-                                Show More
-                            </Link>
-                        </div>
-
-                    </template>
-                </Card>
-            </div>
-        </div>
-    </AuthenticatedLayout>
-</template>
+<style scoped>
+/* Scoped styles for custom adjustments */
+</style>
