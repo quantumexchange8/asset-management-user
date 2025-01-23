@@ -9,7 +9,7 @@
         @endif
 
         <title inertia>{{ config('app.name', 'Volta Asia') }}</title>
-        
+
         <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico')}}">
         <link rel="apple-touch-icon" href="{{ asset('favicon.ico')}}">
 

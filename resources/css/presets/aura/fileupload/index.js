@@ -2,8 +2,9 @@ export default {
     root: ({ props }) => ({
         class: [
             {
-                'flex flex-wrap items-center justify-center gap-2': props.mode === 'basic'
-            }
+                'flex flex-wrap items-center justify-center gap-2': props.mode === 'basic',
+            },
+            'w-full'
         ]
     }),
     input: {

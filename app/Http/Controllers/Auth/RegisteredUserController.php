@@ -12,12 +12,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class RegisteredUserController extends Controller
 {
@@ -29,11 +33,6 @@ class RegisteredUserController extends Controller
         return Inertia::render('Auth/Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request)
     {
         $form_step = $request->step;
@@ -58,8 +57,6 @@ class RegisteredUserController extends Controller
                 return back();
 
             default:
-                $validateData['kyc_image'] =  ['required', 'array'];
-                $validateData['kyc_image.*'] = ['image', 'mimes:jpeg,png,jpg', 'max:2048'];
                 $validateData['referral_code'] =  ['nullable', function($value, $fail){
                     if($value && !User::where('referral_code', $value)->exists()){ //check referral_code exists or not
                         $fail('The referral code is invalid or does not exist.');
@@ -88,13 +85,13 @@ class RegisteredUserController extends Controller
             $referrer = User::where('referral_code', $request->referral_code)->first();
 
             if ($referrer) {
-                
+
                 if(empty($referrer->hierarchyList)){
                     $hierarchyList =  $hierarchyList = "-" . $referrer->id . "-";
                 } else {
                     $hierarchyList = $referrer->hierarchyList . $referrer->id . "-";
                 }
-             
+
                 $user->upline_id = $referrer->id;
                 $user->hierarchyList = $hierarchyList;
             }
@@ -102,12 +99,17 @@ class RegisteredUserController extends Controller
 
         $user->setReferralId();
 
-        $id_no = 'LID' . Str::padLeft($user->id - 1, 6, "0");
+        $id_no = 'VTA' . Str::padLeft($user->id - 1, 6, "0");
         $user->id_number = $id_no;
 
         if ($request->hasFile('kyc_image')) {
             foreach ($request->file('kyc_image') as $file) {
-                $user->addMedia($file)->toMediaCollection('kyc_verification');
+                try {
+                    $user->addMedia($file)->toMediaCollection('kyc_verification');
+                } catch (FileDoesNotExist|FileIsTooBig $e) {
+                    Log::error($e);
+                    return back();
+                }
             }
         }
 

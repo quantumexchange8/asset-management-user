@@ -18,10 +18,10 @@ export default {
             'justify-center',
 
             //Colors
-            'border-solid border-2 border-surface-200 dark:border-surface-700',
+            'border-solid border-2',
 
             // Colors (Conditional)
-            context.active ? 'text-primary' : 'text-surface-900 dark:text-surface-0', // Adjust colors as needed
+            context.active ? 'text-primary border-primary' : 'border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-0', // Adjust colors as needed
 
             // Size and Shape
             'min-w-[2rem]',

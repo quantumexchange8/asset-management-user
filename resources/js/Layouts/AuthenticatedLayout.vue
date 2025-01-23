@@ -13,7 +13,7 @@ defineProps({
 
     <Head :title="title"></Head>
 
-    <div class="min-h-screen bg-surface-50 dark:bg-surface-ground">
+    <div class="min-h-screen bg-surface-50 dark:bg-surface-ground transition-all duration-200">
         <!-- Sidebar -->
         <Sidebar />
 
