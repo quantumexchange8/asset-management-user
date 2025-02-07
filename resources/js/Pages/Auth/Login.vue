@@ -43,7 +43,10 @@ const submit = () => {
             <form @submit.prevent="submit" class="w-full">
                 <div class="flex flex-col gap-3 w-full self-stretch">
                     <div class="flex flex-col gap-1 items-start self-stretch">
-                        <InputLabel value="Email" for="email" />
+                        <InputLabel 
+                            :value="$t('public.email')"
+                            for="email" 
+                        />
                         <InputIconWrapper>
                             <template #icon>
                                 <IconMail :size="20" stroke-width="1.5"/>
@@ -92,7 +95,7 @@ const submit = () => {
                             :href="route('password.request')"
                             class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
                         >
-                            Reset Password
+                            {{ $t('public.reset_password') }}
                         </Link>
                     </div>
 

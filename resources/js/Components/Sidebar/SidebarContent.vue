@@ -28,7 +28,7 @@ import ScrollPanel from 'primevue/scrollpanel';
         </SidebarLink>
 
         <SidebarLink
-            :title="'Wallet'"
+            :title="'Broker'"
             :href="route('wallet.getWalletHistory')"
             :active="route().current('wallet.getWalletHistory')"
         >

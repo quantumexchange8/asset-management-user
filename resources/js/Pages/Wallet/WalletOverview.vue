@@ -73,36 +73,6 @@ watchEffect(() => {
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 w-full gap-3 md:gap-5">
-        <Card 
-            v-for="wallet in wallets" 
-            class="col-span-1 border-t-8"
-            :class="[
-                { 'border-t-primary-600 dark:border-t-primary-400': wallet.type === 'cash_wallet' },
-                { 'border-t-purple-500 dark:border-t-[#D3AAFB]': wallet.type === 'bonus_wallet' },
-            ]"
-        >
-            <template #content>
-                <div class="flex flex-col gap-2">
-                    <!-- Wallet Type and Address -->
-                    <div class="text-lg text-gray-600 dark:text-gray-400 font-bold">
-                        {{ wallet.type.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase()) }}
-                        <span class="inline-flex items-center gap-2">
-                            ({{ wallet.address }})
-                            <IconCopy 
-                                :size="20" 
-                                stroke-width="1.5"
-                                class="w-5 hover:cursor-pointer" 
-                                @click.prevent="copyWalletAddress(wallet.address)" />
-                        </span>
-                    </div>
-
-                    <!-- Wallet Balance -->
-                    <div class="text-xl font-semibold">
-                        {{ wallet.currency_symbol }} {{ wallet.balance }}
-                    </div>
-                </div>
-            </template>
-
-        </Card>
+     
     </div>
 </template>
