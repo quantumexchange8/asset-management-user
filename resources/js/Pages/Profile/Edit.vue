@@ -60,61 +60,49 @@ const updatePaymentAccount = (updatedAccount) => {
 </script>
 
 <template>
-    <Head title="Profile" />
-
-    <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-            >
-                Profile
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <!-- Profile Information and Password Update -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">
-                        <UpdateProfileInformationForm
-                            :must-verify-email="mustVerifyEmail"
-                            :status="status"
-                        />
-                    </div>
-                    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">
-                        <UpdatePasswordForm />
-                    </div>
-                </div>
-
-                <!-- KYC Verification Section -->
+    <AuthenticatedLayout title="profile">
+        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+            <!-- Profile Information and Password Update -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">
-                    <KYCVerificationForm />
-                </div>
-
-                <!-- Payment Account Section -->
-                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">
-                    <PaymentAccountForm
-                        :accounts="paymentAccounts"
-                        @edit="openEditDialog"
-                        @add="openAddDialog"
+                    <UpdateProfileInformationForm
+                        :must-verify-email="mustVerifyEmail"
+                        :status="status"
                     />
                 </div>
-
-                <!-- Add Payment Account Dialog -->
-                <AddPaymentAccount
-                    v-if="isAdding"
-                    @add="addPaymentAccount"
-                    @close="isAdding = false"
-                />
-
-                <!-- Edit Payment Account Dialog -->
-                <EditAccountInfo
-                    v-if="isEditing"
-                    :account="paymentAccounts[editingIndex]"
-                    @update="updatePaymentAccount"
-                    @close="isEditing = false"
-                />
+                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">
+                    <UpdatePasswordForm />
+                </div>
             </div>
+
+            <!-- KYC Verification Section -->
+            <!--                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">-->
+            <!--                    <KYCVerificationForm />-->
+            <!--                </div>-->
+
+            <!--                &lt;!&ndash; Payment Account Section &ndash;&gt;-->
+            <!--                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-surface-900">-->
+            <!--                    <PaymentAccountForm-->
+            <!--                        :accounts="paymentAccounts"-->
+            <!--                        @edit="openEditDialog"-->
+            <!--                        @add="openAddDialog"-->
+            <!--                    />-->
+            <!--                </div>-->
+
+            <!--                &lt;!&ndash; Add Payment Account Dialog &ndash;&gt;-->
+            <!--                <AddPaymentAccount-->
+            <!--                    v-if="isAdding"-->
+            <!--                    @add="addPaymentAccount"-->
+            <!--                    @close="isAdding = false"-->
+            <!--                />-->
+
+            <!--                &lt;!&ndash; Edit Payment Account Dialog &ndash;&gt;-->
+            <!--                <EditAccountInfo-->
+            <!--                    v-if="isEditing"-->
+            <!--                    :account="paymentAccounts[editingIndex]"-->
+            <!--                    @update="updatePaymentAccount"-->
+            <!--                    @close="isEditing = false"-->
+            <!--                />-->
         </div>
     </AuthenticatedLayout>
 </template>

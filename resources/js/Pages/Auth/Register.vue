@@ -3,13 +3,13 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Button from 'primevue/button';
-import { Link, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import FileUpload from 'primevue/fileupload';
 import Image from 'primevue/image';
 import InputIconWrapper from '@/Components/InputIconWrapper.vue';
-import { IconMail, IconLock, IconUser, IconPhotoPlus, IconX, IconUpload, IconLabel, IconUsersPlus, IconFlag, IconPhone, IconCode  } from '@tabler/icons-vue';
+import { IconMail, IconLock, IconUser, IconPhotoPlus, IconX, IconUpload, IconLabel, IconFlag, IconPhone, IconCode  } from '@tabler/icons-vue';
 import { IconArrowLeft } from '@tabler/icons-vue';
 import { IconArrowRight } from '@tabler/icons-vue';
 import Stepper from 'primevue/stepper';
@@ -21,6 +21,10 @@ import { onMounted, ref } from 'vue';
 import { usePrimeVue } from 'primevue/config';
 import Password from 'primevue/password';
 import AuthHeader from "@/Components/AuthHeader.vue";
+
+const props = defineProps({
+    referral_code: String
+})
 
 const activeStep = ref(1);
 const totalSteps = 3;
@@ -35,7 +39,7 @@ const form = useForm({
     phone: '',
     phone_number: '',
     kyc_image: [],
-    referral_code: '',
+    referral_code: props.referral_code ? props.referral_code : '',
     password: '',
     password_confirmation: '',
 });
@@ -121,13 +125,13 @@ const handleContinue = () => {
                 <Stepper class="basis-[50rem]" v-model:value="activeStep" linear>
                     <StepList>
                         <Step :value="1">
-                            <span class="hidden sm:block">Basics</span>
+                            <span class="hidden sm:block">{{ $t('public.basics') }}</span>
                         </Step>
                         <Step :value="2">
-                            <span class="hidden sm:block">Credentials</span>
+                            <span class="hidden sm:block">{{ $t('public.credentials') }}</span>
                         </Step>
                         <Step :value="3">
-                            <span class="hidden sm:block">Identification</span>
+                            <span class="hidden sm:block">{{ $t('public.identification') }}</span>
                         </Step>
                     </StepList>
 
@@ -137,13 +141,13 @@ const handleContinue = () => {
                         <StepPanel v-slot="{ activateCallback }" :value="1">
                             <div class="flex flex-col gap-5">
                                 <AuthHeader
-                                    :header="$t('public.register_step_1')"
+                                    :header="$t('public.basics')"
                                     :caption="$t('public.register_step_1_caption')"
                                 />
                                 <div class="flex flex-col gap-3 items-center self-stretch">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 w-full">
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Name" for="name"/>
+                                            <InputLabel :value="$t('public.name')" for="name"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconUser :size="20" stroke-width="1.5"/>
@@ -154,7 +158,7 @@ const handleContinue = () => {
                                                     type="text"
                                                     class="pl-10 block w-full"
                                                     v-model="form.name"
-                                                    placeholder="Name"
+                                                    :placeholder="$t('public.enter_name')"
                                                     :invalid="!!form.errors.name"
                                                     autofocus
                                                 />
@@ -163,7 +167,7 @@ const handleContinue = () => {
                                         </div>
 
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Email" for="email"/>
+                                            <InputLabel :value="$t('public.email')" for="email"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconMail :size="20" stroke-width="1.5"/>
@@ -174,7 +178,7 @@ const handleContinue = () => {
                                                     type="text"
                                                     class="pl-10 block w-full"
                                                     v-model="form.email"
-                                                    placeholder="Email"
+                                                    :placeholder="$t('public.enter_email')"
                                                     :invalid="!!form.errors.email"
                                                 />
                                             </InputIconWrapper>
@@ -182,7 +186,7 @@ const handleContinue = () => {
                                         </div>
 
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Username" for="username"/>
+                                            <InputLabel :value="$t('public.username')" for="username"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconLabel :size="20" stroke-width="1.5"/>
@@ -192,7 +196,7 @@ const handleContinue = () => {
                                                     type="text"
                                                     class="pl-10 block w-full"
                                                     v-model="form.username"
-                                                    placeholder="Username"
+                                                    :placeholder="$t('public.enter_username')"
                                                     :invalid="!!form.errors.username"
                                                 />
                                             </InputIconWrapper>
@@ -201,7 +205,7 @@ const handleContinue = () => {
                                         </div>
 
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Country" for="country"/>
+                                            <InputLabel :value="$t('public.country')" for="country"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconFlag :size="20" stroke-width="1.5" class="mt-1"/>
@@ -212,7 +216,7 @@ const handleContinue = () => {
                                                     :options="countries"
                                                     :loading="loadingCountries"
                                                     optionLabel="name"
-                                                    placeholder="Select Country"
+                                                    :placeholder="$t('public.select_country')"
                                                     class="pl-7 block w-full"
                                                     :invalid="!!form.errors.country"
                                                     filter
@@ -235,7 +239,7 @@ const handleContinue = () => {
                                         </div>
 
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Phone Number" for="phone"/>
+                                            <InputLabel :value="$t('public.phone_number')" for="phone"/>
                                             <div class="flex gap-2 items-center self-stretch relative">
                                                 <Select
                                                     v-model="selectedPhoneCode"
@@ -292,11 +296,11 @@ const handleContinue = () => {
                                     :href="route('login')"
                                 >
                                     <IconArrowLeft :size="20"/>
-                                    <span class="font-semibold">Back to LOGIN</span>
+                                    <span class="font-semibold">{{ $t('public.back_to_login') }}</span>
                                 </Button>
 
                                 <Button class="flex items-center space-x-1" iconPos="right" @click="handleContinue">
-                                    <span class="font-semibold dark:text-surface-ground text-white">Next</span>
+                                    <span class="font-semibold dark:text-surface-ground text-white">{{ $t('public.next') }}</span>
                                     <IconArrowRight :size="20" class="dark:text-surface-ground text-white"/>
                                 </Button>
                             </div>
@@ -306,14 +310,14 @@ const handleContinue = () => {
                         <StepPanel v-slot="{ activateCallback }" :value="2">
                             <div class="flex flex-col gap-5">
                                 <AuthHeader
-                                    :header="$t('public.register_step_2')"
+                                    :header="$t('public.credentials')"
                                     :caption="$t('public.register_step_2_caption')"
                                 />
                                 <div class="flex flex-col gap-3 items-center self-stretch">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 w-full">
                                         <!-- Password Field -->
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Password" for="password"/>
+                                            <InputLabel :value="$t('public.password')" for="password"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconLock :size="20" stroke-width="1.5" />
@@ -323,7 +327,7 @@ const handleContinue = () => {
                                                     v-model="form.password"
                                                     :invalid="!!form.errors.password"
                                                     class="block w-full"
-                                                    placeholder="Password"
+                                                    placeholder="••••••••"
                                                     toggleMask
                                                     autofocus
                                                 />
@@ -333,7 +337,7 @@ const handleContinue = () => {
 
                                         <!-- Confirm Password Field -->
                                         <div class="flex flex-col gap-1 items-start self-stretch">
-                                            <InputLabel value="Confirm Password" for="password_confirmation"/>
+                                            <InputLabel :value="$t('public.confirm_password')" for="password_confirmation"/>
                                             <InputIconWrapper>
                                                 <template #icon>
                                                     <IconLock :size="20" stroke-width="1.5"/>
@@ -343,7 +347,7 @@ const handleContinue = () => {
                                                     v-model="form.password_confirmation"
                                                     :invalid="!!form.errors.password"
                                                     class="block w-full"
-                                                    placeholder="Confirm Password"
+                                                    placeholder="••••••••"
                                                     toggleMask
                                                 />
                                             </InputIconWrapper>
@@ -362,10 +366,10 @@ const handleContinue = () => {
                             <div class="flex pt-6 justify-between">
                                 <Button class="flex items-center space-x-1" severity="secondary" @click="activateCallback(1)">
                                     <IconArrowLeft :size="20"/>
-                                    <span class="font-semibold">Back</span>
+                                    <span class="font-semibold">{{ $t('public.back') }}</span>
                                 </Button>
                                 <Button class="flex items-center space-x-1" iconPos="right" @click="handleContinue">
-                                    <span class="font-semibold dark:text-surface-ground text-white">Next</span>
+                                    <span class="font-semibold dark:text-surface-ground text-white">{{ $t('public.next') }}</span>
                                     <IconArrowRight :size="20" class="dark:text-surface-ground text-white"/>
                                 </Button>
                             </div>
@@ -375,12 +379,12 @@ const handleContinue = () => {
                         <StepPanel v-slot="{ activateCallback }" :value="3">
                             <div class="flex flex-col gap-5">
                                 <AuthHeader
-                                    :header="$t('public.register_step_3')"
+                                    :header="$t('public.identification')"
                                     :caption="$t('public.register_step_3_caption')"
                                 />
 
                                 <div class="flex flex-col gap-1 items-start self-stretch">
-                                    <InputLabel for="referral_code">{{ $t('public.kyc' )}}</InputLabel>
+                                    <InputLabel for="referral_code">{{ $t('public.upload_identity_proof' )}}</InputLabel>
                                     <FileUpload
                                         name="kyc_image"
                                         :multiple="true"
@@ -480,11 +484,11 @@ const handleContinue = () => {
                             <div class="flex pt-6 justify-between">
                                 <Button class="flex items-center space-x-1" severity="secondary" @click="activateCallback(2)">
                                     <IconArrowLeft :size="20"/>
-                                    <span class="font-semibold">Back</span>
+                                    <span class="font-semibold">{{ $t('public.back') }}</span>
                                 </Button>
 
                                 <Button class="flex items-center space-x-1" @click="handleContinue">
-                                    <span class="font-semibold dark:text-surface-ground text-white">Register</span>
+                                    <span class="font-semibold dark:text-surface-ground text-white">{{ $t('public.register') }}</span>
                                     <IconArrowRight :size="20" class="dark:text-surface-ground text-white"/>
                                 </Button>
                             </div>

@@ -4,6 +4,7 @@ export default {
             // Font
             'leading-none',
             'text-sm',
+            'font-normal',
 
             // Flex
             { 'flex-1 w-[1%]': parent.instance.$name == 'InputGroup' },
@@ -11,7 +12,7 @@ export default {
             // Spacing
             'm-0',
             'w-full',
-            
+
             // Size
             {
                 'py-3 px-3.5': props.size == 'large',

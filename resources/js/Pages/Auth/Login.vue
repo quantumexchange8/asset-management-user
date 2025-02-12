@@ -43,9 +43,9 @@ const submit = () => {
             <form @submit.prevent="submit" class="w-full">
                 <div class="flex flex-col gap-3 w-full self-stretch">
                     <div class="flex flex-col gap-1 items-start self-stretch">
-                        <InputLabel 
+                        <InputLabel
                             :value="$t('public.email')"
-                            for="email" 
+                            for="email"
                         />
                         <InputIconWrapper>
                             <template #icon>
@@ -59,14 +59,14 @@ const submit = () => {
                                 autofocus
                                 :invalid="!!form.errors.email"
                                 autocomplete="username"
-                                placeholder="Email"
+                                :placeholder="$t('public.enter_email')"
                             />
                         </InputIconWrapper>
                         <InputError :message="form.errors.email" />
                     </div>
 
                     <div class="flex flex-col gap-1 items-start self-stretch">
-                        <InputLabel value="Password" for="password"/>
+                        <InputLabel :value="$t('public.password')" for="password"/>
                         <InputIconWrapper>
                             <template #icon>
                                 <IconLock :size="20" stroke-width="1.5"/>
@@ -78,7 +78,7 @@ const submit = () => {
                                 v-model="form.password"
                                 :invalid="!!form.errors.password"
                                 autocomplete="current-password"
-                                placeholder="Password"
+                                placeholder="••••••••"
                             />
                         </InputIconWrapper>
                         <InputError :message="form.errors.password" />
@@ -87,7 +87,7 @@ const submit = () => {
                     <div class="flex items-center justify-between">
                         <label class="flex items-center">
                             <Checkbox name="remember" v-model="form.remember" :binary="true" />
-                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300">Remember Me</span>
+                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300">{{ $t('public.remember_me') }}</span>
                         </label>
 
                         <Link
@@ -106,7 +106,7 @@ const submit = () => {
                             :disabled="form.processing"
                             type="submit"
                         >
-                            Log In
+                            {{ $t('public.login') }}
                         </Button>
 
                         <Link
@@ -114,7 +114,7 @@ const submit = () => {
                             :href="route('register')"
                             class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
                         >
-                            Don't have an account? Register Now
+                            {{ $t('public.register_now') }}
                         </Link>
                     </div>
                 </div>

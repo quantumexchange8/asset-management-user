@@ -15,12 +15,14 @@ import Button from "primevue/button";
                     size="small"
                     :label="$t('public.deposit')"
                     class="w-full"
+                    disabled
                 />
                 <Button
                     severity="danger"
                     size="small"
                     :label="$t('public.withdraw')"
                     class="w-full"
+                    disabled
                 />
             </div>
         </template>

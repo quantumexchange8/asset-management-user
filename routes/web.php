@@ -4,20 +4,24 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SelectOptionController;
 use App\Http\Controllers\WalletController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return Redirect::route('login');
 });
 
+// Change locale
+Route::get('locale/{locale}', function ($locale) {
+    App::setLocale($locale);
+    Session::put("locale", $locale);
+
+    return redirect()->back();
+});
+
 //select option
 Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->name('getCountries');
-
 
 Route::middleware('auth')->group(function () {
     /**
@@ -48,8 +52,13 @@ Route::middleware('auth')->group(function () {
      * ==============================
      */
     Route::prefix('report')->group(function () {
-        Route::get('/lot_comission', [ReportController::class, 'lot_commission'])->name('report.lot_comission');
-        Route::get('/fetchHelloWorld', [ReportController::class, 'fetchHelloWorld'])->name('report.fetchHelloWorld');
+        // Standard Bonus
+        Route::get('/standard_bonus', [ReportController::class, 'standard_bonus'])->name('report.standard_bonus');
+        Route::get('/getStandardBonusData', [ReportController::class, 'getStandardBonusData'])->name('report.getStandardBonusData');
+
+        // Rebate Bonus
+        Route::get('/rebate_bonus', [ReportController::class, 'rebate_bonus'])->name('report.rebate_bonus');
+        Route::get('/getRebateBonusData', [ReportController::class, 'getRebateBonusData'])->name('report.getRebateBonusData');
     });
 });
 

@@ -5,8 +5,8 @@ import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.
 import {
     IconLayoutDashboard,
     IconWallet,
-    IconClockDollar,
-    IconCreditCardPay,
+    IconCoin,
+    IconDatabaseDollar,
     IconReport,
 } from '@tabler/icons-vue';
 import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
@@ -27,31 +27,37 @@ import ScrollPanel from 'primevue/scrollpanel';
             </template>
         </SidebarLink>
 
+<!--        <SidebarLink-->
+<!--            title="broker"-->
+<!--            :href="route('wallet.getWalletHistory')"-->
+<!--            :active="route().current('wallet.getWalletHistory')"-->
+<!--        >-->
+<!--            <template #icon>-->
+<!--                <IconWallet :size="20" stroke-width="1.5"/>-->
+<!--            </template>-->
+<!--        </SidebarLink>-->
+
+        <!-- Analytics -->
+        <SidebarCategoryLabel title="analytics" />
+
         <SidebarLink
-            :title="'Broker'"
-            :href="route('wallet.getWalletHistory')"
-            :active="route().current('wallet.getWalletHistory')"
+            title="standard_bonus"
+            :href="route('report.standard_bonus')"
+            :active="route().current('report.standard_bonus')"
         >
-        <template #icon>
-            <IconWallet :size="20" stroke-width="1.5"/>
-        </template>
-    </SidebarLink>
+            <template #icon>
+                <IconCoin :size="20" stroke-width="1.5"/>
+            </template>
+        </SidebarLink>
 
-    <!-- Analytics -->
-    <SidebarCategoryLabel :title="'Analytics'"/>
-
-    <SidebarCollapsible
-        :title="'Report'"
-    >
-        <template #icon>
-            <IconReport :size="20" stroke-width="1.5"/>
-        </template>
-
-
-        <SidebarCollapsibleItem
-            :title="'Lot Commission'"
-            :href="route('report.lot_comission')"
-        />
-    </SidebarCollapsible>
+        <SidebarLink
+            title="rebate_bonus"
+            :href="route('report.rebate_bonus')"
+            :active="route().current('report.rebate_bonus')"
+        >
+            <template #icon>
+                <IconDatabaseDollar :size="20" stroke-width="1.5"/>
+            </template>
+        </SidebarLink>
     </ScrollPanel>
 </template>

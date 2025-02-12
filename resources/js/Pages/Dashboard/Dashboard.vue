@@ -7,10 +7,16 @@ import WalletTransfer from "@/Pages/Dashboard/DashboardWallet/WalletTransfer.vue
 import DashboardReferral from "@/Pages/Dashboard/DashboardReferral.vue";
 
 defineProps({
-    currentAssetCapital: String,
-    currentTeamCapital: String,
-    totalBonus: String,
-    latestBonuses: Object
+    currentAssetCapital: {
+        type: [String, Number]
+    },
+    currentTeamCapital: {
+        type: [String, Number]
+    },
+    totalBonus: {
+        type: [String, Number]
+    },
+    latestBonuses: Array
 })
 </script>
 

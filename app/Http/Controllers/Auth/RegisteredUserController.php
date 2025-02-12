@@ -28,16 +28,18 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): Response
+    public function create($referral = null): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'referral_code' => $referral,
+        ]);
     }
 
     public function store(Request $request)
     {
         $form_step = $request->step;
 
-        $validateData = [
+        $rules = [
             'name' => ['required', 'regex:/^[a-zA-Z0-9\p{Han}. ]+$/u', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
             'username' => ['required'],
@@ -46,23 +48,52 @@ class RegisteredUserController extends Controller
             'phone' => ['required', 'max:255', 'unique:' . User::class],
         ];
 
+        $attributeNames = [
+            'name' => trans('public.name'),
+            'username' => trans('public.username'),
+            'email' => trans('public.email'),
+            'country' => trans('public.country'),
+            'dial_code' => trans('public.phone_code'),
+            'phone_number' => trans('public.phone_number'),
+            'password' => trans('public.password'),
+            'kyc' => trans('public.upload_identity_proof'),
+        ];
+
         switch ($form_step) {
             case 1:
-                Validator::make($request->all(), $validateData)->validate();
+                Validator::make($request->all(), $rules)
+                    ->setAttributeNames($attributeNames)
+                    ->validate();
+
                 return back();
 
             case 2:
-                $validateData['password'] = ['required', Rules\Password::defaults(), 'confirmed'];
-                Validator::make($request->all(), $validateData)->validate();
+                $passwordRules = [
+                    'password' => ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()],
+                ];
+
+                Validator::make($request->all(), $passwordRules)
+                    ->setAttributeNames($attributeNames)
+                    ->validate();
+
                 return back();
 
+            case 3:
+                $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
+                $rules['referral_code'] = ['nullable'];
+
+                $validator = Validator::make($request->all(), $rules)
+                    ->setAttributeNames($attributeNames)
+                    ->validate();
+
+                break;
+
             default:
-                $validateData['referral_code'] =  ['nullable', function($value, $fail){
-                    if($value && !User::where('referral_code', $value)->exists()){ //check referral_code exists or not
-                        $fail('The referral code is invalid or does not exist.');
-                    }
-                }];
-                Validator::make($request->all(), $validateData)->validate();
+                $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
+
+                $validator = Validator::make($request->all(), $rules)
+                    ->setAttributeNames($attributeNames)
+                    ->validate();
                 break;
         }
 
@@ -87,7 +118,7 @@ class RegisteredUserController extends Controller
             if ($referrer) {
 
                 if(empty($referrer->hierarchyList)){
-                    $hierarchyList =  $hierarchyList = "-" . $referrer->id . "-";
+                    $hierarchyList = "-" . $referrer->id . "-";
                 } else {
                     $hierarchyList = $referrer->hierarchyList . $referrer->id . "-";
                 }
@@ -99,7 +130,7 @@ class RegisteredUserController extends Controller
 
         $user->setReferralId();
 
-        $id_no = 'VTA' . Str::padLeft($user->id - 1, 6, "0");
+        $id_no = 'MID' . Str::padLeft($user->id - 1, 6, "0");
         $user->id_number = $id_no;
 
         if ($request->hasFile('kyc_image')) {
@@ -119,16 +150,16 @@ class RegisteredUserController extends Controller
         $wallet->user_id = $user->id;
         $wallet->type = 'cash_wallet';
         $wallet->address = RunningNumberService::getID('cash_wallet');
-        $wallet->currency = 'CNY';
-        $wallet->currency_symbol = '¥';
+        $wallet->currency = 'USD';
+        $wallet->currency_symbol = '$';
         $wallet->save();
 
         $wallet = new Wallet();
         $wallet->user_id = $user->id;
         $wallet->type = 'bonus_wallet';
         $wallet->address = RunningNumberService::getID('bonus_wallet');
-        $wallet->currency = 'CNY';
-        $wallet->currency_symbol = '¥';
+        $wallet->currency = 'USD';
+        $wallet->currency_symbol = '$';
         $wallet->save();
 
         event(new Registered($user));

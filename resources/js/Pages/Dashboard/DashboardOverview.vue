@@ -7,9 +7,15 @@ import {
 } from "@tabler/icons-vue";
 
 const props = defineProps({
-    currentAssetCapital: String,
-    currentTeamCapital: String,
-    totalBonus: String,
+    currentAssetCapital: {
+        type: [String, Number]
+    },
+    currentTeamCapital: {
+        type: [String, Number]
+    },
+    totalBonus: {
+        type: [String, Number]
+    },
 })
 
 const {formatAmount} = generalFormat();
