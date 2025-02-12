@@ -239,6 +239,7 @@ watchEffect(() => {
                         <Column
                             field="created_at"
                             :header="$t('public.date')"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
@@ -249,6 +250,7 @@ watchEffect(() => {
                         <Column
                             field="client"
                             :header="$t('public.client')"
+                            class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
                                 <div class="flex flex-col">
@@ -261,6 +263,7 @@ watchEffect(() => {
                         <Column
                             field="broker"
                             :header="$t('public.broker')"
+                            class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
                                 <div class="flex gap-2 items-center">
@@ -273,6 +276,7 @@ watchEffect(() => {
                         <Column
                             field="bonus_type"
                             :header="$t('public.description')"
+                            class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
                                 <Tag
@@ -285,10 +289,33 @@ watchEffect(() => {
                         <Column
                             field="bonus_amount"
                             :header="$t('public.amount')"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
                                 <span class="font-medium">${{ formatAmount(data.bonus_amount, 4) }}</span>
+                            </template>
+                        </Column>
+
+                        <!-- Mobile view -->
+                        <Column
+                            field="mobile"
+                            class="md:hidden"
+                        >
+                            <template #body="{ data }">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col items-start">
+                                        <div class="font-semibold">
+                                            {{ $t(`public.${data.bonus_type}`) }}
+                                        </div>
+                                        <div class="flex gap-1 items-center text-surface-500 text-xs">
+                                            {{ dayjs(data.created_at).format('YYYY-MM-DD') }}
+                                        </div>
+                                    </div>
+                                    <div class="text-base font-semibold">
+                                        ${{ formatAmount(data.bonus_amount, 4) }}
+                                    </div>
+                                </div>
                             </template>
                         </Column>
                     </template>

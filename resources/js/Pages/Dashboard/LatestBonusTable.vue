@@ -65,7 +65,6 @@ const {formatAmount} = generalFormat();
                     <!-- Mobile view -->
                     <Column
                         field="mobile"
-                        sortable
                         class="md:hidden"
                     >
                         <template #body="{ data }">

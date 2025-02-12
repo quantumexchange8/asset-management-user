@@ -271,6 +271,7 @@ watchEffect(() => {
                         <Column
                             field="created_at"
                             :header="$t('public.date')"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
@@ -281,6 +282,7 @@ watchEffect(() => {
                         <Column
                             field="client"
                             :header="$t('public.client')"
+                            class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
                                 <div class="flex flex-col">
@@ -293,6 +295,7 @@ watchEffect(() => {
                         <Column
                             field="broker"
                             :header="$t('public.broker')"
+                            class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
                                 <div class="flex gap-2 items-center">
@@ -308,6 +311,7 @@ watchEffect(() => {
                         <Column
                             field="symbol"
                             :header="$t('public.symbol')"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
@@ -318,6 +322,7 @@ watchEffect(() => {
                         <Column
                             field="volume"
                             :header="`${$t('public.volume')} (Ł)`"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
@@ -328,10 +333,40 @@ watchEffect(() => {
                         <Column
                             field="rebate"
                             :header="`${$t('public.rebate')} ($)`"
+                            class="hidden md:table-cell"
                             sortable
                         >
                             <template #body="{ data }">
                                 <span class="font-medium">{{ formatAmount(data.rebate, 4) }}</span>
+                            </template>
+                        </Column>
+
+                        <!-- Mobile view -->
+                        <Column
+                            field="mobile"
+                            class="md:hidden"
+                        >
+                            <template #body="{ data }">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex flex-col items-start">
+                                        <div class="font-semibold">
+                                            {{ data.user_broker_login }} - <span class="text-xs text-surface-500">{{ data.broker.name }}</span>
+                                        </div>
+                                        <div class="flex gap-1 items-center text-surface-500 text-xs">
+                                            <span>{{ dayjs(data.created_at).format('YYYY-MM-DD') }}</span>
+                                            <span>|</span>
+                                            <span>{{ data.symbol }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <div class="text-base font-semibold">
+                                            ${{ formatAmount(data.rebate, 4) }}
+                                        </div>
+                                        <div class="text-xs text-surface-500">
+                                            {{ data.volume }}Ł
+                                        </div>
+                                    </div>
+                                </div>
                             </template>
                         </Column>
                     </template>
