@@ -9,6 +9,7 @@ import QrcodeVue from 'qrcode.vue'
 import Tag from 'primevue/tag';
 import InputText from "primevue/inputtext";
 import {IconCopy} from "@tabler/icons-vue";
+import {useToast} from "primevue/usetoast";
 
 const visible = ref(false);
 const registerLink = ref(`${window.location.origin}/register/${usePage().props.auth.user.referral_code}`);
@@ -53,6 +54,8 @@ const handleClick = () => {
         revealQrCode();
     }
 };
+
+const toast = useToast();
 
 const shareRegisterLink = async () => {
     try {

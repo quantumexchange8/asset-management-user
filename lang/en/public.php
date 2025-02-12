@@ -84,4 +84,5 @@ return [
     "register_now" => "Don't have an account? Register Now",
     "no_data" => "No Data",
     "analytics" => "Analytics",
+    "invite_friends" => "Invite Friends",
 ];
