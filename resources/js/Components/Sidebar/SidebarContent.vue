@@ -17,8 +17,8 @@ import ScrollPanel from 'primevue/scrollpanel';
 <template>
     <ScrollPanel style="flex: 1; width: 100%;" class="h-full">
         <!-- Dashboard -->
-        <SidebarLink 
-            :title="'Dashboard'" 
+        <SidebarLink
+            title="dashboard"
             :href="route('dashboard')"
             :active="route().current('dashboard')"
         >

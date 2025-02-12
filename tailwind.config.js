@@ -20,6 +20,19 @@ export default {
             colors: {
                 surface: {
                     ground: '#09090b'
+                },
+                matisse: {
+                    50: '#f4f7fb',
+                    100: '#e9eef5',
+                    200: '#cddcea',
+                    300: '#a1bed8',
+                    400: '#6f9cc1',
+                    500: '#4d80aa',
+                    600: '#3b6790',
+                    700: '#305274',
+                    800: '#2b4661',
+                    900: '#283d52',
+                    950: '#1b2736',
                 }
             },
             boxShadow: {

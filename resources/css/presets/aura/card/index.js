@@ -31,7 +31,7 @@ export default {
         ]
     },
     title: {
-        class: 'text-xl font-semibold mb-0'
+        class: 'text-lg font-semibold mb-0'
     },
     subtitle: {
         class: [

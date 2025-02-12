@@ -26,7 +26,7 @@ export default {
             // Shapes
             { 'shadow-lg': props.raised },
             { 'rounded-md': !props.rounded, 'rounded-full': props.rounded },
-            { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'InputGroup' },
+            { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name === 'InputGroup' },
 
             // Link Button
             { 'text-primary-600 bg-transparent border-transparent': props.link },
@@ -48,7 +48,7 @@ export default {
 
             // Primary Button
             {
-                'text-surface-ground dark:text-white': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
+                'text-white': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'bg-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'border border-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
             },
@@ -81,7 +81,7 @@ export default {
 
             // Info Button
             {
-                'text-white dark:text-surface-900': props.severity === 'info' && !props.text && !props.outlined && !props.plain,
+                'text-white': props.severity === 'info' && !props.text && !props.outlined && !props.plain,
                 'bg-blue-500 dark:bg-blue-400': props.severity === 'info' && !props.text && !props.outlined && !props.plain,
                 'border border-blue-500 dark:border-blue-400': props.severity === 'info' && !props.text && !props.outlined && !props.plain
             },

@@ -56,7 +56,7 @@ const Tag = !props.external ? Link : 'a'
                 class="text-sm font-medium w-full"
                 v-show="sidebarState.isOpen || sidebarState.isHovered"
             >
-                {{ title }}
+                {{ $t(`public.${title}`) }}
             </span>
             <Badge
                 v-if="pendingCounts > 0 && (sidebarState.isOpen || sidebarState.isHovered)"
@@ -92,7 +92,7 @@ const Tag = !props.external ? Link : 'a'
             class="text-sm font-medium dark:text-white"
             v-show="sidebarState.isOpen || sidebarState.isHovered"
         >
-            {{ title }}
+            {{ $t(`public.${title}`) }}
         </span>
         <slot name="arrow" />
     </button>

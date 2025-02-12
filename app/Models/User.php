@@ -13,7 +13,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, InteractsWithMedia;
 
     /**
@@ -96,5 +95,5 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Transaction::class, 'user_id', 'id');
     }
-   
+
 }

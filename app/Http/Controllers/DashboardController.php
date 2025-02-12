@@ -2,45 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\BrokerConnection;
+use App\Models\WalletLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $user = Auth::user();
 
-        $user_wallet_id = $user->wallets->pluck('id');
+        $activeConnections = BrokerConnection::where('status', 'active');
 
-        $wallet_transaction_history = Transaction::with([
-            'from_wallet.user',
-            'to_wallet.user',
-        ])->where(function ($query) use ($user_wallet_id) {
-            $query->whereIn('from_wallet_id', $user_wallet_id)
-                ->orWhereIn('to_wallet_id', $user_wallet_id);
-        })
-        ->where('status', 'success')
-        ->orderBy('approval_at', 'desc')
-        ->get();
+        $current_asset_capital = (clone $activeConnections)
+            ->where('user_id', $user->id)
+            ->sum('capital_fund');
 
-        $user_wallet_count = $user->wallets->count();
+        $current_team_capital = (clone $activeConnections)
+            ->whereIn('user_id', $user->getChildrenIds())
+            ->sum('capital_fund');
 
-        return Inertia::render('Dashboard', [
-            'user_wallet_count' => $user_wallet_count,
-            'wallet_transaction_history' => $wallet_transaction_history,
-        ]);
-    }
+        $query = WalletLog::query()
+            ->where([
+                'user_id' => $user->id,
+                'category' => 'bonus'
+            ]);
 
-    public function getWalletData(){
-        $user = Auth::user();
+        $total_bonus = (clone $query)
+            ->sum('amount');
 
-        $user_wallets = $user->wallets;
+        $latest_bonus = (clone $query)->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->where('amount', '>', 0)
+            ->latest()
+            ->get();
 
-        return response()->json([
-            'user_wallets' => $user_wallets,
+        return Inertia::render('Dashboard/Dashboard', [
+            'currentAssetCapital' => $current_asset_capital,
+            'currentTeamCapital' => $current_team_capital,
+            'totalBonus' => $total_bonus,
+            'latestBonuses' => $latest_bonus,
         ]);
     }
 }

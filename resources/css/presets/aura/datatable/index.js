@@ -45,8 +45,6 @@ export default {
         class: [
             'font-bold',
 
-           
-
             // Spacing
             'pb-4',
 
@@ -104,6 +102,7 @@ export default {
                 'font-semibold',
                 'leading-[normal]',
                 'uppercase',
+                'hidden md:table-cell',
 
                 // Position
                 { 'sticky z-20 border-b': props.frozen || props.frozen === '' },
@@ -147,7 +146,7 @@ export default {
         bodyCell: ({ props, context, state, parent }) => ({
             class: [
                 // Font
-                'leading-[normal]',
+                'text-sm leading-[normal]',
 
                 //Position
                 { 'sticky box-border border-b': parent.instance.frozenRow },
@@ -164,7 +163,7 @@ export default {
                 // Spacing
                 { 'py-[0.375rem] px-2': context?.size === 'small' && !state['d_editing'] },
                 { 'py-[0.9375rem] px-5': context?.size === 'large' && !state['d_editing'] },
-                { 'py-3 px-4': context?.size !== 'large' && context?.size !== 'small' && !state['d_editing'] },
+                { 'py-3 md:px-4': context?.size !== 'large' && context?.size !== 'small' && !state['d_editing'] },
                 { 'py-[0.6rem] px-2': state['d_editing'] },
 
                 // Color

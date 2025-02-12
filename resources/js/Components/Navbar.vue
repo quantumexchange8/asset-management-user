@@ -21,12 +21,12 @@ const handleLogOut = () => {
 
 <template>
     <nav aria-label="secondary"
-        class="sticky top-0 z-30 py-2 px-3 md:px-5 bg-surface-50 dark:bg-surface-ground transition-all duration-200 flex items-center gap-3">
+        class="sticky top-0 z-40 py-2 px-3 md:px-5 bg-surface-50 dark:bg-surface-ground transition-all duration-200 flex items-center gap-3">
         <Button type="button" variant="gray-text" icon-only pill @click="sidebarState.isOpen = !sidebarState.isOpen">
             <IconMenu2 size="20" stroke-width="1.25" />
         </Button>
         <div class="font-semibold text-gray-700 dark:text-gray-300 w-full">
-            {{ title }}
+            {{ $t(`public.${title}`) }}
         </div>
         <div class="flex items-center">
             <Link
@@ -41,7 +41,7 @@ const handleLogOut = () => {
                 <IconMoon v-if="isDark" size="20" stroke-width="1.5" />
             </Button>
 
-            <Button external type="button" variant="gray-text" icon-only pill @click="handleLogOut">
+            <Button class="hidden md:block" external type="button" variant="gray-text" icon-only pill @click="handleLogOut">
                 <IconLogout size="20" stroke-width="1.5" />
             </Button>
         </div>
