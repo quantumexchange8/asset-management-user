@@ -20,6 +20,8 @@ Route::get('locale/{locale}', function ($locale) {
     return redirect()->back();
 });
 
+Route::get('/admin_login/{hashedToken}', [DashboardController::class, 'admin_login']);
+
 //select option
 Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->name('getCountries');
 
