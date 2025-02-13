@@ -14,8 +14,8 @@ export default {
             // Sizes
             {
                 'h-8 w-8': props.size == null || props.size == 'normal',
-                'w-12 h-12': props.size == 'large',
-                'w-16 h-16': props.size == 'xlarge'
+                'w-10 h-10': props.size == 'large',
+                'w-20 h-20': props.size == 'xlarge'
             },
             { '-ml-4': parent.instance.$style?.name == 'avatargroup' },
 

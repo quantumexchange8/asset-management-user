@@ -36,10 +36,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/getWallets', [WalletController::class, 'getWallets'])->name('dashboard.getWallets');
     });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     //wallet
     Route::prefix('wallet')->group(function () {
         Route::get('/connections', [ReportController::class, 'connections'])->name('wallet.connections');
@@ -61,6 +57,18 @@ Route::middleware('auth')->group(function () {
         // Rebate Bonus
         Route::get('/rebate_bonus', [ReportController::class, 'rebate_bonus'])->name('report.rebate_bonus');
         Route::get('/getRebateBonusData', [ReportController::class, 'getRebateBonusData'])->name('report.getRebateBonusData');
+    });
+
+    /**
+     * ==============================
+     *           Profile
+     * ==============================
+     */
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile');
+        Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/uploadKyc', [ProfileController::class, 'uploadKyc'])->name('profile.uploadKyc');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 });
 

@@ -10,54 +10,51 @@ import {
     IconReport,
 } from '@tabler/icons-vue';
 import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
-import ScrollPanel from 'primevue/scrollpanel';
 
 </script>
 
 <template>
-    <ScrollPanel style="flex: 1; width: 100%;" class="h-full">
-        <!-- Dashboard -->
-        <SidebarLink
-            title="dashboard"
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
-        >
-            <template #icon>
-                <IconLayoutDashboard :size="20" stroke-width="1.5" />
-            </template>
-        </SidebarLink>
+    <!-- Dashboard -->
+    <SidebarLink
+        title="dashboard"
+        :href="route('dashboard')"
+        :active="route().current('dashboard')"
+    >
+        <template #icon>
+            <IconLayoutDashboard :size="20" stroke-width="1.5" />
+        </template>
+    </SidebarLink>
 
-<!--        <SidebarLink-->
-<!--            title="broker"-->
-<!--            :href="route('wallet.getWalletHistory')"-->
-<!--            :active="route().current('wallet.getWalletHistory')"-->
-<!--        >-->
-<!--            <template #icon>-->
-<!--                <IconWallet :size="20" stroke-width="1.5"/>-->
-<!--            </template>-->
-<!--        </SidebarLink>-->
+    <!--        <SidebarLink-->
+    <!--            title="broker"-->
+    <!--            :href="route('wallet.getWalletHistory')"-->
+    <!--            :active="route().current('wallet.getWalletHistory')"-->
+    <!--        >-->
+    <!--            <template #icon>-->
+    <!--                <IconWallet :size="20" stroke-width="1.5"/>-->
+    <!--            </template>-->
+    <!--        </SidebarLink>-->
 
-        <!-- Analytics -->
-        <SidebarCategoryLabel title="analytics" />
+    <!-- Analytics -->
+    <SidebarCategoryLabel title="analytics" />
 
-        <SidebarLink
-            title="standard_bonus"
-            :href="route('report.standard_bonus')"
-            :active="route().current('report.standard_bonus')"
-        >
-            <template #icon>
-                <IconCoin :size="20" stroke-width="1.5"/>
-            </template>
-        </SidebarLink>
+    <SidebarLink
+        title="standard_bonus"
+        :href="route('report.standard_bonus')"
+        :active="route().current('report.standard_bonus')"
+    >
+        <template #icon>
+            <IconCoin :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
 
-        <SidebarLink
-            title="rebate_bonus"
-            :href="route('report.rebate_bonus')"
-            :active="route().current('report.rebate_bonus')"
-        >
-            <template #icon>
-                <IconDatabaseDollar :size="20" stroke-width="1.5"/>
-            </template>
-        </SidebarLink>
-    </ScrollPanel>
+    <SidebarLink
+        title="rebate_bonus"
+        :href="route('report.rebate_bonus')"
+        :active="route().current('report.rebate_bonus')"
+    >
+        <template #icon>
+            <IconDatabaseDollar :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
 </template>

@@ -8,18 +8,17 @@ export default {
             'rounded-t-md',
 
             // Spacing
-            'py-4 px-[1.125rem]',
+            'py-2 px-[1.125rem]',
             '-mb-px',
 
             // Colors and Conditions
             'outline-transparent',
             {
                 'border-surface-200 dark:border-surface-700': !context.active,
-                'bg-surface-0 dark:bg-surface-900': !context.active,
                 'text-surface-700 dark:text-surface-0/80': !context.active,
 
-                'bg-surface-0 dark:bg-surface-900': context.active,
-                'text-primary': context.active,
+                'bg-surface-50 dark:bg-transparent': context.active,
+                'text-primary font-semibold': context.active,
 
                 'opacity-60 cursor-default user-select-none select-none pointer-events-none': props?.disabled
             },

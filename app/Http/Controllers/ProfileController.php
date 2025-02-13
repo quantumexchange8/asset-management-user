@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,10 +19,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
-        ]);
+        return Inertia::render('Profile/Edit');
     }
 
     /**
@@ -29,15 +27,26 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'dial_code' => $request->dial_code,
+            'phone' => $request->phone,
+            'phone_number' => $request->dial_code . $request->phone,
+        ]);
+
+        if ($request->hasFile('profile_photo')) {
+            $user->clearMediaCollection('profile_photo');
+            $user->addMedia($request->profile_photo)->toMediaCollection('profile_photo');
         }
 
-        $request->user()->save();
+        if ($request->profile_action == 'remove') {
+            $user->clearMediaCollection('profile_photo');
+        }
 
-        return Redirect::route('profile.edit');
+        return back()->with('toast');
     }
 
     /**
@@ -59,5 +68,29 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function uploadKyc(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'kyc_image' => ['required'],
+        ])->setAttributeNames([
+            'kyc_image' => trans('public.kyc_file')
+        ]);
+        $validator->validate();
+
+        $user = $request->user();
+
+        if ($request->hasFile('kyc_image')) {
+            $user->clearMediaCollection('kyc_image');
+            foreach ($request->file('kyc_image') as $image) {
+                $user->addMedia($image)->toMediaCollection('kyc_image');
+            }
+
+            $user->kyc_status = 'pending';
+            $user->save();
+        }
+
+        return back()->with('toast');
     }
 }
