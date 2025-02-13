@@ -92,7 +92,7 @@ return [
     "remove" => "移除",
     "upload_identity_proof_caption" => "确保您的文件正确",
     "pending" => "待处理",
-    "verfied" => "已验证",
+    "verified" => "已验证",
     "unverified" => "未验证",
     "drag_and_drop" => "拖放文件到此处上传。",
     "save" => "保存",

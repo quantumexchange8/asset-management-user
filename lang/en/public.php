@@ -93,7 +93,7 @@ return [
     "remove" => "Remove",
     "upload_identity_proof_caption" => "Ensure your files are correct",
     "pending" => "Pending",
-    "verfied" => "Verified",
+    "verified" => "Verified",
     "unverified" => "Unverified",
     "drag_and_drop" => "Drag and drop files to here to upload.",
     "save" => "Save",
