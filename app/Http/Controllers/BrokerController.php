@@ -11,7 +11,11 @@ class BrokerController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Broker/Broker');
+        $brokerCounts = Broker::where('status', 'active')->count();
+
+        return Inertia::render('Broker/Broker', [
+            'brokerCounts' => $brokerCounts
+        ]);
     }
 
     public function getBrokerData(Request $request)

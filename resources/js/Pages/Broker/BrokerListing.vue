@@ -262,7 +262,7 @@ watchEffect(() => {
 
                             <!-- StatusBadge Section -->
                             <div class="flex items-center gap-2 self-stretch">
-                                <Skeleton width="5rem" height="1.5rem"></Skeleton>
+                                <Skeleton class="w-full" height="1.5rem"></Skeleton>
                             </div>
 
                             <!-- Descriptions -->
