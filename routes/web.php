@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BrokerController;
+use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SelectOptionController;
@@ -36,12 +38,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/getWallets', [WalletController::class, 'getWallets'])->name('dashboard.getWallets');
     });
 
-    //wallet
-    Route::prefix('wallet')->group(function () {
-        Route::get('/connections', [ReportController::class, 'connections'])->name('wallet.connections');
-        Route::get('/get_wallet_history', [WalletController::class, 'getWalletHistory'])->name('wallet.getWalletHistory');
-        Route::get('/get_wallet_history_data', [WalletController::class, 'getWalletHistoryData'])->name('wallet.getWalletHistoryData');
+    /**
+     * ==============================
+     *            Broker
+     * ==============================
+     */
+    Route::prefix('broker')->group(function () {
+        Route::get('/', [BrokerController::class, 'index'])->name('broker');
+        Route::get('/getBrokerData', [BrokerController::class, 'getBrokerData'])->name('broker.getBrokerData');
+    });
 
+    /**
+     * ==============================
+     *          Connections
+     * ==============================
+     */
+    Route::prefix('connections')->group(function () {
+        Route::get('/', [ConnectionController::class, 'index'])->name('connections');
+        Route::get('/getConnectionAccounts', [ConnectionController::class, 'getConnectionAccounts'])->name('connections.getConnectionAccounts');
+        Route::get('/getConnectionsData', [ConnectionController::class, 'getConnectionsData'])->name('connections.getConnectionsData');
     });
 
     /**

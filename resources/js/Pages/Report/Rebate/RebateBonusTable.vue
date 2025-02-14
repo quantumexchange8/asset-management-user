@@ -285,10 +285,7 @@ watchEffect(() => {
                             class="hidden md:table-cell"
                         >
                             <template #body="{ data }">
-                                <div class="flex flex-col">
-                                    <span class="text-surface-950 dark:text-white">{{ data.subject_user.name }}</span>
-                                    <span class="text-surface-500">{{ data.subject_user.email }}</span>
-                                </div>
+                                <span class="text-surface-950 dark:text-white">{{ data.subject_user.username }}</span>
                             </template>
                         </Column>
 

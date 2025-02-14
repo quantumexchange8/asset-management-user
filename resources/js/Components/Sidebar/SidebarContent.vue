@@ -4,10 +4,10 @@ import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
 import {
     IconLayoutDashboard,
-    IconWallet,
+    IconHomeDollar,
     IconCoin,
     IconDatabaseDollar,
-    IconReport,
+    IconHomeShare,
 } from '@tabler/icons-vue';
 import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
 
@@ -25,15 +25,28 @@ import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue"
         </template>
     </SidebarLink>
 
-    <!--        <SidebarLink-->
-    <!--            title="broker"-->
-    <!--            :href="route('wallet.getWalletHistory')"-->
-    <!--            :active="route().current('wallet.getWalletHistory')"-->
-    <!--        >-->
-    <!--            <template #icon>-->
-    <!--                <IconWallet :size="20" stroke-width="1.5"/>-->
-    <!--            </template>-->
-    <!--        </SidebarLink>-->
+    <!-- Market -->
+    <SidebarCategoryLabel title="market" />
+
+    <SidebarLink
+        title="broker"
+        :href="route('broker')"
+        :active="route().current('broker')"
+    >
+        <template #icon>
+            <IconHomeDollar :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
+
+    <SidebarLink
+        title="connections"
+        :href="route('connections')"
+        :active="route().current('connections')"
+    >
+        <template #icon>
+            <IconHomeShare :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
 
     <!-- Analytics -->
     <SidebarCategoryLabel title="analytics" />

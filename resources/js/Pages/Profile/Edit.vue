@@ -7,6 +7,7 @@ import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 import AccountPreferences from "@/Pages/Profile/Account/AccountPreferences.vue";
+import PaymentAccount from "@/Pages/Profile/Payment/PaymentAccount.vue";
 
 const tabs = ref([
     {

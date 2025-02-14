@@ -66,8 +66,8 @@ const shareRegisterLink = async () => {
         });
 
         toast.add({
-            title: 'Success',
-            message: 'Register Link was shared successfully',
+            title: trans('public.success'),
+            message: trans('public.register_link_shared'),
             type: 'success'
         })
     } catch (error) {

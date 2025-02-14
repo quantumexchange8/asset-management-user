@@ -22,7 +22,7 @@ class ReportController extends Controller
             $data = json_decode($request->only(['lazyEvent'])['lazyEvent'], true);
 
             $query = BonusHistory::with([
-                'subject_user:id,name,email,hierarchyList',
+                'subject_user:id,username,hierarchyList',
                 'broker',
                 'broker.media',
             ])
@@ -92,7 +92,7 @@ class ReportController extends Controller
             $data = json_decode($request->only(['lazyEvent'])['lazyEvent'], true);
 
             $query = TradeRebateSummary::with([
-                'subject_user:id,name,email,hierarchyList',
+                'subject_user:id,username,hierarchyList',
                 'broker',
                 'broker.media',
             ])
