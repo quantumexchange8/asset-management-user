@@ -14,7 +14,7 @@ const handleOverview = (data) => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="standard_bonus">
+    <AuthenticatedLayout title="ib_group_incentive">
         <div class="flex flex-col items-center gap-5">
             <StandardOverview
                 :totalBonusAmount="totalBonusAmount"

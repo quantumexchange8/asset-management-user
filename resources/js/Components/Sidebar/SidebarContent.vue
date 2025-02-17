@@ -65,9 +65,9 @@ import {
     </SidebarLink>
 
     <SidebarLink
-        title="standard_bonus"
-        :href="route('report.standard_bonus')"
-        :active="route().current('report.standard_bonus')"
+        title="ib_group_incentive"
+        :href="route('report.ib_group_incentive')"
+        :active="route().current('report.ib_group_incentive')"
     >
         <template #icon>
             <IconCoin :size="20" stroke-width="1.5"/>

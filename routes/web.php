@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/getProfitSharingData', [ReportController::class, 'getProfitSharingData'])->name('report.getProfitSharingData');
 
         // Standard Bonus
-        Route::get('/standard_bonus', [ReportController::class, 'standard_bonus'])->name('report.standard_bonus');
+        Route::get('/ib_group_incentive', [ReportController::class, 'ib_group_incentive'])->name('report.ib_group_incentive');
         Route::get('/getStandardBonusData', [ReportController::class, 'getStandardBonusData'])->name('report.getStandardBonusData');
 
         // Rebate Bonus

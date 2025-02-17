@@ -34,7 +34,6 @@ return [
     "referral_qr_code" => "Referral QR code",
     "scan_to_register" => "Scan to register",
     "broker" => "Broker",
-    "standard_bonus" => "Standard Bonus",
     "rebate_bonus" => "Rebate Bonus",
     "highest_bonus" => "Highest Bonus",
     "client" => "Client",
@@ -121,4 +120,7 @@ return [
     "reset_password_caption" => "Enter your new password",
     "toast_success_reset_password" => "Your password has been reset successfully",
     "success" => "Success",
+    "profit_sharing" => "Profit Sharing",
+    "ib_group_incentive" => "IB Group Incentive",
+    "same_level" => "Same Level",
 ];

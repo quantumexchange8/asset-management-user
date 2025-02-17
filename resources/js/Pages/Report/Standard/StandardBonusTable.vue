@@ -279,7 +279,7 @@ watchEffect(() => {
                             field="bonus_type"
                             :header="$t('public.description')"
                             class="hidden md:table-cell"
-                            :class="locale === 'cn' ? 'min-w-24' : 'min-w-40'"
+                            :class="locale === 'cn' ? 'min-w-28' : 'min-w-40'"
                         >
                             <template #body="{ data }">
                                 <Tag

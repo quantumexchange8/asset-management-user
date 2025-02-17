@@ -84,7 +84,7 @@ class ReportController extends Controller
         return response()->json(['success' => false, 'data' => []]);
     }
 
-    public function standard_bonus()
+    public function ib_group_incentive()
     {
         return Inertia::render('Report/Standard/StandardBonus');
     }
