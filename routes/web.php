@@ -8,6 +8,8 @@ use App\Http\Controllers\SelectOptionController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
@@ -18,13 +20,13 @@ Route::get('/', function () {
 Route::get('locale/{locale}', function ($locale) {
     App::setLocale($locale);
     Session::put("locale", $locale);
-
     return redirect()->back();
 });
 
+// Admin login
 Route::get('/admin_login/{hashedToken}', [DashboardController::class, 'admin_login']);
 
-//select option
+// Select option
 Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->name('getCountries');
 
 Route::middleware('auth')->group(function () {
@@ -65,6 +67,10 @@ Route::middleware('auth')->group(function () {
      * ==============================
      */
     Route::prefix('report')->group(function () {
+        // Profit Report
+        Route::get('/profit_sharing', [ReportController::class, 'profit_sharing'])->name('report.profit_sharing');
+        Route::get('/getProfitSharingData', [ReportController::class, 'getProfitSharingData'])->name('report.getProfitSharingData');
+
         // Standard Bonus
         Route::get('/standard_bonus', [ReportController::class, 'standard_bonus'])->name('report.standard_bonus');
         Route::get('/getStandardBonusData', [ReportController::class, 'getStandardBonusData'])->name('report.getStandardBonusData');
@@ -81,11 +87,10 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile');
-        Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/update', [ProfileController::class, 'update'])->name('profile.update'); // Fixed route
         Route::post('/uploadKyc', [ProfileController::class, 'uploadKyc'])->name('profile.uploadKyc');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 });
-
 
 require __DIR__ . '/auth.php';

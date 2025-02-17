@@ -2,14 +2,17 @@
 import SidebarLink from '@/Components/Sidebar/SidebarLink.vue'
 import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
+import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
+
+// Import Tabler icons
 import {
     IconLayoutDashboard,
     IconHomeDollar,
     IconCoin,
     IconDatabaseDollar,
     IconHomeShare,
+    IconChartBar
 } from '@tabler/icons-vue';
-import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
 
 </script>
 
@@ -50,6 +53,16 @@ import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue"
 
     <!-- Analytics -->
     <SidebarCategoryLabel title="analytics" />
+
+    <SidebarLink
+        title="profit_sharing"
+        :href="route('report.profit_sharing')"
+        :active="route().current('report.profit_sharing')"
+    >
+        <template #icon>
+            <IconChartBar :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
 
     <SidebarLink
         title="standard_bonus"
