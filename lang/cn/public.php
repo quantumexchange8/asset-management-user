@@ -84,6 +84,7 @@ return [
     "register_now" => "还没有账户？立即注册",
     "no_data" => "无数据",
     "analytics" => "分析",
+    "invite_friends" => "邀请朋友",
     "account" => "账户",
     "payments" => "付款",
     "profile_information" => "个人资料信息",
