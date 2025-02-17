@@ -136,7 +136,7 @@ class RegisteredUserController extends Controller
         if ($request->hasFile('kyc_image')) {
             foreach ($request->file('kyc_image') as $file) {
                 try {
-                    $user->addMedia($file)->toMediaCollection('kyc_verification');
+                    $user->addMedia($file)->toMediaCollection('kyc_image');
                 } catch (FileDoesNotExist|FileIsTooBig $e) {
                     Log::error($e);
                     return back();
