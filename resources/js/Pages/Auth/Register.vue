@@ -346,6 +346,7 @@ const handleContinue = () => {
                                                     placeholder="••••••••"
                                                     toggleMask
                                                     autofocus
+                                                    :promptLabel="$t('public.password')"
                                                 />
                                             </InputIconWrapper>
                                             <InputError :message="form.errors.password" />
@@ -365,6 +366,7 @@ const handleContinue = () => {
                                                     class="block w-full"
                                                     placeholder="••••••••"
                                                     toggleMask
+                                                    :promptLabel="$t('public.password')"
                                                 />
                                             </InputIconWrapper>
                                         </div>

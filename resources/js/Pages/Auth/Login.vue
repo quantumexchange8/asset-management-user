@@ -9,8 +9,11 @@ import { Link, useForm } from '@inertiajs/vue3';
 import { IconMail, IconLock  } from '@tabler/icons-vue';
 import InputIconWrapper from '@/Components/InputIconWrapper.vue';
 import AuthHeader from "@/Components/AuthHeader.vue";
+import {useToast} from "primevue/usetoast";
+import {onMounted, watch} from "vue";
+import {trans} from "laravel-vue-i18n";
 
-defineProps({
+const props = defineProps({
     canResetPassword: {
         type: Boolean,
     },
@@ -30,6 +33,19 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const toast = useToast();
+
+onMounted(() => {
+    if (props.status) {
+        toast.add({
+            severity: 'success',
+            summary: trans('public.success'),
+            detail: trans('public.toast_success_reset_password'),
+            life: 3000,
+        });
+    }
+});
 </script>
 
 <template>
@@ -87,13 +103,13 @@ const submit = () => {
                     <div class="flex items-center justify-between">
                         <label class="flex items-center">
                             <Checkbox name="remember" v-model="form.remember" :binary="true" />
-                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300">{{ $t('public.remember_me') }}</span>
+                            <span class="ms-2 text-sm text-surface-700 dark:text-surface-300">{{ $t('public.remember_me') }}</span>
                         </label>
 
                         <Link
                             v-if="canResetPassword"
                             :href="route('password.request')"
-                            class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
+                            class="text-sm text-surface-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-surface-400"
                         >
                             {{ $t('public.reset_password') }}
                         </Link>
@@ -112,7 +128,7 @@ const submit = () => {
                         <Link
                             v-if="canResetPassword"
                             :href="route('register')"
-                            class="text-sm text-gray-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-gray-400"
+                            class="text-sm text-surface-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-surface-400"
                         >
                             {{ $t('public.register_now') }}
                         </Link>

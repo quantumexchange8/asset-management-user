@@ -1,10 +1,10 @@
 export default {
     root: ({ props }) => ({
         class: [
-            'relative [&>input]:w-full', 
-            { '[&>input]:pr-10': props.toggleMask }, 
-            { 'flex [&>input]:w-full': props.fluid, 
-                'inline-flex': !props.fluid 
+            'relative [&>input]:w-full',
+            { '[&>input]:pr-10': props.toggleMask },
+            { 'flex [&>input]:w-full': props.fluid,
+                'inline-flex': !props.fluid
             },
             { '[&>input]:pr-10': props.toggleMask }, // Adds right padding if toggle mask is enabled.
             { '[&>input]:pl-10': true }, // Adds left padding for the icon to prevent overlap with the text input area.

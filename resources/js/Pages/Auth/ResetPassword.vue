@@ -2,9 +2,13 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import {Link, useForm} from '@inertiajs/vue3';
+import AuthHeader from "@/Components/AuthHeader.vue";
+import {IconLock, IconMail} from "@tabler/icons-vue";
+import InputIconWrapper from "@/Components/InputIconWrapper.vue";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
 
 const props = defineProps({
     email: {
@@ -32,70 +36,92 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Reset Password" />
+    <GuestLayout title="reset_password">
+        <div class="flex flex-col gap-3 rounded-md p-5 dark:bg-surface-900 w-full max-w-[90vw] sm:max-w-md items-center justify-center">
+            <AuthHeader
+                :header="$t('public.reset_password')"
+                :caption="$t('public.reset_password_caption')"
+            />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+            <form @submit.prevent="submit" class="w-full">
+                <div class="flex flex-col gap-3 w-full self-stretch">
+                    <div class="flex flex-col gap-1 items-start self-stretch">
+                        <InputLabel for="email">{{ $t('public.email') }}</InputLabel>
+                        <InputIconWrapper>
+                            <template #icon>
+                                <IconMail :size="20" stroke-width="1.5"/>
+                            </template>
+                            <InputText
+                                id="email"
+                                type="email"
+                                class="pl-10 block w-full"
+                                v-model="form.email"
+                                disabled
+                                :invalid="!!form.errors.email"
+                                autocomplete="username"
+                                :placeholder="$t('public.enter_email')"
+                            />
+                        </InputIconWrapper>
+                        <InputError :message="form.errors.email" />
+                    </div>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                    <div class="flex flex-col gap-1 items-start self-stretch">
+                        <InputLabel :value="$t('public.password')" for="password"/>
+                        <InputIconWrapper>
+                            <template #icon>
+                                <IconLock :size="20" stroke-width="1.5" />
+                            </template>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                            <Password
+                                v-model="form.password"
+                                :invalid="!!form.errors.password"
+                                class="block w-full"
+                                placeholder="••••••••"
+                                toggleMask
+                                :promptLabel="$t('public.password')"
+                                autofocus
+                            />
+                        </InputIconWrapper>
+                        <InputError :message="form.errors.password" />
+                    </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                    <div class="flex flex-col gap-1 items-start self-stretch">
+                        <InputLabel :value="$t('public.confirm_password')" for="password_confirmation"/>
+                        <InputIconWrapper>
+                            <template #icon>
+                                <IconLock :size="20" stroke-width="1.5"/>
+                            </template>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                            <Password
+                                v-model="form.password_confirmation"
+                                :invalid="!!form.errors.password"
+                                class="block w-full"
+                                placeholder="••••••••"
+                                toggleMask
+                                :promptLabel="$t('public.password')"
+                            />
+                        </InputIconWrapper>
+                    </div>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                    <div class="flex flex-col gap-1 pt-5 items-center">
+                        <Button
+                            class="w-full text-center font-semibold dark:text-surface-ground text-white"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                            type="submit"
+                        >
+                            {{ $t('public.reset_password') }}
+                        </Button>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Reset Password
-                </PrimaryButton>
-            </div>
-        </form>
+                        <Link
+                            :href="route('login')"
+                            class="text-sm text-surface-600 hover:text-primary dark:hover:text-primary-500 focus:outline-none dark:text-surface-400"
+                        >
+                            {{ $t('public.back_to_login') }}
+                        </Link>
+                    </div>
+                </div>
+            </form>
+        </div>
     </GuestLayout>
 </template>

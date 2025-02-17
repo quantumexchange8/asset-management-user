@@ -113,4 +113,12 @@ return [
     "inactive" => "Inactive",
     "market" => "Market",
     "paginator_caption" => "Showing {first} to {last} of {totalRecords} entries",
+    "forgot_password" => "Forgot Password",
+    "forgot_password_caption" => "Send us your email for reset instructions",
+    "password_reset_link_sent" => "We have sent a password reset link to",
+    "send" => "Send",
+    "retry_after" => "Retry after",
+    "reset_password_caption" => "Enter your new password",
+    "toast_success_reset_password" => "Your password has been reset successfully",
+    "success" => "Success",
 ];

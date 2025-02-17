@@ -112,4 +112,12 @@ return [
     "inactive" => "非活跃",
     "market" => "市场",
     "paginator_caption" => "显示 {first} 至 {last} 的 {totalRecords} 条目",
+    "forgot_password" => "忘记密码",
+    "forgot_password_caption" => "请发送您的电子邮件以获取重置说明",
+    "password_reset_link_sent" => "我们已向您发送密码重置链接",
+    "send" => "发送",
+    "retry_after" => "请稍后重试",
+    "reset_password_caption" => "输入新密码",
+    "toast_success_reset_password" => "您的密码已成功重置",
+    "success" => "成功"
 ];
