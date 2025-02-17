@@ -34,7 +34,7 @@ return [
     "referral_qr_code" => "推荐二维码",
     "scan_to_register" => "扫描注册",
     "broker" => "经纪商",
-    "rebate_bonus" => "返利奖金",
+    "rebate_bonus" => "交易奖金",
     "highest_bonus" => "最高奖金",
     "client" => "客户",
     "direct_sponsor" => "开户成就奖",
