@@ -111,4 +111,5 @@ return [
     "active" => "活跃",
     "inactive" => "非活跃",
     "market" => "市场",
+    "paginator_caption" => "显示 {first} 至 {last} 的 {totalRecords} 条目",
 ];

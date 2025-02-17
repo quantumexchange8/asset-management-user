@@ -186,7 +186,7 @@ const getSeverity = (status) => {
                         :rowsPerPageOptions="[10, 20, 50, 100]"
                         :first="first"
                         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        :currentPageReportTemplate="$t('public.paginator_caption')"
                         v-model:filters="filters"
                         ref="dt"
                         dataKey="id"
@@ -202,7 +202,7 @@ const getSeverity = (status) => {
                                 <div class="flex items-center space-x-4 w-full md:w-auto">
 
                                     <!-- Search bar -->
-                                    <IconField class="w-full">
+                                    <IconField class="w-full md:w-auto">
                                         <InputIcon>
                                             <IconSearch :size="16" stroke-width="1.5" />
                                         </InputIcon>

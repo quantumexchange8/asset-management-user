@@ -207,7 +207,7 @@ watchEffect(() => {
                     :rowsPerPageOptions="[10, 20, 50, 100]"
                     :first="first"
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    :currentPageReportTemplate="$t('public.paginator_caption')"
                     v-model:filters="filters"
                     ref="dt"
                     dataKey="id"
@@ -248,7 +248,7 @@ watchEffect(() => {
                                 @click="toggle"
                             >
                                 <IconAdjustments :size="15"/>
-                                {{ $t('public.filter') }}
+                                <span class="text-sm">{{ $t('public.filter') }}</span>
                             </Button>
                         </div>
                     </template>

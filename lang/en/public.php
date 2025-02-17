@@ -112,4 +112,5 @@ return [
     "active" => "Active",
     "inactive" => "Inactive",
     "market" => "Market",
+    "paginator_caption" => "Showing {first} to {last} of {totalRecords} entries",
 ];

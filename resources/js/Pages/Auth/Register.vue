@@ -21,6 +21,7 @@ import { onMounted, ref } from 'vue';
 import { usePrimeVue } from 'primevue/config';
 import Password from 'primevue/password';
 import AuthHeader from "@/Components/AuthHeader.vue";
+import {useLangObserver} from "@/Composables/localeObserver.js";
 
 const props = defineProps({
     referral_code: String
@@ -43,6 +44,8 @@ const form = useForm({
     password: '',
     password_confirmation: '',
 });
+
+const {locale} = useLangObserver();
 
 //get countries/phone code
 const selectedCountry = ref();
@@ -208,7 +211,7 @@ const handleContinue = () => {
                                             <InputLabel :value="$t('public.country')" for="country"/>
                                             <InputIconWrapper>
                                                 <template #icon>
-                                                    <IconFlag :size="20" stroke-width="1.5" class="mt-1"/>
+                                                    <IconFlag :size="20" stroke-width="1.5" />
                                                 </template>
 
                                                 <Select
@@ -220,17 +223,24 @@ const handleContinue = () => {
                                                     class="pl-7 block w-full"
                                                     :invalid="!!form.errors.country"
                                                     filter
+                                                    :filter-fields="['name', 'iso2']"
                                                 >
                                                     <template #value="slotProps">
                                                         <div v-if="slotProps.value" class="flex items-center">
-                                                            <div>{{ slotProps.value.name }}</div>
+                                                            <div class="leading-tight">{{ JSON.parse(slotProps.value.translations)[locale] || slotProps.value.name }}</div>
                                                         </div>
                                                         <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
                                                     </template>
                                                     <template #option="slotProps">
                                                         <div class="flex items-center gap-1">
-                                                            <div>{{ slotProps.option.emoji }}</div>
-                                                            <div class="max-w-[200px] truncate">{{ slotProps.option.name }}</div>
+                                                            <img
+                                                                v-if="slotProps.option.iso2"
+                                                                :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
+                                                                :alt="slotProps.option.iso2"
+                                                                width="18"
+                                                                height="12"
+                                                            />
+                                                            <div class="max-w-[200px] truncate">{{ JSON.parse(slotProps.option.translations)[locale] || slotProps.option.name }}</div>
                                                         </div>
                                                     </template>
                                                 </Select>
@@ -260,9 +270,15 @@ const handleContinue = () => {
                                                     </template>
                                                     <template #option="slotProps">
                                                         <div class="flex items-center gap-1">
-                                                            <div>{{ slotProps.option.emoji }}</div>
-                                                            <div>{{ slotProps.option.iso2 }}</div>
-                                                            <div class="max-w-[200px] truncate text-gray-500">({{ slotProps.option.phone_code }})</div>
+                                                            <img
+                                                                v-if="slotProps.option.iso2"
+                                                                :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
+                                                                :alt="slotProps.option.iso2"
+                                                                width="18"
+                                                                height="12"
+                                                            />
+                                                            <div>{{ slotProps.option.phone_code }}</div>
+                                                            <div class="max-w-[200px] truncate text-gray-500">({{ slotProps.option.iso2 }})</div>
                                                         </div>
                                                     </template>
                                                 </Select>

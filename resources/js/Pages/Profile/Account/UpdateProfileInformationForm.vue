@@ -13,6 +13,7 @@ import InputIconWrapper from "@/Components/InputIconWrapper.vue";
 import {IconFlag, IconPhone} from "@tabler/icons-vue";
 import {useToast} from "primevue/usetoast";
 import {trans} from "laravel-vue-i18n";
+import {useLangObserver} from "@/Composables/localeObserver.js";
 
 defineProps({
     mustVerifyEmail: {
@@ -25,6 +26,7 @@ defineProps({
 
 const user = usePage().props.auth.user;
 const {formatNameLabel} = generalFormat();
+const {locale} = useLangObserver();
 
 const form = useForm({
     name: user.name,
@@ -225,32 +227,35 @@ const submitForm = () => {
 
                 <div class="flex flex-col gap-1 items-start self-stretch">
                     <InputLabel :value="$t('public.country')" for="country"/>
-                    <InputIconWrapper>
-                        <template #icon>
-                            <IconFlag :size="20" stroke-width="1.5" class="mt-1"/>
+                    <Select
+                        v-model="selectedCountry"
+                        :options="countries"
+                        :loading="loadingCountries"
+                        optionLabel="name"
+                        :placeholder="$t('public.select_country')"
+                        class="block w-full"
+                        :invalid="!!form.errors.country_id"
+                        filter
+                    >
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex items-center">
+                                <div class="leading-tight">{{ JSON.parse(slotProps.value.translations)[locale] || slotProps.value.name }}</div>
+                            </div>
+                            <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
                         </template>
-
-                        <Select
-                            v-model="selectedCountry"
-                            :options="countries"
-                            :loading="loadingCountries"
-                            optionLabel="name"
-                            :placeholder="$t('public.select_country')"
-                            class="pl-7 block w-full"
-                            :invalid="!!form.errors.country_id"
-                            filter
-                        >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex items-center">
-                                    <div>{{ slotProps.value.name }}</div>
-                                </div>
-                                <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="max-w-[200px] truncate">{{ slotProps.option.name }}</div>
-                            </template>
-                        </Select>
-                    </InputIconWrapper>
+                        <template #option="slotProps">
+                            <div class="flex items-center gap-1">
+                                <img
+                                    v-if="slotProps.option.iso2"
+                                    :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
+                                    :alt="slotProps.option.iso2"
+                                    width="18"
+                                    height="12"
+                                />
+                                <div class="max-w-[200px] truncate">{{ JSON.parse(slotProps.option.translations)[locale] || slotProps.option.name }}</div>
+                            </div>
+                        </template>
+                    </Select>
                     <InputError :message="form.errors.country_id" />
                 </div>
 
@@ -276,6 +281,13 @@ const submitForm = () => {
                             </template>
                             <template #option="slotProps">
                                 <div class="flex items-center gap-1">
+                                    <img
+                                        v-if="slotProps.option.iso2"
+                                        :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
+                                        :alt="slotProps.option.iso2"
+                                        width="18"
+                                        height="12"
+                                    />
                                     <div>{{ slotProps.option.phone_code }}</div>
                                     <div class="max-w-[200px] truncate text-gray-500">({{ slotProps.option.iso2 }})</div>
                                 </div>
