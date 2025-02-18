@@ -88,6 +88,7 @@ class ProfileController extends Controller
             }
 
             $user->kyc_status = 'pending';
+            $user->kyc_requested_at = now();
             $user->save();
         }
 
