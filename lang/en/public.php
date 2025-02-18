@@ -123,4 +123,7 @@ return [
     "profit_sharing" => "Profit Sharing",
     "ib_group_incentive" => "IB Group Incentive",
     "same_level" => "Same Level",
+    "rejected" => "Rejected",
+    "reason" => "Reason",
+    "toast_upload_kyc_success_message" => "Proof of Identity Upload Successful",
 ];

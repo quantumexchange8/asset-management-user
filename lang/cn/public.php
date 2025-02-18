@@ -123,4 +123,7 @@ return [
     "profit_sharing" => "盈利分成",
     "ib_group_incentive" => "经纪人团队奖",
     "same_level" => "同级奖金",
+    "rejected" => "拒绝",
+    "reason" => "原因",
+    "toast_upload_kyc_success_message" => "身份证明上传成功",
 ];

@@ -20,6 +20,9 @@ const getSeverity = (status) => {
         case 'unverified':
             return 'danger';
 
+        case 'rejected':
+            return 'danger';
+
         case 'pending':
             return 'warn';
     }
@@ -54,6 +57,13 @@ const getSeverity = (status) => {
                 </div>
             </template>
             <template #content>
+                <div
+                    v-if="usePage().props.auth.user.kyc_status === 'rejected'"
+                    class="text-sm mb-5"
+                >
+                    <span class="text-xs font-semibold text-surface-400">{{ $t('public.reason') }}: </span>
+                    {{ usePage().props.auth.user.kyc_approval_description }}
+                </div>
                 <UploadKyc v-if="usePage().props.auth.user.kyc_status !== 'verified'" />
             </template>
         </Card>
