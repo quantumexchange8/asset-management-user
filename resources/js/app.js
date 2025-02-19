@@ -11,7 +11,7 @@ import { i18nVue } from 'laravel-vue-i18n';
 import iosZoomFix from '../js/Composables/ios-zoom-fix.js';
 import ToastService from 'primevue/toastservice';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Volta Asia';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

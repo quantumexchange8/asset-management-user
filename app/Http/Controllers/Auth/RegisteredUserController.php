@@ -142,6 +142,9 @@ class RegisteredUserController extends Controller
                     return back();
                 }
             }
+
+            $user->kyc_status = 'pending';
+            $user->kyc_requested_at = now();
         }
 
         $user->save();
