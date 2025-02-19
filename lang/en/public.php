@@ -126,4 +126,8 @@ return [
     "rejected" => "Rejected",
     "reason" => "Reason",
     "toast_upload_kyc_success_message" => "Proof of Identity Upload Successful",
+    "identity_number" => "ID/Passport",
+    "enter_identity_number" => "Enter ID/Passport",
+    "phone_code" => "Phone code",
+    "phone" => "Phone",
 ];

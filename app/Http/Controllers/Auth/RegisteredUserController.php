@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
             'country' => ['required'],
             'dial_code' => ['required'],
             'phone' => ['required', 'max:255', 'unique:' . User::class],
+            'identity_number' => ['required', 'unique:' . User::class],
         ];
 
         $attributeNames = [
@@ -54,9 +55,11 @@ class RegisteredUserController extends Controller
             'email' => trans('public.email'),
             'country' => trans('public.country'),
             'dial_code' => trans('public.phone_code'),
+            'phone' => trans('public.phone'),
             'phone_number' => trans('public.phone_number'),
             'password' => trans('public.password'),
             'kyc' => trans('public.upload_identity_proof'),
+            'identity_number' => trans('public.identity_number'),
         ];
 
         switch ($form_step) {
@@ -110,6 +113,7 @@ class RegisteredUserController extends Controller
         $user->country_id = $country->id;
         $user->nationality = $country->nationality;
         $user->password =  Hash::make($request->password);
+        $user->identity_number = $request->identity_number;
 
         // Check if the referral code exists in the database
         if (!empty($request->referral_code)) {
