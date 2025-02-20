@@ -16,11 +16,16 @@ const errorMessage = ref("");
 const uploadedPhotos = ref([]); // Stores image previews
 const fileInput = ref(null); // Reference to file input
 
-// Simulated available balances
-const walletBalances = ref({
-    bonus_wallet: 3400.00,
-    cash_wallet: 3145.00
-});
+// Fetch Wallet Balances from Backend
+const fetchWallets = async () => {
+  try {
+    const userId = 2; // 🔥 Change this dynamically if needed
+    const response = await axios.get(`http://localhost:3000/api/wallets?userId=${userId}`);
+    wallets.value = response.data;
+  } catch (error) {
+    console.error("Error fetching wallets:", error);
+  }
+};
 
 const walletOptions = [
     { label: "Bonus Wallet", value: "bonus_wallet" },
