@@ -189,14 +189,16 @@ const handleInput = (event, targetRef) => {
                     severity="success"
                     size="small"
                     label="Deposit"
-                    class="w-full bg-green-600 hover:bg-green-700 text-white"
+                    class="w-full"
+                    disabled
                     @click="openDepositDialog"
                 />
                 <Button
                     severity="danger"
                     size="small"
                     label="Withdraw"
-                    class="w-full bg-red-600 hover:bg-red-700 text-white"
+                    class="w-full"
+                    disabled
                     @click="openWithdrawDialog"
                 />
             </div>
@@ -248,8 +250,8 @@ const handleInput = (event, targetRef) => {
 
             <div class="flex justify-end gap-2 mt-4">
                 <Button label="Cancel" class="p-button-text text-gray-700" @click="showWithdrawDialog = false" />
-                <Button 
-                    label="Confirm" 
+                <Button
+                    label="Confirm"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                     :disabled="isSubmitting || !!errorMessage"
                     @click="submitWithdrawal"
@@ -268,8 +270,8 @@ const handleInput = (event, targetRef) => {
             <div class="flex flex-col gap-2">
                 <label class="text-gray-600 font-medium">Select Type</label>
                 <div class="flex gap-4">
-                   
-                    <button 
+
+                    <button
                         class="w-1/2 py-2 rounded-md text-center"
                         :class="selectedDepositType === 'usdt' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'"
                         @click="selectedDepositType = 'usdt'"
@@ -281,36 +283,36 @@ const handleInput = (event, targetRef) => {
              <label class="text-gray-600 font-medium"
             >Network--------------------------------------------****</label>
 
-          
+
             <!-- Token Address -->
             <label class="text-gray-600 font-medium"
             >Token Address--------------------------------------****</label>
-        
+
 
 
              <!-- Deposit Amount -->
             <div class="mt-4">
             <label class="text-gray-700 font-medium">Deposit Amount</label>
             <div class="relative mt-2">
-                <input 
-                type="number" 
-                placeholder="Enter amount" 
+                <input
+                type="number"
+                placeholder="Enter amount"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
                 />
             </div>
             </div>
 
-        
+
             <!-- Upload Payment Slip -->
             <div class="mt-4">
                 <label class="text-gray-700 font-medium">Upload Payment Slip</label>
-                <div 
+                <div
                     class="border-dashed border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100 mt-2"
                     @dragover.prevent
                     @drop="handleDrop"
                     @click="fileInput.click()"
                 >
-                    <input 
+                    <input
                         ref="fileInput"
                         type="file"
                         multiple
@@ -318,7 +320,7 @@ const handleInput = (event, targetRef) => {
                         class="hidden"
                         @change="handleFileUpload"
                     />
-                    <p class="text-gray-600 text-sm">Drag & drop files here or 
+                    <p class="text-gray-600 text-sm">Drag & drop files here or
                         <span class="text-blue-500 font-semibold cursor-pointer">browse</span>
                     </p>
                 </div>
@@ -327,19 +329,19 @@ const handleInput = (event, targetRef) => {
                 <div v-if="uploadedPhotos.length" class="flex gap-2 mt-2">
                     <div v-for="(photo, index) in uploadedPhotos" :key="index" class="relative">
                         <img :src="photo" class="w-16 h-16 object-cover rounded-md shadow-md" />
-                        <button 
+                        <button
                             class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs"
                             @click="removeImage(index)"
                         >X</button>
                     </div>
                 </div>
             </div>
-                
+
             <!-- Confirm and cancel button-->
                 <div class="flex justify-end gap-2 mt-4">
                     <Button label="Cancel" class="p-button-text text-gray-700" @click="showDepositDialog = false" />
-                    <Button 
-                        label="Confirm" 
+                    <Button
+                        label="Confirm"
                         class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
                         @click="submitDeposit"
                 />

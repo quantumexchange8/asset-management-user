@@ -46,7 +46,6 @@ class RegisteredUserController extends Controller
             'country' => ['required'],
             'dial_code' => ['required'],
             'phone' => ['required', 'max:255', 'unique:' . User::class],
-            'identity_number' => ['required', 'unique:' . User::class],
         ];
 
         $attributeNames = [
@@ -84,8 +83,9 @@ class RegisteredUserController extends Controller
             case 3:
                 $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
                 $rules['referral_code'] = ['nullable'];
+                $rules['identity_number'] = ['required'];
 
-                $validator = Validator::make($request->all(), $rules)
+                Validator::make($request->all(), $rules)
                     ->setAttributeNames($attributeNames)
                     ->validate();
 
@@ -146,6 +146,9 @@ class RegisteredUserController extends Controller
                     return back();
                 }
             }
+
+            $user->kyc_status = 'pending';
+            $user->kyc_requested_at = now();
         }
 
         $user->save();
