@@ -5,7 +5,7 @@ import {computed, ref} from "vue";
 import {usePage} from "@inertiajs/vue3";
 import {trans} from "laravel-vue-i18n";
 import Dialog from "primevue/dialog";
-import QrcodeVue from 'qrcode.vue'
+import QrcodeVue from 'qrcode.vue';
 import Tag from 'primevue/tag';
 import InputText from "primevue/inputtext";
 import {IconCopy} from "@tabler/icons-vue";
@@ -66,9 +66,10 @@ const shareRegisterLink = async () => {
         });
 
         toast.add({
-            title: trans('public.success'),
-            message: trans('public.register_link_shared'),
-            type: 'success'
+            severity: 'success',
+            summary: trans('public.success'),
+            detail: trans('public.register_link_shared'),
+            life: 3000,
         })
     } catch (error) {
         console.error('Error sharing the register link:', error);

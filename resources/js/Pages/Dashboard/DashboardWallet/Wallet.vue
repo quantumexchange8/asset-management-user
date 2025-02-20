@@ -6,12 +6,14 @@ import Skeleton from "primevue/skeleton";
 const wallets = ref([]);
 const loadingWallets = ref(false);
 const {formatAmount} = generalFormat();
+const emit = defineEmits(["update:wallets"])
 
 const getWallets = async () => {
     loadingWallets.value = true;
     try {
         const response = await axios.get('/dashboard/getWallets');
         wallets.value = response.data.wallets;
+        emit('update:wallets', wallets.value)
     } catch (error) {
         console.error('Error fetching wallets:', error);
     } finally {

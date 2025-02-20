@@ -492,7 +492,7 @@ const handleContinue = () => {
                                                 <div class="flex items-center justify-center p-3 text-surface-400 dark:text-surface-600 rounded-full border border-surface-400 dark:border-surface-600">
                                                     <IconUpload size="24" stroke-width="1.5" />
                                                 </div>
-                                                <p class="text-sm">Drag and drop files to here to upload.</p>
+                                                <p class="text-sm">{{ $t('public.drag_and_drop') }}</p>
                                             </div>
                                         </template>
                                     </FileUpload>

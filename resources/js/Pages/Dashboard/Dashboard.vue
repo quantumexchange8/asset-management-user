@@ -5,6 +5,7 @@ import Wallet from "@/Pages/Dashboard/DashboardWallet/Wallet.vue";
 import LatestBonusTable from "@/Pages/Dashboard/LatestBonusTable.vue";
 import WalletTransfer from "@/Pages/Dashboard/DashboardWallet/WalletTransfer.vue";
 import DashboardReferral from "@/Pages/Dashboard/DashboardReferral.vue";
+import {ref} from "vue";
 
 defineProps({
     currentAssetCapital: {
@@ -17,7 +18,9 @@ defineProps({
         type: [String, Number]
     },
     latestBonuses: Array
-})
+});
+
+const wallets = ref([]);
 </script>
 
 <template>
@@ -33,7 +36,9 @@ defineProps({
                 />
 
                 <!-- Wallet -->
-                <Wallet />
+                <Wallet
+                    @update:wallets="wallets = $event"
+                />
 
                 <!-- Latest Bonus -->
                 <LatestBonusTable
@@ -43,7 +48,9 @@ defineProps({
 
             <!-- Extra features -->
             <div class="flex flex-col gap-3 md:gap-5 w-full lg:basis-1/3">
-                <WalletTransfer />
+                <WalletTransfer
+                    :wallets="wallets"
+                />
                 <DashboardReferral />
             </div>
         </div>

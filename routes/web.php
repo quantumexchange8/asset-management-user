@@ -30,6 +30,8 @@ Route::get('/admin_login/{hashedToken}', [DashboardController::class, 'admin_log
 Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->name('getCountries');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/getDepositProfiles', [SelectOptionController::class, 'getDepositProfiles'])->name('getDepositProfiles');
+
     /**
      * ==============================
      *           Dashboard
@@ -38,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/getWallets', [WalletController::class, 'getWallets'])->name('dashboard.getWallets');
+
+        // Deposit
+        Route::post('/deposit', [WalletController::class, 'deposit'])->name('deposit');
     });
 
     /**

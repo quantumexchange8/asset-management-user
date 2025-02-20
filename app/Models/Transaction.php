@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Transaction extends Model
+class Transaction extends Model implements HasMedia
 {
-    use SoftDeletes;
-
-    protected $table = "transactions";
-    
-    public $primaryKey = "id";
+    use SoftDeletes, InteractsWithMedia;
 
     protected $guarded = [];
 
@@ -35,5 +33,5 @@ class Transaction extends Model
     {
         return $this->belongsTo(Wallet::class, 'to_wallet_id', 'id');
     }
-    
+
 }
