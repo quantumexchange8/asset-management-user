@@ -126,4 +126,8 @@ return [
     "rejected" => "拒绝",
     "reason" => "原因",
     "toast_upload_kyc_success_message" => "身份证明上传成功",
+    "identity_number" => "身份/护照",
+    "enter_identity_number" => "进入身份/护照",
+    "phone_code" => "电话代码",
+    "phone" => "电话",
 ];

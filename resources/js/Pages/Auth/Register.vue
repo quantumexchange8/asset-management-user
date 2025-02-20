@@ -9,7 +9,7 @@ import Select from 'primevue/select';
 import FileUpload from 'primevue/fileupload';
 import Image from 'primevue/image';
 import InputIconWrapper from '@/Components/InputIconWrapper.vue';
-import { IconMail, IconLock, IconUser, IconPhotoPlus, IconX, IconUpload, IconLabel, IconFlag, IconPhone, IconCode  } from '@tabler/icons-vue';
+import { IconMail, IconLock, IconUser, IconPhotoPlus, IconX, IconUpload, IconLabel, IconFlag, IconPhone, IconCode, IconEPassport  } from '@tabler/icons-vue';
 import { IconArrowLeft } from '@tabler/icons-vue';
 import { IconArrowRight } from '@tabler/icons-vue';
 import Stepper from 'primevue/stepper';
@@ -40,6 +40,7 @@ const form = useForm({
     phone: '',
     phone_number: '',
     kyc_image: [],
+    identity_number: '',
     referral_code: props.referral_code ? props.referral_code : '',
     password: '',
     password_confirmation: '',
@@ -299,6 +300,24 @@ const handleContinue = () => {
                                             </div>
                                             <InputError :message="form.errors.phone" />
                                             <InputError :message="form.errors.dial_code" />
+                                        </div>
+
+                                        <div class="flex flex-col gap-1 items-start self-stretch">
+                                            <InputLabel :value="$t('public.identity_number')" for="identity_number"/>
+                                            <InputIconWrapper>
+                                                <template #icon>
+                                                    <IconEPassport :size="20" stroke-width="1.5"/>
+                                                </template>
+                                                <InputText
+                                                    id="identity_number"
+                                                    type="text"
+                                                    class="pl-10 block w-full"
+                                                    v-model="form.identity_number"
+                                                    :placeholder="$t('public.enter_identity_number')"
+                                                    :invalid="!!form.errors.identity_number"
+                                                />
+                                            </InputIconWrapper>
+                                            <InputError :message="form.errors.identity_number"/>
                                         </div>
                                     </div>
                                 </div>
