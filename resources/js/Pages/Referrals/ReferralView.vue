@@ -148,8 +148,29 @@ const clearSearch = () => {
                     </div>
                 </div>
 
+                <div
+                    v-if="isLoading"
+                    class="flex items-center justify-between px-3 py-3.5 my-1 w-full bg-surface-50 dark:bg-surface-800 rounded-md border border-surface-200 dark:border-transparent transition-all duration-200"
+                >
+                    <div class="flex gap-2 items-center w-full">
+                        <Skeleton width="5rem" class="my-0.5" height="1rem"></Skeleton>
+                    </div>
+                    <div class="flex gap-2 items-center w-full">
+                        <div class="text-surface-400 dark:text-surface-500">
+                            <IconUsersGroup size="18" />
+                        </div>
+                        <Skeleton width="5rem" class="my-0.5" height="1.rem"></Skeleton>
+                    </div>
+                    <div class="w-full font-medium">
+                        <Skeleton width="5rem" class="my-0.5" height="1rem"></Skeleton>
+                    </div>
+                    <div class="flex justify-end w-full font-semibold text-green-500">
+                        <Skeleton width="5rem" class="my-0.5" height="1rem"></Skeleton>
+                    </div>
+                </div>
+
                 <!-- Body -->
-                <ScrollPanel style="width: 100%; height: 228px">
+                <ScrollPanel style="width: 100%; height:100%; max-height: 228px">
                     <div
                         v-for="user in referrals"
                         class="flex items-center justify-between p-3 my-1 w-full bg-surface-50 dark:bg-surface-800 rounded-md border border-surface-200 dark:border-transparent select-none hover:border-primary dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-800/20 cursor-pointer transition-all duration-200"
