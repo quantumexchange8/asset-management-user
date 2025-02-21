@@ -30,7 +30,7 @@ class WalletController extends Controller
     {
         Validator::make($request->all(), [
             'wallet_id' => ['required'],
-            'amount' => ['required', 'min:50'],
+            'amount' => ['required', 'numeric', 'min:50'],
             'deposit_profile_id' => ['required'],
             'payment_slips' => ['required'],
         ])->setAttributeNames([
