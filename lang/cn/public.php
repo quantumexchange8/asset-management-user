@@ -147,4 +147,17 @@ return [
     "toast_success_request_deposit_message" => "成功请求存款",
     "network" => "网络",
     "token_address" => "代币地址",
+    "referral_programme" => "团队市场",
+    "total_referrals" => "直系推荐",
+    "total_networks" => "团队人数",
+    "total_earnings" => "总收益",
+    "your_referral_link" => "您的推荐链接",
+    "my_referrals" => "我的推荐",
+    "user" => "用户",
+    "bonus_from_user" => "来自用户的奖金",
+    "level" => "等级",
+    "directs" => "直系",
+    "networks" => "团队",
+    "team_capital" => "团队资金",
+    "collapse_all" => "全部折叠"
 ];

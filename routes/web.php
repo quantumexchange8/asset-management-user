@@ -4,6 +4,7 @@ use App\Http\Controllers\BrokerController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\SelectOptionController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ConnectionController::class, 'index'])->name('connections');
         Route::get('/getConnectionAccounts', [ConnectionController::class, 'getConnectionAccounts'])->name('connections.getConnectionAccounts');
         Route::get('/getConnectionsData', [ConnectionController::class, 'getConnectionsData'])->name('connections.getConnectionsData');
+    });
+
+    /**
+     * ==============================
+     *          Referrals
+     * ==============================
+     */
+    Route::prefix('referral_programme')->group(function () {
+        Route::get('/', [ReferralController::class, 'index'])->name('referral_programme');
+        Route::get('/getReferralsData', [ReferralController::class, 'getReferralsData'])->name('referral_programme.getReferralsData');
+        Route::get('/getDownlineData', [ReferralController::class, 'getDownlineData'])->name('referral_programme.getDownlineData');
     });
 
     /**

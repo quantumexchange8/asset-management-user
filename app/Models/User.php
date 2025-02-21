@@ -96,4 +96,13 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Transaction::class, 'user_id', 'id');
     }
 
+    public function directs(): HasMany
+    {
+        return $this->hasMany(User::class, 'upline_id', 'id');
+    }
+
+    public function active_connections(): HasMany
+    {
+        return $this->hasMany(BrokerConnection::class, 'user_id', 'id')->where('status', 'active');
+    }
 }

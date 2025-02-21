@@ -3,15 +3,14 @@ import SidebarLink from '@/Components/Sidebar/SidebarLink.vue'
 import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
 import SidebarCategoryLabel from "@/Components/Sidebar/SidebarCategoryLabel.vue";
-
-// Import Tabler icons
 import {
     IconLayoutDashboard,
     IconHomeDollar,
     IconCoin,
     IconDatabaseDollar,
     IconHomeShare,
-    IconChartBar
+    IconChartBar,
+    IconUsersGroup
 } from '@tabler/icons-vue';
 
 </script>
@@ -48,6 +47,16 @@ import {
     >
         <template #icon>
             <IconHomeShare :size="20" stroke-width="1.5"/>
+        </template>
+    </SidebarLink>
+
+    <SidebarLink
+        title="referral_programme"
+        :href="route('referral_programme')"
+        :active="route().current('referral_programme')"
+    >
+        <template #icon>
+            <IconUsersGroup :size="20" stroke-width="1.5"/>
         </template>
     </SidebarLink>
 
