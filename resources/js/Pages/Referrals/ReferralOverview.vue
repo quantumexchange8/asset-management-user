@@ -57,7 +57,7 @@ const qrcodeContainer = ref(null);
 const canWebShare = ref(!!navigator.share);
 
 const buttonLabel = computed(() =>
-    canWebShare.value
+    canWebShare.value && window.innerWidth < 768
         ? 'share_referral_code'
         : 'reveal_qr_code'
 );
