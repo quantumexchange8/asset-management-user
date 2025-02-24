@@ -152,7 +152,7 @@ const closeDialog = () => {
 
 <template>
     <form class="flex flex-col gap-5 items-center self-stretch">
-        <div class="flex flex-col items-center gap-1 p-5 w-full bg-surface-100">
+        <div class="flex flex-col items-center gap-1 p-5 w-full bg-surface-100 dark:bg-surface-800">
             <span class="text-surface-500 text-sm">{{ $t('public.balance') }}</span>
             <span class="text-xl font-semibold">${{ formatAmount(selectedWallet.balance, 4) }}</span>
         </div>
@@ -164,14 +164,14 @@ const closeDialog = () => {
             />
             <div
                 v-if="loadingProfiles"
-                class="grid grid-cols-1 md:grid-cols-2 items-start gap-3 self-stretch"
+                class="grid grid-cols-1 md:grid-cols-2 items-start gap-5 self-stretch"
             >
                 <div
                     v-for="account in 2"
-                    class="group flex flex-col items-start py-2 px-4 gap-1 self-stretch rounded-lg border shadow-input transition-colors duration-300 select-none cursor-pointer w-full bg-primary-50 dark:bg-gray-800 border-primary-500"
+                    class="group flex flex-col items-start py-2 px-4 gap-1 self-stretch rounded-lg border shadow-input transition-colors duration-300 select-none cursor-pointer w-full bg-primary-50 dark:bg-surface-800 border-primary-500"
                 >
                     <span
-                        class="flex-grow text-sm font-semibold text-gray-950 dark:text-white"
+                        class="flex-grow text-sm font-semibold text-surface-950 dark:text-white"
                     >
                         {{ $t('public.loading') }}
                     </span>
@@ -276,12 +276,12 @@ const closeDialog = () => {
             />
 
             <!-- Details -->
-            <div class="flex flex-col gap-3 w-full bg-surface-100 rounded-md p-3 self-stretch">
+            <div class="flex flex-col gap-3 w-full bg-surface-100 dark:bg-surface-800 rounded-md p-3 self-stretch">
                 <div class="flex flex-col gap-1 items-start">
                     <div class="text-sm text-surface-500">
                         {{ $t('public.network') }}
                     </div>
-                    <div class="font-medium text-sm break-all">
+                    <div class="font-medium text-surface-950 dark:text-white text-sm break-all">
                         {{ selectedProfile.crypto_network }}
                     </div>
                 </div>
@@ -291,11 +291,11 @@ const closeDialog = () => {
                         class="absolute -top-1 right-[90px] md:-top-1 md:right-50 !bg-surface-950 !text-white"
                         :value="$t(`public.${tooltipText}`)"
                     ></Tag>
-                    <div class="min-w-[140px] md:w-full text-surface-500 text-xs md:text-sm font-medium">
+                    <div class="text-sm text-surface-500">
                         {{ $t('public.token_address') }}
                     </div>
                     <div
-                        class="text-surface-950 text-sm md:w-full font-medium break-all hover:cursor-pointer select-none"
+                        class="text-surface-950 dark:text-white text-sm md:w-full font-medium break-all hover:cursor-pointer select-none"
                         @click="copyToClipboard(selectedProfile.account_number)"
                     >
                         {{ selectedProfile.account_number }}
