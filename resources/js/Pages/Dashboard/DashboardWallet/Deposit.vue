@@ -3,7 +3,7 @@ import {computed, ref} from "vue";
 import {generalFormat} from "@/Composables/format.js";
 import Select from "primevue/select";
 import InputLabel from "@/Components/InputLabel.vue";
-import {useForm} from "@inertiajs/vue3";
+import {useForm, usePage} from "@inertiajs/vue3";
 import {
     IconCircleCheckFilled, IconPhotoPlus, IconUpload, IconX
 } from "@tabler/icons-vue";
@@ -33,71 +33,9 @@ const emit = defineEmits(['update:visible'])
 const form = useForm({
     wallet_id: '',
     amount: '',
-    deposit_profile_id: '',
     txn_hash: '',
     payment_slips: null
 });
-
-const profilesType = ref();
-const selectedProfileType = ref();
-const allDepositProfiles = ref([]);
-const depositProfiles = ref();
-const selectedProfile = ref();
-const loadingProfiles = ref();
-
-const getDepositProfiles = async () => {
-    loadingProfiles.value = true;
-    try {
-        const response = await axios.get('/getDepositProfiles');
-        allDepositProfiles.value = response.data.depositProfiles; // Store full list
-        profilesType.value = response.data.depositTypes;
-        selectedProfileType.value = profilesType.value[0];
-
-        // Set initial filtered profiles
-        filterDepositProfiles(selectedProfileType.value);
-    } catch (error) {
-        console.error(error);
-    } finally {
-        loadingProfiles.value = false;
-    }
-}
-
-getDepositProfiles();
-
-const filterDepositProfiles = (type) => {
-    depositProfiles.value = allDepositProfiles.value.filter(profile => profile.type === type);
-    selectedProfile.value = depositProfiles.value[0];
-}
-
-const selectProfileType = (type) => {
-    selectedProfileType.value = type;
-    filterDepositProfiles(type);
-}
-
-const tooltipText = ref('copy')
-
-function copyToClipboard(text) {
-    const textToCopy = text;
-
-    const textArea = document.createElement('textarea');
-    document.body.appendChild(textArea);
-
-    textArea.value = textToCopy;
-    textArea.select();
-
-    try {
-        const successful = document.execCommand('copy');
-
-        tooltipText.value = 'copied';
-        setTimeout(() => {
-            tooltipText.value = 'copy';
-        }, 1500);
-    } catch (err) {
-        console.error('Copy to clipboard failed:', err);
-    }
-
-    document.body.removeChild(textArea);
-}
 
 const $primevue = usePrimeVue();
 
@@ -128,7 +66,6 @@ const toast = useToast();
 
 const submitForm = () => {
     form.wallet_id = selectedWallet.value.id;
-    form.deposit_profile_id = selectedProfile.value.id;
     form.amount = depositAmount.value;
 
     form.post(route('deposit'), {
@@ -157,158 +94,23 @@ const closeDialog = () => {
             <span class="text-xl font-semibold">${{ formatAmount(selectedWallet.balance, 4) }}</span>
         </div>
 
-        <div class="flex flex-col gap-1 items-start self-stretch">
-            <InputLabel
-                :value="$t('public.type')"
-                for="wallet"
-            />
-            <div
-                v-if="loadingProfiles"
-                class="grid grid-cols-1 md:grid-cols-2 items-start gap-5 self-stretch"
-            >
-                <div
-                    v-for="account in 2"
-                    class="group flex flex-col items-start py-2 px-4 gap-1 self-stretch rounded-lg border shadow-input transition-colors duration-300 select-none cursor-pointer w-full bg-primary-50 dark:bg-surface-800 border-primary-500"
-                >
-                    <span
-                        class="flex-grow text-sm font-semibold text-surface-950 dark:text-white"
-                    >
-                        {{ $t('public.loading') }}
-                    </span>
-                </div>
+        <div class="flex flex-col items-start gap-1 w-full">
+            <span class="self-stretch text-surface-950 dark:text-white text-sm font-semibold">{{ $t('public.deposit_information') }}</span>
+            <div class="self-stretch text-surface-600 dark:text-surface-400 text-xs">
+                {{ $t('public.click_the_link_to_broker') }} - <a
+                href="https://client.bgifx.co/"
+                target="_blank"
+                class="underline hover:text-blue-500"
+            >https://client.bgifx.co/</a>
             </div>
-
-            <div
-                v-else
-                class="grid grid-cols-1 md:grid-cols-2 items-start gap-5 self-stretch"
-            >
-                <div
-                    v-for="type in profilesType"
-                    @click="selectProfileType(type)"
-                    class="group flex flex-col items-start py-2 px-4 gap-1 self-stretch rounded-lg border shadow-input transition-colors duration-300 select-none cursor-pointer w-full"
-                    :class="{
-                        'bg-primary-50 dark:bg-primary-900 border-primary': selectedProfileType === type,
-                        'bg-white dark:bg-surface-900 border-surface-300 dark:border-surface-700 hover:bg-primary-50 hover:border-primary-500': selectedProfileType !== type,
-                    }"
-                >
-                    <div class="flex items-center gap-3 self-stretch">
-                        <span
-                            class="flex-grow text-sm font-semibold transition-colors duration-300 group-hover:text-primary-700 dark:group-hover:text-primary-500"
-                            :class="{
-                                'text-primary-600 dark:text-primary-100': selectedProfileType === type,
-                                'text-surface-950 dark:text-white': selectedProfileType !== type
-                            }"
-                        >
-                            {{ $t(`public.${type}`) }}
-                        </span>
-                        <div
-                            :class="{
-                                'text-primary-600 dark:text-primary-100': selectedProfileType === type,
-                                'text-surface-950 dark:text-white': selectedProfileType !== type
-                            }"
-                        >
-                            <IconCircleCheckFilled v-if="selectedProfileType === type" size="20" stroke-width="1.5" />
-                        </div>
-                    </div>
-                </div>
+            <div class="self-stretch text-surface-600 dark:text-surface-400 text-xs">
+                {{ $t('public.email') }} - {{ usePage().props.auth.user.email }}
             </div>
-        </div>
-
-        <div
-            v-if="!loadingProfiles"
-            class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full"
-        >
-            <div class="flex flex-col gap-1 items-start self-stretch">
-                <InputLabel
-                    :value="$t('public.wallet')"
-                    for="wallet"
-                />
-                <Select
-                    v-model="selectedWallet"
-                    :options="cashWallets"
-                    optionLabel="type"
-                    :placeholder="$t('public.select_wallet')"
-                    class="block w-full"
-                    :invalid="!!form.errors.wallet_id"
-                >
-                    <template #value="slotProps">
-                        {{ $t(`public.${slotProps.value.type}`) }}
-                    </template>
-                    <template #option="slotProps">
-                        {{ $t(`public.${slotProps.option.type}`) }}
-                    </template>
-                </Select>
+            <div class="self-stretch text-surface-600 dark:text-surface-400 text-xs mb-2">
+                {{ $t('public.password') }} - Abc123456
             </div>
-
-            <div class="flex flex-col gap-1 items-start self-stretch">
-                <InputLabel
-                    :value="$t('public.deposit_account')"
-                    for="wallet"
-                />
-                <Select
-                    v-model="selectedProfile"
-                    :options="depositProfiles"
-                    optionLabel="name"
-                    :placeholder="$t('public.select_account')"
-                    class="block w-full"
-                    :invalid="!!form.errors.wallet_id"
-                >
-                    <template #value="slotProps">
-                        {{ slotProps.value.name }}
-                    </template>
-                    <template #option="slotProps">
-                        {{ slotProps.option.name }}
-                    </template>
-                </Select>
-            </div>
-        </div>
-
-        <!-- Deposit Details -->
-        <div
-            v-if="selectedProfileType === 'crypto'"
-            class="flex flex-col md:flex-row gap-5 items-center self-stretch"
-        >
-            <!-- QR -->
-            <qrcode-vue
-                ref="qrcode"
-                :value="selectedProfile.account_number"
-                :size="200"
-            />
-
-            <!-- Details -->
-            <div class="flex flex-col gap-3 w-full bg-surface-100 dark:bg-surface-800 rounded-md p-3 self-stretch">
-                <div class="flex flex-col gap-1 items-start">
-                    <div class="text-sm text-surface-500">
-                        {{ $t('public.network') }}
-                    </div>
-                    <div class="font-medium text-surface-950 dark:text-white text-sm break-all">
-                        {{ selectedProfile.crypto_network }}
-                    </div>
-                </div>
-                <div class="flex flex-col items-start gap-1 self-stretch relative">
-                    <Tag
-                        v-if="tooltipText === 'copied'"
-                        class="absolute -top-1 right-[90px] md:-top-1 md:right-50 !bg-surface-950 !text-white"
-                        :value="$t(`public.${tooltipText}`)"
-                    ></Tag>
-                    <div class="text-sm text-surface-500">
-                        {{ $t('public.token_address') }}
-                    </div>
-                    <div
-                        class="text-surface-950 dark:text-white text-sm md:w-full font-medium break-all hover:cursor-pointer select-none"
-                        @click="copyToClipboard(selectedProfile.account_number)"
-                    >
-                        {{ selectedProfile.account_number }}
-                    </div>
-                </div>
-                <div class="flex flex-col gap-1 items-start">
-                    <div class="text-sm text-surface-500">
-                        {{ $t('public.amount') }}
-                    </div>
-                    <div class="text-primary-500 font-semibold text-sm break-all">
-                        ${{ formatAmount(depositAmount ?? 0) }}
-                    </div>
-                </div>
+            <div v-for="(step, index) in 3" :key="index" class="self-stretch text-surface-600 dark:text-surface-500 text-xs">
+                {{ index + 1 }}. {{ $t(`public.deposit_info_${index+1}`) }}
             </div>
         </div>
 
@@ -333,7 +135,6 @@ const closeDialog = () => {
                 <InputError :message="form.errors.amount" />
             </div>
             <div
-                v-if="selectedProfileType === 'crypto'"
                 class="flex flex-col gap-1 items-start self-stretch"
             >
                 <InputLabel

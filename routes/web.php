@@ -32,6 +32,7 @@ Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->n
 
 Route::middleware('auth')->group(function () {
     Route::get('/getDepositProfiles', [SelectOptionController::class, 'getDepositProfiles'])->name('getDepositProfiles');
+    Route::get('/getBrokers', [SelectOptionController::class, 'getBrokers'])->name('getBrokers');
 
     /**
      * ==============================
@@ -65,6 +66,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ConnectionController::class, 'index'])->name('connections');
         Route::get('/getConnectionAccounts', [ConnectionController::class, 'getConnectionAccounts'])->name('connections.getConnectionAccounts');
         Route::get('/getConnectionsData', [ConnectionController::class, 'getConnectionsData'])->name('connections.getConnectionsData');
+
+        Route::post('connectBroker', [ConnectionController::class, 'connectBroker'])->name('connections.connectBroker');
     });
 
     /**

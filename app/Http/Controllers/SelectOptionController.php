@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Broker;
 use App\Models\Country;
 use App\Models\DepositProfile;
 use App\Models\Rank;
@@ -27,6 +28,21 @@ class SelectOptionController extends Controller
         return response()->json([
             'depositProfiles' => (clone $query)->get(),
             'depositTypes' => (clone $query)->distinct('type')->pluck('type'),
+        ]);
+    }
+
+    public function getBrokers()
+    {
+        $brokers = Broker::with('media')
+            ->where('status', 'active')
+            ->select([
+                'id',
+                'name',
+            ])
+            ->get();
+
+        return response()->json([
+            'brokers' => $brokers,
         ]);
     }
 }

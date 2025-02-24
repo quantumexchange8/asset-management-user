@@ -75,7 +75,7 @@ const submit = () => {
                             <Password
                                 v-model="form.password"
                                 :invalid="!!form.errors.password"
-                                class="block w-full"
+                                class="block pl-10 w-full"
                                 placeholder="••••••••"
                                 toggleMask
                                 :promptLabel="$t('public.password')"
@@ -95,7 +95,7 @@ const submit = () => {
                             <Password
                                 v-model="form.password_confirmation"
                                 :invalid="!!form.errors.password"
-                                class="block w-full"
+                                class="block pl-10 w-full"
                                 placeholder="••••••••"
                                 toggleMask
                                 :promptLabel="$t('public.password')"

@@ -31,17 +31,14 @@ class WalletController extends Controller
         Validator::make($request->all(), [
             'wallet_id' => ['required'],
             'amount' => ['required', 'numeric', 'min:50'],
-            'deposit_profile_id' => ['required'],
             'payment_slips' => ['required'],
         ])->setAttributeNames([
             'wallet_id' => trans('public.wallet'),
             'amount' => trans('public.amount'),
-            'deposit_profile_id' => trans('public.deposit_account'),
             'payment_slips' => trans('public.upload_payment_slip'),
         ])->validate();
 
         $wallet = Wallet::find($request->wallet_id);
-        $deposit_profile = DepositProfile::find($request->deposit_profile_id);
 
         $transaction = Transaction::create([
             'user_id' => Auth::id(),
@@ -49,14 +46,11 @@ class WalletController extends Controller
             'transaction_type' => 'deposit',
             'to_wallet_id' => $wallet->id,
             'transaction_number' => RunningNumberService::getID('transaction'),
-            'to_payment_account_name' => $deposit_profile->name,
-            'to_payment_platform' => $deposit_profile->type,
-            'to_payment_platform_name' => $deposit_profile->type == 'crypto' ? $deposit_profile->crypto_network : $deposit_profile->bank_name,
-            'to_payment_account_no' => $deposit_profile->account_number,
+            'to_payment_platform' => 'crypto',
             'txn_hash' => $request->txn_hash,
             'amount' => $request->amount,
-            'from_currency' => $deposit_profile->currency,
-            'to_currency' => $deposit_profile->currency,
+            'from_currency' => 'USD',
+            'to_currency' => 'USD',
             'transaction_amount' => $request->amount,
             'fund_type' => 'real_fund',
             'old_wallet_amount' => $wallet->balance,

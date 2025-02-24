@@ -14,6 +14,7 @@ class BrokerConnection extends Model
         'user_id',
         'broker_id',
         'broker_login',
+        'master_password',
         'capital_fund',
         'connection_type',
         'connection_number',

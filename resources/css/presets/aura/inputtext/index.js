@@ -2,7 +2,6 @@ export default {
     root: ({ props, context, parent }) => ({
         class: [
             // Font
-            'leading-none',
             'text-sm',
             'font-normal',
 

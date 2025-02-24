@@ -4,6 +4,7 @@ import EmptyData from "@/Components/EmptyData.vue";
 import {IconCircleLetterB} from "@tabler/icons-vue";
 import {generalFormat} from "@/Composables/format.js";
 import Skeleton from "primevue/skeleton";
+import CreateConnection from "@/Pages/Connections/CreateConnection.vue";
 
 defineProps({
     connectionsCount: Number
@@ -62,12 +63,13 @@ const formattedBalance = (data) => {
 <template>
     <div
         v-if="connectionsCount === 0"
-        class="w-full"
+        class="flex flex-col justify-center items-center w-full"
     >
         <EmptyData
             :title="$t('public.no_connections')"
             :message="$t('public.no_connections_caption')"
         />
+<!--        <CreateConnection />-->
     </div>
 
     <div
@@ -87,7 +89,7 @@ const formattedBalance = (data) => {
                     <div
                         class="w-10 h-10 rounded-full grow-0 shrink-0 flex items-center justify-center border border-surface-200 dark:border-surface-800 text-surface-300 dark:text-surface-600"
                     >
-                        <IconCircleLetterB size="28" stroke-width="1.5" />
+                        <IconCircleLetterB size="28" stroke-width="1.5"/>
                     </div>
                     <div class="flex flex-col items-start">
                         <Skeleton width="5rem" height="1.25rem" class="my-1"></Skeleton>
@@ -138,7 +140,7 @@ const formattedBalance = (data) => {
                         v-else
                         class="w-10 h-10 rounded-full grow-0 shrink-0 flex items-center justify-center border border-surface-200 dark:border-surface-800 text-surface-300 dark:text-surface-600"
                     >
-                        <IconCircleLetterB size="28" stroke-width="1.5" />
+                        <IconCircleLetterB size="28" stroke-width="1.5"/>
                     </div>
                     <div class="flex flex-col items-start">
                         <div class="self-stretch truncate font-bold">

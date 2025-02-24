@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\BrokerConnection;
+use App\Services\RunningNumberService;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class ConnectionController extends Controller
 {
     public function index()
     {
-        $connectionsCount = BrokerConnection::where('user_id', Auth::id())->count();
+        $connectionsCount = BrokerConnection::where('user_id', Auth::id())
+            ->whereIn('status', [
+                'active',
+                'removed'
+            ])
+            ->count();
 
         return Inertia::render('Connections/BrokerConnection', [
             'connectionsCount' => $connectionsCount,
@@ -26,6 +33,10 @@ class ConnectionController extends Controller
             'broker.media'
         ])
             ->where('user_id', Auth::id())
+            ->whereIn('status', [
+                'active',
+                'removed'
+            ])
             ->distinct('broker_id', 'broker_login')
             ->latest()
             ->get();
@@ -50,6 +61,10 @@ class ConnectionController extends Controller
                     'user_id' => Auth::id(),
                     'broker_id' => $broker_id,
                     'broker_login' => $broker_login,
+                ])
+                ->whereIn('status', [
+                    'active',
+                    'removed'
                 ]);
 
             if ($data['filters']['global']['value']) {
@@ -93,5 +108,33 @@ class ConnectionController extends Controller
         }
 
         return response()->json(['success' => false, 'data' => []]);
+    }
+
+    public function connectBroker(Request $request)
+    {
+        Validator::make($request->all(), [
+            'broker_id' => ['required'],
+            'broker_login' => ['required'],
+            'amount' => ['required', 'numeric', 'min:50'],
+            'master_password' => ['required'],
+        ])->setAttributeNames([
+            'broker_id' => trans('public.broker'),
+            'broker_login' => trans('public.broker_login'),
+            'amount' => trans('public.amount'),
+            'master_password' => trans('public.master_password'),
+        ])->validate();
+
+        BrokerConnection::create([
+            'user_id' => Auth::id(),
+            'broker_id' => $request->broker_id,
+            'broker_login' => $request->broker_login,
+            'master_password' => encrypt($request->master_password),
+            'capital_fund' => $request->amount,
+            'connection_type' => 'initial_join',
+            'connection_number' => RunningNumberService::getID('connection'),
+            'status' => 'pending',
+        ]);
+
+        return back()->with('toast', 'success');
     }
 }

@@ -159,5 +159,16 @@ return [
     "directs" => "直系",
     "networks" => "团队",
     "team_capital" => "团队资金",
-    "collapse_all" => "全部折叠"
+    "collapse_all" => "全部折叠",
+    "connect" => "连接",
+    "connect_to_broker" => "连接到经纪商",
+    "connect_information" => "连接信息",
+    "connect_info_1" => "确保登录信息正确",
+    "connect_info_2" => "主密码已安全存储并加密",
+    "connect_info_3" => "请管理员稍作审核连接",
+    "deposit_information" => "存款信息",
+    "click_the_link_to_broker" => "点击链接跳转至经纪商",
+    "deposit_info_1" => "点击上方链接，使用邮箱密码登入",
+    "deposit_info_2" => "交易完成后，请提交交易凭证",
+    "deposit_info_3" => "请管理员稍作审核交易"
 ];

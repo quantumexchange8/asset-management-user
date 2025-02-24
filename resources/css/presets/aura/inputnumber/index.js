@@ -21,7 +21,6 @@ export default {
         root: ({ parent, context }) => ({
             class: [
                 // Font
-                'leading-none',
                 'text-sm',
 
                 // Display

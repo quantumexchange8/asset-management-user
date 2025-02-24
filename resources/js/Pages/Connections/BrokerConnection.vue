@@ -23,6 +23,7 @@ import InputIcon from "primevue/inputicon";
 import Tag from "primevue/tag";
 import Popover from "primevue/popover";
 import DatePicker from "primevue/datepicker";
+import CreateConnection from "@/Pages/Connections/CreateConnection.vue";
 
 defineProps({
     connectionsCount: Number
@@ -169,6 +170,13 @@ const getSeverity = (status) => {
 <template>
     <AuthenticatedLayout title="connections">
         <div class="flex flex-col gap-5 items-center self-stretch w-full">
+<!--            <div-->
+<!--                v-if="connectionsCount > 0"-->
+<!--                class="flex justify-end w-full"-->
+<!--            >-->
+<!--                <CreateConnection />-->
+<!--            </div>-->
+
             <ConnectionView
                 :connectionsCount="connectionsCount"
                 @update:broker_id="broker_id = $event"
@@ -343,12 +351,6 @@ const getSeverity = (status) => {
                     </DataTable>
                 </template>
             </Card>
-
-            <EmptyData
-                v-else
-                :title="$t('public.no_connections')"
-                :message="$t('public.no_connections_caption')"
-            />
         </div>
 
         <Popover ref="op">

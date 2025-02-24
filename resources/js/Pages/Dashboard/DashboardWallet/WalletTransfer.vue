@@ -30,6 +30,7 @@ const openDialog = (type) => {
                     size="small"
                     :label="$t('public.deposit')"
                     class="w-full"
+                    :disabled="!wallets.length"
                     @click="openDialog('deposit')"
                 />
                 <Button

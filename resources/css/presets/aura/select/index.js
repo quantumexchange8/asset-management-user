@@ -126,7 +126,6 @@ export default {
             'flex items-center',
 
             // Font
-            'leading-none',
             'text-sm',
 
             // Spacing
@@ -175,7 +174,7 @@ export default {
     emptyMessage: {
         class: [
             // Font
-            'leading-none',
+            'text-sm',
 
             // Spacing
             'py-2 px-3',
