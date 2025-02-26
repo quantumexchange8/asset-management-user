@@ -9,11 +9,18 @@ import TabPanel from 'primevue/tabpanel';
 import AccountPreferences from "@/Pages/Profile/Account/AccountPreferences.vue";
 import PaymentAccount from "@/Pages/Profile/Payment/PaymentAccount.vue";
 
+const props = defineProps({
+    front_identity_image: String,
+    back_identity_image: String,
+})
+
 const tabs = ref([
     {
         title: 'account',
         component: h(AccountPreferences, {
             title: 'account',
+            front_identity_image: props.front_identity_image,
+            back_identity_image: props.back_identity_image
         }),
         value: '0'
     },

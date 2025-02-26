@@ -2,8 +2,10 @@
 import Avatar from 'primevue/avatar';
 import {usePage, Link} from "@inertiajs/vue3";
 import {generalFormat} from "@/Composables/format.js";
+import Tag from "primevue/tag";
 
 const user = usePage().props.auth.user;
+const rank = usePage().props.auth.rank;
 const {formatNameLabel} = generalFormat();
 </script>
 
@@ -29,7 +31,13 @@ const {formatNameLabel} = generalFormat();
             shape="circle"
         />
         <div class="flex flex-col text-sm">
-            <span class="font-semibold max-w-36 truncate">{{ user.name }}</span>
+            <div class="flex items-center gap-1 font-semibold">
+                <span class="max-w-28 truncate">{{ user.name }}</span>
+                <Tag
+                    severity="primary"
+                    :value="rank.rank_name === 'member' ? $t(`public.${rank.rank_name}`) : rank.rank_name"
+                />
+            </div>
             <span class="text-xs text-surface-500 max-w-36 truncate">{{ user.email }}</span>
         </div>
     </Link>

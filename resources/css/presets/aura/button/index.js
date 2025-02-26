@@ -8,7 +8,6 @@ export default {
             { 'flex-col': (props.iconPos === 'top' || props.iconPos === 'bottom') && props.label },
 
             // Sizes & Spacing
-            'leading-[normal]',
             {
                 'px-3 py-2': props.size === null,
                 'text-sm py-1.5 px-3': props.size === 'small',
@@ -49,8 +48,8 @@ export default {
             // Primary Button
             {
                 'text-white': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
-                'bg-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
-                'border border-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
+                'bg-primary hover:bg-primary-300 dark:hover:bg-primary-300': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
+                'border border-primary hover:border-primary-300 dark:hover:border-primary-300': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
             },
             // Primary Text Button
             { 'text-primary': props.text && props.severity === null && !props.plain },

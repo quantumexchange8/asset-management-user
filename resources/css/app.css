@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 :root {
-    --p-primary-50: #fdf8f0;
-    --p-primary-100: #faecd4;
-    --p-primary-200: #f5dcb0;
-    --p-primary-300: #ecc482;
-    --p-primary-400: #e2ae65;
-    --p-primary-500: #cca05a; /* Main primary color */
-    --p-primary-600: #b08750;
-    --p-primary-700: #926f43;
-    --p-primary-800: #735737;
-    --p-primary-900: #594529;
-    --p-primary-950: #362717;
+    --p-primary-50: 253 248 240;
+    --p-primary-100: 250 236 212;
+    --p-primary-200: 245 220 176;
+    --p-primary-300: 236 196 130;
+    --p-primary-400: 226 174 101;
+    --p-primary-500: 204 160 90; /* Main primary color */
+    --p-primary-600: 176 135 80;
+    --p-primary-700: 146 111 67;
+    --p-primary-800: 115 87 55;
+    --p-primary-900: 89 69 41;
+    --p-primary-950: 54 39 23;
     --p-surface-0: #ffffff;
     --p-surface-50: #fafafa;
     --p-surface-100: #f4f4f5;
@@ -31,6 +31,7 @@
 
 /* Light */
 :root {
+    --primary: var(--p-primary-500);
     --p-primary-color: var(--p-primary-500);
     --p-primary-contrast-color: var(--p-surface-0);
     --p-primary-hover-color: var(--p-primary-600);
@@ -58,6 +59,7 @@
 */
 @media (prefers-color-scheme: dark) {
     :root {
+        --primary: var(--p-primary-400);
         --p-primary-color: var(--p-primary-400);
         --p-primary-contrast-color: var(--p-surface-900);
         --p-primary-hover-color: var(--p-primary-300);

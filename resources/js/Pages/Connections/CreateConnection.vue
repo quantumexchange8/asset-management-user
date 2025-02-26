@@ -53,6 +53,9 @@ const submitForm = () => {
     form.broker_id = selectedBroker.value?.id
     form.post(route('connections.connectBroker'), {
         onSuccess: () => {
+            closeDialog();
+            form.reset();
+
             toast.add({
                 severity: 'success',
                 summary: trans('public.success'),

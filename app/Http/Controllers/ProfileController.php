@@ -7,10 +7,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class ProfileController extends Controller
 {
@@ -19,7 +23,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit');
+        $user = $request->user();
+
+        return Inertia::render('Profile/Edit', [
+            'front_identity_image' => $user->getFirstMediaUrl('front_identity'),
+            'back_identity_image' => $user->getFirstMediaUrl('back_identity'),
+        ]);
     }
 
     /**
@@ -35,6 +44,7 @@ class ProfileController extends Controller
             'dial_code' => $request->dial_code,
             'phone' => $request->phone,
             'phone_number' => $request->dial_code . $request->phone,
+            'identity_number' => $request->identity_number,
         ]);
 
         if ($request->hasFile('profile_photo')) {
@@ -73,24 +83,43 @@ class ProfileController extends Controller
     public function uploadKyc(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kyc_image' => ['required'],
+            'front_identity' => ['required'],
+            'back_identity' => ['required'],
         ])->setAttributeNames([
-            'kyc_image' => trans('public.kyc_file')
+            'front_identity' => trans('public.front_identity'),
+            'back_identity' => trans('public.back_identity'),
         ]);
         $validator->validate();
 
         $user = $request->user();
 
-        if ($request->hasFile('kyc_image')) {
-            $user->clearMediaCollection('kyc_image');
-            foreach ($request->file('kyc_image') as $image) {
-                $user->addMedia($image)->toMediaCollection('kyc_image');
+        if ($request->hasFile('front_identity')) {
+            try {
+                $user->clearMediaCollection('front_identity');
+                $user->addMedia($request->front_identity)->toMediaCollection('front_identity');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Log::error($e);
+                throw ValidationException::withMessages(['front_identity' => trans('public.file_too_big')]);
             }
 
             $user->kyc_status = 'pending';
             $user->kyc_requested_at = now();
-            $user->save();
         }
+
+        if ($request->hasFile('back_identity')) {
+            try {
+                $user->clearMediaCollection('back_identity');
+                $user->addMedia($request->back_identity)->toMediaCollection('back_identity');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Log::error($e);
+                throw ValidationException::withMessages(['back_identity' => trans('public.file_too_big')]);
+            }
+
+            $user->kyc_status = 'pending';
+            $user->kyc_requested_at = now();
+        }
+
+        $user->save();
 
         return back()->with('toast');
     }

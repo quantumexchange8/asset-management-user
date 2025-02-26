@@ -1,49 +1,99 @@
 <script setup>
-import {IconPhotoPlus, IconUpload, IconX} from "@tabler/icons-vue";
-import Image from "primevue/image";
+import {IconAlertSquareRounded, IconFileCheck, IconPhotoPlus} from "@tabler/icons-vue";
 import Button from "primevue/button";
-import FileUpload from "primevue/fileupload";
-import {usePrimeVue} from "primevue/config";
 import {useForm} from "@inertiajs/vue3";
 import {useToast} from "primevue/usetoast";
 import {trans} from "laravel-vue-i18n";
 import InputError from "@/Components/InputError.vue"
-
-//file
-const $primevue = usePrimeVue();
+import Tag from "primevue/tag";
+import InputLabel from "@/Components/InputLabel.vue";
+import {ref} from "vue";
 
 const form = useForm({
-    kyc_image: null
+    front_identity: null,
+    back_identity: null,
 })
 
-const onRemoveTemplatingFile = (removeFileCallback, index) => {
-    removeFileCallback(index);
-};
-
-const onSelectedFiles = (event) => {
-    form.kyc_image = Array.from(event.target.files);
-};
-
-const formatSize = (bytes) => {
-    const k = 1024;
-    const dm = 3;
-    const sizes = $primevue.config.locale.fileSizeTypes;
-
-    if (bytes === 0) {
-        return `0 ${sizes[0]}`;
-    }
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-    return `${formattedSize} ${sizes[i]}`;
-};
-
 const toast = useToast();
+
+// Front Identity
+const frontFile = ref(null);
+const isDraggingFront = ref(false);
+
+const dragOverFront = () => {
+    isDraggingFront.value = true;
+};
+
+const dragLeaveFront = () => {
+    isDraggingFront.value = false;
+};
+
+const handleDropFront = (event) => {
+    isDraggingFront.value = false;
+    form.errors.front_identity = null;
+    const droppedFiles = event.dataTransfer.files;
+    if (droppedFiles.length > 0) {
+        validateFile(droppedFiles[0], 'front_identity');
+    }
+};
+
+const handleFrontFileSelect = (event) => {
+    form.errors.front_identity = null;
+    const selectedFile = event.target.files[0];
+    validateFile(selectedFile, 'front_identity');
+};
+
+// Back Identity
+const backFile = ref(null);
+const isDraggingBack = ref(false);
+
+const dragOverBack = () => {
+    isDraggingBack.value = true;
+};
+
+const dragLeaveBack = () => {
+    isDraggingBack.value = false;
+};
+
+const handleDropBack = (event) => {
+    isDraggingBack.value = false;
+    form.errors.back_identity = null;
+    const droppedFiles = event.dataTransfer.files;
+    if (droppedFiles.length > 0) {
+        validateFile(droppedFiles[0], 'back_identity');
+    }
+};
+
+const handleBackFileSelect = (event) => {
+    form.errors.back_identity = null;
+    const selectedFile = event.target.files[0];
+    validateFile(selectedFile, 'back_identity');
+};
+
+const validateFile = (fileInput, identity_type) => {
+    if (fileInput.type.startsWith("image/")) {
+        if (identity_type === "front_identity") {
+            frontFile.value = fileInput;
+            form.front_identity = frontFile.value;
+        } else {
+            backFile.value = fileInput;
+            form.back_identity = backFile.value;
+        }
+    } else {
+        toast.add({
+            severity: 'error',
+            summary: trans('public.error'),
+            detail: trans('public.toast_image_type_error'),
+            life: 5000,
+        });
+    }
+};
 
 const submitForm = () => {
     form.post(route('profile.uploadKyc'), {
         onSuccess: () => {
+            frontFile.value = null;
+            backFile.value = null;
             toast.add({
                 severity: 'success',
                 summary: trans('public.success'),
@@ -51,89 +101,164 @@ const submitForm = () => {
                 life: 3000,
             });
         },
-        preserveState: true,
-        preserveScroll: true,
     })
 }
 </script>
 
 <template>
-    <div class="flex flex-col gap-5">
-        <FileUpload
-            name="kyc_image"
-            :multiple="true"
-            accept="image/*"
-            @input="onSelectedFiles"
-        >
-            <template #header="{ chooseCallback, clearCallback, files }">
-                <div class="flex flex-wrap justify-between items-center flex-1 gap-4">
-                    <div class="flex gap-2">
-                        <Button
-                            @click="chooseCallback()"
-                            rounded
-                            outlined
-                            severity="secondary"
-                            class="!p-0 flex items-center justify-center h-10 w-10"
+    <div class="flex flex-col gap-5 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 w-full">
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel for="front_identity">{{ $t('public.front_identity' )}}</InputLabel>
+                <div
+                    :class="[
+                        'flex flex-col gap-3 items-center self-stretch px-5 py-8 rounded-md border-2 border-dashed transition-colors duration-150',
+                        {
+                            'border-blue-500 dark:text-blue-400 bg-blue-200/50 dark:bg-blue-800/10': isDraggingFront,
+                            'bg-surface-50 dark:bg-surface-ground border-surface-300 dark:border-surface-600': !isDraggingFront,
+                        }
+                    ]"
+                    @dragover.prevent="dragOverFront"
+                    @dragleave.prevent="dragLeaveFront"
+                    @drop.prevent="handleDropFront"
+                >
+                    <div
+                        v-if="form.errors.front_identity"
+                        class="rounded-lg w-12 h-12 shrink-0 grow-0 border border-red-300 dark:border-red-600 flex items-center justify-center text-red-500 dark:text-red-400"
+                    >
+                        <IconAlertSquareRounded size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-else-if="frontFile"
+                        class="rounded-lg w-12 h-12 shrink-0 grow-0 border border-green-300 dark:border-green-600 flex items-center justify-center text-green-500 dark:text-green-400"
+                    >
+                        <IconFileCheck size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-else
+                        :class="[
+                            'rounded-lg w-12 h-12 shrink-0 grow-0 border border-surface-300 dark:border-surface-600 flex items-center justify-center',
+                            {
+                                'text-blue-500 dark:text-blue-400': isDraggingFront,
+                                'text-surface-600 dark:text-surface-400': !isDraggingFront,
+                            }
+                        ]"
+                    >
+                        <IconPhotoPlus size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-if="frontFile"
+                        class="flex flex-col items-center justify-center self-stretch"
+                    >
+                        <span class="text-xs text-surface-600 dark:text-surface-400">{{ frontFile.name }}</span>
+                        <label
+                            for="fileInputFront"
+                            class="text-xs text-blue-500 cursor-pointer underline select-none hover:text-blue-600"
                         >
-                            <IconPhotoPlus :size="20" stroke-width="1.5"/>
-                        </Button>
+                            {{ $t('public.replace_file') }}
+                        </label>
+                    </div>
+                    <div v-else class="flex flex-col items-center text-surface-500 dark:text-surface-400 text-xs text-center">
+                        {{ $t('public.drag_and_drop') }} <label for="fileInputFront" class="text-blue-500 cursor-pointer underline select-none hover:text-blue-600">{{ $t('public.choose_file') }}</label>
+                    </div>
+                    <input type="file" id="fileInputFront" class="hidden" @change="handleFrontFileSelect" accept="image/*" />
+                    <InputError :message="form.errors.front_identity" class="text-center" />
+                    <div class="flex items-center gap-2 self-stretch justify-center w-full">
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">PNG</span>
+                        </Tag>
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">JPG</span>
+                        </Tag>
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">JPEG</span>
+                        </Tag>
+                    </div>
+                </div>
+                <div class="text-xs text-right w-full text-surface-500 dark:text-surface-400">
+                    {{ $t('public.max_size') }}: 2MB
+                </div>
+            </div>
 
-                        <Button
-                            @click="clearCallback()"
-                            rounded
-                            outlined
-                            severity="danger"
-                            class="!p-0 flex items-center justify-center h-10 w-10"
-                            :disabled="!files || files.length === 0"
+            <!-- Back Identity -->
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel for="back_identity">{{ $t('public.back_identity' )}}</InputLabel>
+                <div
+                    :class="[
+                        'flex flex-col gap-3 items-center self-stretch px-5 py-8 rounded-md border-2 border-dashed transition-colors duration-150',
+                        {
+                            'border-blue-500 dark:text-blue-400 bg-blue-200/50 dark:bg-blue-800/10': isDraggingBack,
+                            'bg-surface-50 dark:bg-surface-ground border-surface-300 dark:border-surface-600': !isDraggingBack,
+                        }
+                    ]"
+                    @dragover.prevent="dragOverBack"
+                    @dragleave.prevent="dragLeaveBack"
+                    @drop.prevent="handleDropBack"
+                >
+                    <div
+                        v-if="form.errors.back_identity"
+                        class="rounded-lg w-12 h-12 shrink-0 grow-0 border border-red-300 dark:border-red-600 flex items-center justify-center text-red-500 dark:text-red-400"
+                    >
+                        <IconAlertSquareRounded size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-else-if="backFile"
+                        class="rounded-lg w-12 h-12 shrink-0 grow-0 border border-green-300 dark:border-green-600 flex items-center justify-center text-green-500 dark:text-green-400"
+                    >
+                        <IconFileCheck size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-else-if="form.errors.back_identity"
+                        class="rounded-lg w-12 h-12 shrink-0 grow-0 border border-red-300 dark:border-red-600 flex items-center justify-center text-red-500 dark:text-red-400"
+                    >
+                        <IconAlertSquareRounded size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-else
+                        :class="[
+                            'rounded-lg w-12 h-12 shrink-0 grow-0 border border-surface-300 dark:border-surface-600 flex items-center justify-center',
+                            {
+                                'text-blue-500 dark:text-blue-400': isDraggingBack,
+                                'text-surface-600 dark:text-surface-400': !isDraggingBack,
+                            }
+                        ]"
+                    >
+                        <IconPhotoPlus size="28" stroke-width="1.5" />
+                    </div>
+                    <div
+                        v-if="backFile"
+                        class="flex flex-col items-center justify-center self-stretch"
+                    >
+                        <span class="text-xs text-surface-600 dark:text-surface-400">{{ backFile.name }}</span>
+                        <label
+                            for="fileInputBack"
+                            class="text-xs text-blue-500 cursor-pointer underline select-none hover:text-blue-600"
                         >
-                            <IconX :size="20" stroke-width="1.5"/>
-                        </Button>
+                            {{ $t('public.replace_file') }}
+                        </label>
+                    </div>
+                    <div v-else class="flex flex-col items-center text-surface-500 dark:text-surface-400 text-xs text-center">
+                        {{ $t('public.drag_and_drop') }} <label for="fileInputBack" class="text-blue-500 cursor-pointer underline select-none hover:text-blue-600">{{ $t('public.choose_file') }}</label>
+                    </div>
+                    <input type="file" id="fileInputBack" class="hidden" @change="handleBackFileSelect" accept="image/*" />
+                    <InputError :message="form.errors.back_identity" class="text-center" />
+                    <div class="flex items-center gap-2 self-stretch justify-center w-full">
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">PNG</span>
+                        </Tag>
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">JPG</span>
+                        </Tag>
+                        <Tag severity="secondary">
+                            <span class="dark:text-surface-500">JPEG</span>
+                        </Tag>
                     </div>
                 </div>
-            </template>
-            <template #content="{ files, removeFileCallback }">
-                <div class="flex flex-col gap-3">
-                    <div v-if="files.length > 0">
-                        <div class="flex overflow-x-scroll gap-4">
-                            <div
-                                v-for="(file, index) of files" :key="file.name + file.type + file.size"
-                                class="p-5 rounded-border w-full max-w-64 flex flex-col border dark:border-surface-700 items-center gap-4 relative"
-                            >
-                                <div class="absolute top-2 right-2">
-                                    <Button
-                                        outlined
-                                        severity="danger"
-                                        size="sm"
-                                        rounded
-                                        text
-                                        class="p-2"
-                                        @click="onRemoveTemplatingFile(removeFileCallback, index)"
-                                    >
-                                        <IconX size="16" stroke-width="1.5" />
-                                    </Button>
-                                </div>
-                                <div class="max-h-20 mt-5">
-                                    <Image role="presentation" :alt="file.name" :src="file.objectURL" preview imageClass="w-48 object-contain h-20" />
-                                </div>
-                                <div class="flex flex-col gap-1 items-center self-stretch w-52">
-                                    <span class="font-semibold text-center text-xs truncate w-full max-w-52">{{ file.name }}</span>
-                                    <div class="text-xxs">{{ formatSize(file.size) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-xs text-right w-full text-surface-500 dark:text-surface-400">
+                    {{ $t('public.max_size') }}: 2MB
                 </div>
-            </template>
-            <template #empty>
-                <div class="flex items-center justify-center flex-col gap-3 mt-3">
-                    <div class="flex items-center justify-center p-3 text-surface-400 dark:text-surface-600 rounded-full border border-surface-400 dark:border-surface-600">
-                        <IconUpload size="24" stroke-width="1.5" />
-                    </div>
-                    <p class="text-sm">{{ $t('public.drag_and_drop') }}</p>
-                </div>
-            </template>
-        </FileUpload>
-        <InputError :message="form.errors.kyc_image" />
+            </div>
+        </div>
 
         <div class="flex items-center justify-end">
             <Button

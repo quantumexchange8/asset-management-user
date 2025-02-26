@@ -30,6 +30,7 @@ class ProfileUpdateRequest extends FormRequest
             'country_id' => ['required', 'exists:countries,id'],
             'dial_code' => ['required'],
             'phone' => ['required'],
+            'identity_number' => ['required'],
         ];
     }
 
@@ -42,6 +43,7 @@ class ProfileUpdateRequest extends FormRequest
             'country_id' => trans('public.country'),
             'dial_code' => trans('public.dial_code'),
             'phone' => trans('public.phone_number'),
+            'identity_number' => trans('public.identity_number'),
         ];
     }
 }

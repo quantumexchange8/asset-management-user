@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BrokerConnection;
+use App\Models\Wallet;
 use App\Services\RunningNumberService;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ConnectionController extends Controller
@@ -124,16 +126,61 @@ class ConnectionController extends Controller
             'master_password' => trans('public.master_password'),
         ])->validate();
 
-        BrokerConnection::create([
+        // Check Wallet balance
+        $cash_wallet = Wallet::where([
+            'user_id' => Auth::id(),
+            'type' => 'cash_wallet'
+        ])->first();
+
+        if ($cash_wallet->balance < $request->amount) {
+            throw ValidationException::withMessages(['amount' => trans('public.insufficient_balance')]);
+        }
+
+        // Check login
+        $connection = BrokerConnection::where([
+            'broker_id' => $request->broker_id,
+            'broker_login' => $request->broker_login,
+        ])->first();
+
+        if (!empty($connection) && $connection->user_id != Auth::id()) {
+            throw ValidationException::withMessages(['broker_login' => trans('public.invalid_login_entered')]);
+        }
+
+        $pending_connection = BrokerConnection::where([
+            'broker_id' => $request->broker_id,
+            'broker_login' => $request->broker_login,
+            'status' => 'pending'
+        ])->first();
+
+        if ($pending_connection) {
+            throw ValidationException::withMessages(['broker_login' => trans('public.wait_for_admin_to_verify')]);
+        }
+
+        $broker_connection = BrokerConnection::create([
             'user_id' => Auth::id(),
             'broker_id' => $request->broker_id,
             'broker_login' => $request->broker_login,
             'master_password' => encrypt($request->master_password),
             'capital_fund' => $request->amount,
-            'connection_type' => 'initial_join',
             'connection_number' => RunningNumberService::getID('connection'),
             'status' => 'pending',
         ]);
+
+        $existing_connection = BrokerConnection::where([
+            'user_id' => Auth::id(),
+            'broker_id' => $request->broker_id,
+            'broker_login' => $request->broker_login,
+        ])->first();
+
+        if ($existing_connection->status == 'active' && $existing_connection->connection_type == 'initial_join') {
+            $broker_connection->connection_type = 'top_up';
+        } else {
+            $broker_connection->connection_type = 'initial_join';
+        }
+        $broker_connection->save();
+
+        $cash_wallet->balance -= $request->amount;
+        $cash_wallet->save();
 
         return back()->with('toast', 'success');
     }

@@ -57,7 +57,8 @@ class RegisteredUserController extends Controller
             'phone' => trans('public.phone'),
             'phone_number' => trans('public.phone_number'),
             'password' => trans('public.password'),
-            'kyc' => trans('public.upload_identity_proof'),
+            'front_identity' => trans('public.front_identity'),
+            'back_identity' => trans('public.back_identity'),
             'identity_number' => trans('public.identity_number'),
         ];
 
@@ -82,6 +83,8 @@ class RegisteredUserController extends Controller
 
             case 3:
                 $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
+                $rules['front_identity'] = ['nullable', 'image', 'max:2000'];
+                $rules['back_identity'] = ['nullable', 'image', 'max:2000'];
                 $rules['referral_code'] = ['nullable'];
                 $rules['identity_number'] = ['required'];
 
@@ -94,7 +97,7 @@ class RegisteredUserController extends Controller
             default:
                 $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
 
-                $validator = Validator::make($request->all(), $rules)
+                Validator::make($request->all(), $rules)
                     ->setAttributeNames($attributeNames)
                     ->validate();
                 break;
@@ -137,14 +140,24 @@ class RegisteredUserController extends Controller
         $id_no = 'MID' . Str::padLeft($user->id - 1, 6, "0");
         $user->id_number = $id_no;
 
-        if ($request->hasFile('kyc_image')) {
-            foreach ($request->file('kyc_image') as $file) {
-                try {
-                    $user->addMedia($file)->toMediaCollection('kyc_image');
-                } catch (FileDoesNotExist|FileIsTooBig $e) {
-                    Log::error($e);
-                    return back();
-                }
+        if ($request->hasFile('front_identity')) {
+            try {
+                $user->addMedia($request->front_identity)->toMediaCollection('front_identity');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Log::error($e);
+                throw ValidationException::withMessages(['front_identity' => trans('public.file_too_big')]);
+            }
+
+            $user->kyc_status = 'pending';
+            $user->kyc_requested_at = now();
+        }
+
+        if ($request->hasFile('back_identity')) {
+            try {
+                $user->addMedia($request->back_identity)->toMediaCollection('back_identity');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Log::error($e);
+                throw ValidationException::withMessages(['back_identity' => trans('public.file_too_big')]);
             }
 
             $user->kyc_status = 'pending';

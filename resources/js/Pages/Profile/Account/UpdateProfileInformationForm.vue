@@ -36,7 +36,8 @@ const form = useForm({
     dial_code: '',
     phone: user.phone,
     profile_photo: null,
-    profile_action: ''
+    profile_action: '',
+    identity_number: user.identity_number,
 });
 
 const removeProfilePhoto = () => {
@@ -109,137 +110,162 @@ const submitForm = () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 items-center self-stretch w-full">
-        <div class="flex flex-col self-stretch">
-            <h4 class="text-sm font-medium text-surface-950 dark:text-white">
-                {{ $t('public.profile_information') }}
-            </h4>
+    <form @submit.prevent="submitForm" class="flex flex-col gap-5 self-stretch w-full">
+        <div class="flex flex-col gap-2 items-center self-stretch py-3">
+            <Avatar
+                v-if="selectedProfilePhoto"
+                :image="selectedProfilePhoto"
+                size="xlarge"
+                shape="circle"
+            />
+            <Avatar
+                v-else
+                :label="formatNameLabel(user.name)"
+                size="xlarge"
+                shape="circle"
+            />
 
-            <span class="text-xs text-gray-600 dark:text-gray-400">
-                {{ $t('public.profile_information_caption') }}
-            </span>
+            <div class="flex items-center gap-4">
+                <input
+                    ref="profilePhotoInput"
+                    id="kyc_verification"
+                    type="file"
+                    class="hidden"
+                    accept="image/*"
+                    @change="handleUploadProfilePhoto"
+                />
+                <Button
+                    type="button"
+                    severity="info"
+                    size="small"
+                    :disabled="form.processing"
+                    @click.prevent="$refs.profilePhotoInput.click()"
+                >
+                    {{ $t('public.change') }}
+                </Button>
+                <Button
+                    type="button"
+                    severity="danger"
+                    size="small"
+                    outlined
+                    :disabled="!selectedProfilePhoto || form.processing"
+                    @click.prevent="removeProfilePhoto"
+                >
+                    {{ $t('public.remove') }}
+                </Button>
+            </div>
         </div>
 
-        <form @submit.prevent="submitForm" class="flex flex-col gap-5 self-stretch w-full">
-            <div class="flex flex-col gap-2 items-center self-stretch">
-                <Avatar
-                    v-if="selectedProfilePhoto"
-                    :image="selectedProfilePhoto"
-                    size="xlarge"
-                    shape="circle"
-                />
-                <Avatar
-                    v-else
-                    :label="formatNameLabel(user.name)"
-                    size="xlarge"
-                    shape="circle"
+        <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-3">
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel
+                    for="name"
+                    :value="$t('public.name')"
                 />
 
-                <div class="flex items-center gap-4">
-                    <input
-                        ref="profilePhotoInput"
-                        id="kyc_verification"
-                        type="file"
-                        class="hidden"
-                        accept="image/*"
-                        @change="handleUploadProfilePhoto"
-                    />
-                    <Button
-                        type="button"
-                        severity="info"
-                        size="small"
-                        :disabled="form.processing"
-                        @click.prevent="$refs.profilePhotoInput.click()"
-                    >
-                        {{ $t('public.change') }}
-                    </Button>
-                    <Button
-                        type="button"
-                        severity="danger"
-                        size="small"
-                        outlined
-                        :disabled="!selectedProfilePhoto || form.processing"
-                        @click.prevent="removeProfilePhoto"
-                    >
-                        {{ $t('public.remove') }}
-                    </Button>
-                </div>
+                <InputText
+                    id="name"
+                    type="text"
+                    class="block w-full"
+                    v-model="form.name"
+                    :placeholder="$t('public.enter_name')"
+                    autofocus
+                    autocomplete="name"
+                    :invalid="!!form.errors.name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-3">
-                <div class="flex flex-col gap-1 items-start self-stretch">
-                    <InputLabel
-                        for="name"
-                        :value="$t('public.name')"
-                    />
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel
+                    for="username"
+                    :value="$t('public.username')"
+                />
 
-                    <InputText
-                        id="name"
-                        type="text"
-                        class="block w-full"
-                        v-model="form.name"
-                        :placeholder="$t('public.enter_name')"
-                        autofocus
-                        autocomplete="name"
-                        :invalid="!!form.errors.name"
-                    />
+                <InputText
+                    id="username"
+                    type="text"
+                    class="block w-full"
+                    v-model="form.username"
+                    :placeholder="$t('public.enter_username')"
+                    :invalid="!!form.errors.username"
+                />
 
-                    <InputError class="mt-2" :message="form.errors.name" />
-                </div>
+                <InputError class="mt-2" :message="form.errors.username" />
+            </div>
 
-                <div class="flex flex-col gap-1 items-start self-stretch">
-                    <InputLabel
-                        for="username"
-                        :value="$t('public.username')"
-                    />
+            <div class="flex flex-col gap-1 md:col-span-2 items-start self-stretch">
+                <InputLabel
+                    for="email"
+                    :value="$t('public.email')"
+                />
 
-                    <InputText
-                        id="username"
-                        type="text"
-                        class="block w-full"
-                        v-model="form.username"
-                        :placeholder="$t('public.enter_username')"
-                        :invalid="!!form.errors.username"
-                    />
+                <InputText
+                    id="email"
+                    type="email"
+                    class="block w-full"
+                    v-model="form.email"
+                    :placeholder="$t('public.enter_email')"
+                    :invalid="!!form.errors.email"
+                    disabled
+                    autocomplete="email"
+                />
 
-                    <InputError class="mt-2" :message="form.errors.username" />
-                </div>
+                <InputError class="mt-2" :message="form.errors.email" />
+            </div>
 
-                <div class="flex flex-col gap-1 items-start self-stretch">
-                    <InputLabel
-                        for="email"
-                        :value="$t('public.email')"
-                    />
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel :value="$t('public.country')" for="country"/>
+                <Select
+                    v-model="selectedCountry"
+                    :options="countries"
+                    :loading="loadingCountries"
+                    optionLabel="name"
+                    :placeholder="$t('public.select_country')"
+                    class="block w-full"
+                    :invalid="!!form.errors.country_id"
+                    filter
+                >
+                    <template #value="slotProps">
+                        <div v-if="slotProps.value" class="flex items-center">
+                            {{ JSON.parse(slotProps.value.translations)[locale] || slotProps.value.name }}
+                        </div>
+                        <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
+                    </template>
+                    <template #option="slotProps">
+                        <div class="flex items-center gap-1">
+                            <img
+                                v-if="slotProps.option.iso2"
+                                :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
+                                :alt="slotProps.option.iso2"
+                                width="18"
+                                height="12"
+                            />
+                            <div class="max-w-[200px] truncate">{{ JSON.parse(slotProps.option.translations)[locale] || slotProps.option.name }}</div>
+                        </div>
+                    </template>
+                </Select>
+                <InputError :message="form.errors.country_id" />
+            </div>
 
-                    <InputText
-                        id="email"
-                        type="email"
-                        class="block w-full"
-                        v-model="form.email"
-                        :placeholder="$t('public.enter_email')"
-                        :invalid="!!form.errors.email"
-                        disabled
-                        autocomplete="email"
-                    />
-
-                    <InputError class="mt-2" :message="form.errors.email" />
-                </div>
-
-                <div class="flex flex-col gap-1 items-start self-stretch">
-                    <InputLabel :value="$t('public.country')" for="country"/>
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel :value="$t('public.phone_number')" for="phone"/>
+                <div class="flex gap-2 items-center self-stretch relative">
                     <Select
-                        v-model="selectedCountry"
+                        v-model="selectedPhoneCode"
                         :options="countries"
                         :loading="loadingCountries"
-                        optionLabel="name"
-                        :placeholder="$t('public.select_country')"
-                        class="block w-full"
-                        :invalid="!!form.errors.country_id"
+                        optionLabel="phone_code"
+                        placeholder="60"
+                        class="w-[100px]"
+                        :invalid="!!form.errors.dial_code"
                         filter
+                        :filterFields="['name', 'iso2', 'phone_code']"
                     >
                         <template #value="slotProps">
                             <div v-if="slotProps.value" class="flex items-center">
-                                <div class="leading-tight">{{ JSON.parse(slotProps.value.translations)[locale] || slotProps.value.name }}</div>
+                                <div>{{ slotProps.value.phone_code }}</div>
                             </div>
                             <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
                         </template>
@@ -252,73 +278,48 @@ const submitForm = () => {
                                     width="18"
                                     height="12"
                                 />
-                                <div class="max-w-[200px] truncate">{{ JSON.parse(slotProps.option.translations)[locale] || slotProps.option.name }}</div>
+                                <div>{{ slotProps.option.phone_code }}</div>
+                                <div class="max-w-[200px] truncate text-gray-500">({{ slotProps.option.iso2 }})</div>
                             </div>
                         </template>
                     </Select>
-                    <InputError :message="form.errors.country_id" />
+                    <InputText
+                        id="phone"
+                        type="text"
+                        class="block w-full"
+                        v-model="form.phone"
+                        placeholder="1234567"
+                        :invalid="!!form.errors.phone"
+                    />
                 </div>
-
-                <div class="flex flex-col gap-1 items-start self-stretch">
-                    <InputLabel :value="$t('public.phone_number')" for="phone"/>
-                    <div class="flex gap-2 items-center self-stretch relative">
-                        <Select
-                            v-model="selectedPhoneCode"
-                            :options="countries"
-                            :loading="loadingCountries"
-                            optionLabel="phone_code"
-                            placeholder="60"
-                            class="w-[100px]"
-                            :invalid="!!form.errors.dial_code"
-                            filter
-                            :filterFields="['name', 'iso2', 'phone_code']"
-                        >
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="flex items-center">
-                                    <div>{{ slotProps.value.phone_code }}</div>
-                                </div>
-                                <span v-else class="text-surface-400 dark:text-surface-500">{{ slotProps.placeholder }}</span>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="flex items-center gap-1">
-                                    <img
-                                        v-if="slotProps.option.iso2"
-                                        :src="`https://flagcdn.com/w40/${slotProps.option.iso2.toLowerCase()}.png`"
-                                        :alt="slotProps.option.iso2"
-                                        width="18"
-                                        height="12"
-                                    />
-                                    <div>{{ slotProps.option.phone_code }}</div>
-                                    <div class="max-w-[200px] truncate text-gray-500">({{ slotProps.option.iso2 }})</div>
-                                </div>
-                            </template>
-                        </Select>
-                        <InputIconWrapper>
-                            <template #icon>
-                                <IconPhone :size="20" stroke-width="1.5"/>
-                            </template>
-
-                            <InputText
-                                id="phone"
-                                type="text"
-                                class="pl-10 block w-full"
-                                v-model="form.phone"
-                                placeholder="1234567"
-                                :invalid="!!form.errors.phone"
-                            />
-                        </InputIconWrapper>
-                    </div>
-                    <InputError :message="form.errors.phone" />
-                </div>
+                <InputError :message="form.errors.phone" />
             </div>
 
-            <div class="flex items-center justify-end">
-                <Button
-                    type="submit"
-                    :label="$t('public.save')"
-                    :disabled="form.processing"
+            <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel
+                    for="identity_number"
+                    :value="$t('public.identity_number')"
                 />
+
+                <InputText
+                    id="identity_number"
+                    type="text"
+                    class="block w-full"
+                    v-model="form.identity_number"
+                    :placeholder="$t('public.enter_identity_number')"
+                    :invalid="!!form.errors.identity_number"
+                />
+
+                <InputError class="mt-2" :message="form.errors.identity_number" />
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="flex items-center justify-end">
+            <Button
+                type="submit"
+                :label="$t('public.save')"
+                :disabled="form.processing"
+            />
+        </div>
+    </form>
 </template>
