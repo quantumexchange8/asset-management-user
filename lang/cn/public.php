@@ -179,4 +179,16 @@ return [
     "invalid_login_entered" => "输入的账号号码无效，请重新输入",
     "wait_for_admin_to_verify" => "请等待管理员验证连接",
     "member" => "会员",
+    "front_identity" => "身份证正面",
+    "back_identity" => "身份证反面",
+    "choose_file" => "选择文件",
+    "supported_format" => "支持的格式",
+    "max_size" => "最大文件大小",
+    "replace_file" => "替换文件",
+    "error" => "错误",
+    "toast_image_type_error" => "文件类型不被接受",
+    "file_too_big" => "文件大小超出限制",
+    "take_id_photo" => "拍摄您的身份证/护照照片",
+    "upload_kyc_info_1" => "为了遵守监管要求并确保安全的交易环境，所有用户必须完成实名认证（KYC）验证。这有助于防止欺诈、身份盗用和金融犯罪。",
+    "upload_kyc_info_2" => "为了更好地为您服务，我们要求您提供原始的身份证明文件。这也有助于确保您收到的奖励正确无误。"
 ];

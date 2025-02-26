@@ -92,6 +92,7 @@ class ProfileController extends Controller
         $validator->validate();
 
         $user = $request->user();
+        $user->clearMediaCollection('kyc_image');
 
         if ($request->hasFile('front_identity')) {
             try {
