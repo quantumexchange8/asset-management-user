@@ -18,7 +18,7 @@ import {
     IconAdjustments,
     IconCircleLetterB
 } from '@tabler/icons-vue';
-import { onMounted, ref, watch, watchEffect } from 'vue';
+import {nextTick, onMounted, ref, watch, watchEffect} from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
 import debounce from "lodash/debounce.js";
 import { usePage } from '@inertiajs/vue3';
@@ -169,6 +169,36 @@ watchEffect(() => {
         loadLazyData({ first: first.value, rows: rows.value });
     }
 });
+
+const expandedPosts = ref({});
+const needsExpansion = ref({}); // Track which brokers need "See more"
+const descriptions = ref([]); // Holds references to all description elements
+
+const toggleExpand = (id) => {
+    expandedPosts.value = {
+        ...expandedPosts.value,
+        [id]: !expandedPosts.value[id]
+    };
+};
+
+const checkOverflow = () => {
+    nextTick(() => {
+        descriptions.value.forEach((el, index) => {
+            if (el) {
+                const brokerId = brokers.value[index]?.id;
+                if (brokerId) {
+                    needsExpansion.value[brokerId] = el.scrollHeight > el.offsetHeight;
+                }
+            }
+        });
+    });
+};
+
+// Re-check on mount and when locale or broker descriptions change
+onMounted(checkOverflow);
+watch(locale, checkOverflow);
+
+watch(() => brokers.value, checkOverflow, { deep: true });
 </script>
 
 <template>
@@ -338,27 +368,40 @@ watchEffect(() => {
 <!--                            </div>-->
 
                             <!-- Descriptions -->
-                            <div class="flex items-start w-full self-stretch">
-                                <span class="text-xs">{{ broker.description[locale] }}</span>
+                            <div class="flex flex-col items-start w-full self-stretch">
+                            <span
+                                ref="descriptions"
+                                class="text-xs"
+                                :class="{ 'line-clamp-3': !expandedPosts[broker.id] }"
+                            >
+                              {{ broker.description[locale] }}
+                            </span>
+                                <button
+                                    v-if="needsExpansion[broker.id]"
+                                    @click="toggleExpand(broker.id)"
+                                    class="text-blue-500 text-xs hover:text-blue-600 select-none cursor-pointer"
+                                >
+                                    {{ expandedPosts[broker.id] ? $t('public.see_less') : $t('public.see_more') }}
+                                </button>
                             </div>
 
-                            <!-- Details Section -->
-<!--                            <div class="flex items-end justify-between self-stretch">-->
-<!--                                <div class="flex flex-col items-center gap-1 self-stretch w-full">-->
-<!--                                    <div class="py-1 flex items-center gap-3 self-stretch w-full text-gray-500">-->
-<!--                                        <IconUserDollar size="20" stroke-width="1.5" />-->
-<!--                                        <div class="text-gray-950 dark:text-white text-sm font-medium">-->
-<!--                                            {{ formatAmount(broker.connections_count, 0) }} {{ $t('public.connections') }}-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="py-1 flex items-center gap-3 self-stretch text-gray-500">-->
-<!--                                        <IconPremiumRights size="20" stroke-width="1.5" />-->
-<!--                                        <div class="text-gray-950 dark:text-white text-sm font-medium">-->
-<!--                                            <span class="text-primary-500">$ {{ formatAmount(Number(broker.connections_sum_capital_fund ?? 0)) }}</span> {{ $t('public.fund_capital') }}-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="flex items-center justify-between w-full self-stretch gap-5">
+                                <div
+                                    v-for="action in broker.actions"
+                                    class="w-full"
+                                >
+                                    <Button
+                                        as="a"
+                                        :label="$t(`public.${action.broker_action}`)"
+                                        :href="action.action_url"
+                                        target="_blank"
+                                        rel="noopener"
+                                        size="small"
+                                        class="w-full"
+                                        :severity="action.broker_action === 'deposit' ? 'success' : 'info'"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </Card>

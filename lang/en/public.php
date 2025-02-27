@@ -190,5 +190,7 @@ return [
     "file_too_big" => "The file size is too big",
     "take_id_photo" => "Take a photo of your ID/Passport",
     "upload_kyc_info_1" => "To comply with regulatory requirements and ensure a secure trading environment, all users must complete the Know Your Customer (KYC) verification process. This helps us prevent fraud, identity theft, and financial crimes.",
-    "upload_kyc_info_2" => "To serve you better we ask that you provide original identifying documents. It also helps to ensure that the bonus rewards you receive are sent correctly."
+    "upload_kyc_info_2" => "To serve you better we ask that you provide original identifying documents. It also helps to ensure that the bonus rewards you receive are sent correctly.",
+    "see_more" => "See More",
+    "see_less" => "See Less",
 ];

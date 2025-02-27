@@ -18,18 +18,6 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                primary: 'rgb(var(--primary))',
-                'primary-50': 'rgb(var(--p-primary-50))',
-                'primary-100': 'rgb(var(--p-primary-100))',
-                'primary-200': 'rgb(var(--p-primary-200))',
-                'primary-300': 'rgb(var(--p-primary-300))',
-                'primary-400': 'rgb(var(--p-primary-400))',
-                'primary-500': 'rgb(var(--p-primary-500))',
-                'primary-600': 'rgb(var(--p-primary-600))',
-                'primary-700': 'rgb(var(--p-primary-700))',
-                'primary-800': 'rgb(var(--p-primary-800))',
-                'primary-900': 'rgb(var(--p-primary-900))',
-                'primary-950': 'rgb(var(--p-primary-950))',
                 surface: {
                     ground: '#09090b'
                 },

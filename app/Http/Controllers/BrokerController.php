@@ -26,6 +26,7 @@ class BrokerController extends Controller
             $query = Broker::query()
                 ->with([
                     'user:id,name',
+                    'actions'
                 ])
                 ->withCount(['connections as connections_count' => function($query) {
                     $query->select(DB::raw('count(distinct(user_id))'));
@@ -51,7 +52,7 @@ class BrokerController extends Controller
                 $sortType = $data['sortOrder'];
                 switch ($sortType) {
                     case 'latest':
-                        $query->orderBy('created_at', 'desc');
+                        $query->orderByRaw('id = 1 DESC, id DESC');
                         break;
 
                     case 'largest_fund':
@@ -66,7 +67,7 @@ class BrokerController extends Controller
                         return response()->json(['error' => 'Invalid filter'], 400);
                 }
             } else {
-                $query->latest();
+                $query->orderByRaw('id = 1 DESC, id DESC');
             }
 
             $brokers = $query->paginate($data['rows']);

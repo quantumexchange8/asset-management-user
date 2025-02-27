@@ -50,7 +50,7 @@ const selectConnection = (data) => {
 }
 
 const formattedBalance = (data) => {
-    const amount = formatAmount(data.capital_fund);
+    const amount = formatAmount(data.total_capital_fund);
     const parts = amount.split(".");
 
     return parts.length > 1

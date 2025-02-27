@@ -17,30 +17,36 @@ class ConnectionController extends Controller
     public function index()
     {
         $connectionsCount = BrokerConnection::where('user_id', Auth::id())
-            ->whereIn('status', [
-                'active',
-                'removed'
-            ])
-            ->count();
+            ->whereIn('status', ['active', 'removed'])
+            ->selectRaw('broker_id, broker_login, COUNT(*) as total_connections')
+            ->groupBy('broker_id', 'broker_login')
+            ->get();
 
         return Inertia::render('Connections/BrokerConnection', [
-            'connectionsCount' => $connectionsCount,
+            'connectionsCount' => count($connectionsCount),
         ]);
     }
 
     public function getConnectionAccounts()
     {
-        $query = BrokerConnection::with([
-            'broker',
-            'broker.media'
-        ])
+        $subQuery = BrokerConnection::selectRaw('MAX(id) as max_id')
             ->where('user_id', Auth::id())
-            ->whereIn('status', [
-                'active',
-                'removed'
-            ])
-            ->distinct('broker_id', 'broker_login')
-            ->latest()
+            ->whereIn('status', ['active', 'removed'])
+            ->groupBy('broker_id', 'broker_login');
+
+        $query = BrokerConnection::with(['broker', 'broker.media'])
+            ->joinSub($subQuery, 'latest_broker_connections', function ($join) {
+                $join->on('broker_connections.id', '=', 'latest_broker_connections.max_id');
+            })
+            ->selectRaw('broker_connections.*,
+                (SELECT SUM(capital_fund)
+                 FROM broker_connections AS bc
+                 WHERE bc.broker_id = broker_connections.broker_id
+                 AND bc.broker_login = broker_connections.broker_login
+                 AND bc.user_id = ?
+                 AND bc.status = "active") AS total_capital_fund',
+                [Auth::id()])
+            ->orderByDesc('broker_connections.id')
             ->get();
 
         return response()->json([
