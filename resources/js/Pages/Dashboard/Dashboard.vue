@@ -2,10 +2,10 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DashboardOverview from "@/Pages/Dashboard/DashboardOverview.vue";
 import Wallet from "@/Pages/Dashboard/DashboardWallet/Wallet.vue";
-import LatestBonusTable from "@/Pages/Dashboard/LatestBonusTable.vue";
 import WalletTransfer from "@/Pages/Dashboard/DashboardWallet/WalletTransfer.vue";
 import DashboardReferral from "@/Pages/Dashboard/DashboardReferral.vue";
 import {ref} from "vue";
+import AccumulateBonus from "@/Pages/Dashboard/AccumulateBonus.vue";
 
 defineProps({
     currentAssetCapital: {
@@ -40,10 +40,8 @@ const wallets = ref([]);
                     @update:wallets="wallets = $event"
                 />
 
-                <!-- Latest Bonus -->
-                <LatestBonusTable
-                    :latestBonuses="latestBonuses"
-                />
+                <!-- Accumulate Bonus -->
+                <AccumulateBonus />
             </div>
 
             <!-- Extra features -->

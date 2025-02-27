@@ -26,25 +26,20 @@ class DashboardController extends Controller
             ->whereIn('user_id', $user->getChildrenIds())
             ->sum('capital_fund');
 
-        $query = WalletLog::query()
+        $lastSaturday = Carbon::now()->subDays(Carbon::now()->dayOfWeek + 1)->startOfDay();
+
+        $total_bonus = WalletLog::query()
             ->where([
                 'user_id' => $user->id,
                 'category' => 'bonus'
-            ]);
-
-        $total_bonus = (clone $query)
+            ])
+            ->where('created_at', '<=', $lastSaturday)
             ->sum('amount');
-
-        $latest_bonus = (clone $query)->where('created_at', '>=', Carbon::now()->subDays(7))
-            ->where('amount', '>', 0)
-            ->latest()
-            ->get();
 
         return Inertia::render('Dashboard/Dashboard', [
             'currentAssetCapital' => $current_asset_capital,
             'currentTeamCapital' => $current_team_capital,
             'totalBonus' => $total_bonus,
-            'latestBonuses' => $latest_bonus,
         ]);
     }
 

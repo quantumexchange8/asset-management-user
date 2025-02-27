@@ -18,7 +18,7 @@ class TradeRebateSummary extends Model
 
     public function subject_user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'downline_user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function broker(): BelongsTo

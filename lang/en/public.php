@@ -193,4 +193,6 @@ return [
     "upload_kyc_info_2" => "To serve you better we ask that you provide original identifying documents. It also helps to ensure that the bonus rewards you receive are sent correctly.",
     "see_more" => "See More",
     "see_less" => "See Less",
+    "accumulate_bonus" => "Accumulate Bonus",
+    "receive_on_saturday" => "Receive On Saturday",
 ];

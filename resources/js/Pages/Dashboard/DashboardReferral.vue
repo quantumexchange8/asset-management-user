@@ -110,11 +110,12 @@ const downloadQrCode = () => {
                             ref="qrcode"
                             :value="registerLink"
                             :margin="2"
-                            :size="200"
+                            :size="150"
                         />
                     </div>
                     <Button
                         type="button"
+                        size="small"
                         @click="downloadQrCode"
                     >
                         <span class="text-sm font-semibold">{{ $t('public.download_qr_to_share') }}</span>
