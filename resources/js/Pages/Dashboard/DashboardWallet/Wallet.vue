@@ -56,7 +56,7 @@ getWallets();
             </div>
             <div class="flex flex-col self-stretch">
                 <div class="text-2xl font-bold text-white">
-                    ${{ formatAmount(wallet.balance, 4) }}
+                    {{ formatAmount(wallet.balance, 4) }}
                 </div>
                 <div
                     class="flex justify-between items-center"

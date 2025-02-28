@@ -91,7 +91,7 @@ const closeDialog = () => {
     <form class="flex flex-col gap-5 items-center self-stretch">
         <div class="flex flex-col items-center gap-1 p-5 w-full bg-surface-100 dark:bg-surface-800">
             <span class="text-surface-500 text-sm">{{ $t('public.balance') }}</span>
-            <span class="text-xl font-semibold">${{ formatAmount(selectedWallet.balance, 4) }}</span>
+            <span class="text-xl font-semibold">{{ formatAmount(selectedWallet.balance, 4) }}</span>
         </div>
 
         <div class="flex flex-col items-start gap-1 w-full">

@@ -24,7 +24,7 @@ const nextSaturday = getNextSaturday();
             <div class="flex flex-col gap-3 w-full items-center self-stretch">
                 <div class="flex flex-col items-center p-5 bg-surface-100 dark:bg-surface-800 w-full">
                     <div class="text-3xl font-medium">
-                        ${{ formatAmount(user.accumulated_amount, 4) }}
+                        {{ formatAmount(user.accumulated_amount, 4) }}
                     </div>
                     <span class="text-surface-500 text-sm">{{ $t('public.accumulate_bonus') }}</span>
                 </div>

@@ -105,4 +105,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(BrokerConnection::class, 'user_id', 'id')->where('status', 'active');
     }
+
+    public function broker_accounts(): HasMany
+    {
+        return $this->hasMany(BrokerAccount::class, 'user_id', 'id');
+    }
 }

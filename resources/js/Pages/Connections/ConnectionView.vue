@@ -158,7 +158,7 @@ const formattedBalance = (data) => {
 
                 <div class="flex justify-between items-end">
                     <div class="text-3xl font-medium">
-                        $<span v-html="formattedBalance(connection)"></span>
+                        <span v-html="formattedBalance(connection)"></span>
                     </div>
                     <div class="font-medium">
                         {{ connection.broker_login }}

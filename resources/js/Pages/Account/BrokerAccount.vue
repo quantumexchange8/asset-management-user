@@ -1,32 +1,26 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import ConnectionView from "@/Pages/Connections/ConnectionView.vue";
+import AccountListing from "@/Pages/Account/AccountListing.vue";
+import {ref, watch} from "vue";
+import dayjs from "dayjs";
+import Tag from "primevue/tag";
+import IconField from "primevue/iconfield";
+import Popover from "primevue/popover";
+import ProgressSpinner from "primevue/progressspinner";
+import {IconAdjustments, IconSearch, IconXboxX} from "@tabler/icons-vue";
+import InputText from "primevue/inputtext";
+import DatePicker from "primevue/datepicker";
+import InputIcon from "primevue/inputicon";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
 import Card from "primevue/card";
-import EmptyData from "@/Components/EmptyData.vue";
-import {onMounted, ref, watch} from "vue";
 import {generalFormat} from "@/Composables/format.js";
 import {FilterMatchMode} from "@primevue/core/api";
 import debounce from "lodash/debounce.js";
-import dayjs from "dayjs";
-import DataTable from "primevue/datatable";
-import InputText from "primevue/inputtext";
-import Column from "primevue/column";
-import {
-    IconAdjustments,
-    IconSearch,
-    IconXboxX,
-} from "@tabler/icons-vue";
-import ProgressSpinner from "primevue/progressspinner";
-import Button from "primevue/button";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
-import Tag from "primevue/tag";
-import Popover from "primevue/popover";
-import DatePicker from "primevue/datepicker";
-import CreateConnection from "@/Pages/Connections/CreateConnection.vue";
 
 defineProps({
-    connectionsCount: Number
+    brokerAccountsCount: Number
 });
 
 const isLoading = ref(false);
@@ -35,13 +29,12 @@ const connections = ref([]);
 const {formatAmount} = generalFormat();
 const totalRecords = ref(0);
 const first = ref(0);
-const broker_id = ref('');
-const broker_login = ref('');
+const account = ref('');
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    broker_id: { value: broker_id.value, matchMode: FilterMatchMode.EQUALS },
-    broker_login: { value: broker_login.value, matchMode: FilterMatchMode.EQUALS },
+    broker_id: { value: account.value.broker_id, matchMode: FilterMatchMode.EQUALS },
+    broker_login: { value: account.value.broker_login, matchMode: FilterMatchMode.EQUALS },
     start_join_date: { value: null, matchMode: FilterMatchMode.EQUALS },
     end_join_date: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
@@ -63,7 +56,7 @@ const loadLazyData = (event) => {
                 lazyEvent: JSON.stringify(lazyParams.value)
             };
 
-            const url = route('connections.getConnectionsData', params);
+            const url = route('account.getConnectionsData', params);
             const response = await fetch(url);
             const results = await response.json();
 
@@ -96,9 +89,9 @@ const toggle = (event) => {
     op.value.toggle(event);
 }
 
-watch([broker_id, broker_login], ([newBrokerId, newBrokerLogin]) => {
-    filters.value.broker_id = newBrokerId;
-    filters.value.broker_login = newBrokerLogin;
+watch(account, (newAccount) => {
+    filters.value.broker_id = newAccount.broker_id;
+    filters.value.broker_login = newAccount.broker_login;
 
     lazyParams.value = {
         first: dt.value.first,
@@ -168,22 +161,14 @@ const getSeverity = (status) => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="connections">
+    <AuthenticatedLayout title="account">
         <div class="flex flex-col gap-5 items-center self-stretch w-full">
-<!--            <div-->
-<!--                v-if="connectionsCount > 0"-->
-<!--                class="flex justify-end w-full"-->
-<!--            >-->
-<!--                <CreateConnection />-->
-<!--            </div>-->
-
-            <ConnectionView
-                :connectionsCount="connectionsCount"
-                @update:broker_id="broker_id = $event"
-                @update:broker_login="broker_login = $event"
+            <AccountListing
+                :brokerAccountsCount="brokerAccountsCount"
+                @update:account="account = $event"
             />
 
-            <Card v-if="connectionsCount > 0" class="w-full">
+            <Card v-if="brokerAccountsCount > 0" class="w-full">
                 <template #content>
                     <DataTable
                         :value="connections"

@@ -187,16 +187,16 @@ const clearSearch = () => {
                             <div class="text-surface-400 dark:text-surface-500">
                                 <IconUsersGroup size="18" />
                             </div>
-                            <span class="font-semibold">{{ formatAmount(user.total_downlines, 0) }}</span>
+                            <span class="font-semibold">{{ formatAmount(user.total_downlines, 0, '') }}</span>
                             <Tag severity="success">
-                                ${{ formatAmount(user.total_downline_capital_fund) }}
+                                {{ formatAmount(user.total_downline_capital_fund) }}
                             </Tag>
                         </div>
                         <div class="w-full font-medium">
-                            ${{ formatAmount(user.capital_fund_sum) }}
+                            {{ formatAmount(user.capital_fund_sum) }}
                         </div>
                         <div class="flex justify-end w-full font-semibold text-green-500">
-                            ${{ formatAmount(user.total_direct_downline_earnings, 4) }}
+                            {{ formatAmount(user.total_direct_downline_earnings, 4) }}
                         </div>
                     </div>
                 </ScrollPanel>
@@ -222,13 +222,13 @@ const clearSearch = () => {
                                 <div class="text-surface-400 dark:text-surface-500">
                                     <IconUsersGroup size="18" />
                                 </div>
-                                <span class="font-semibold">{{ formatAmount(user.total_downlines, 0) }}</span>
+                                <span class="font-semibold">{{ formatAmount(user.total_downlines, 0, '') }}</span>
                                 <span>|</span>
-                                <span class="font-semibold">${{ formatAmount(user.total_downline_capital_fund) }}</span>
+                                <span class="font-semibold">{{ formatAmount(user.total_downline_capital_fund) }}</span>
                             </div>
                         </div>
                         <div class="flex flex-col flex justify-end text-right">
-                            <span class="font-semibold">${{ formatAmount(user.capital_fund_sum) }}</span>
+                            <span class="font-semibold">{{ formatAmount(user.capital_fund_sum) }}</span>
                             <span class="text-xs">{{ $t('public.current_asset_capital') }}</span>
                         </div>
                     </div>
@@ -319,19 +319,19 @@ const clearSearch = () => {
                                     {{ upline.username }}
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">${{ formatAmount(upline.capital_fund_sum) }}</span>
+                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">{{ formatAmount(upline.capital_fund_sum) }}</span>
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">${{ formatAmount(upline.total_downline_capital_fund) }}</span>
+                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">{{ formatAmount(upline.total_downline_capital_fund) }}</span>
                                 </div>
                             </div>
                             <div class="pb-2 px-3 rounded-b grid grid-cols-2 gap-3 w-full self-stretch text-sm">
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(upline.total_directs, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(upline.total_directs, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.directs') }}</span>
                                 </div>
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(upline.total_downlines, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(upline.total_downlines, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.networks') }}</span>
                                 </div>
                             </div>
@@ -390,19 +390,19 @@ const clearSearch = () => {
                                     {{ parent.username }}
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">${{ formatAmount(parent.capital_fund_sum) }}</span>
+                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">{{ formatAmount(parent.capital_fund_sum) }}</span>
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">${{ formatAmount(parent.total_downline_capital_fund) }}</span>
+                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">{{ formatAmount(parent.total_downline_capital_fund) }}</span>
                                 </div>
                             </div>
                             <div class="pb-2 px-3 rounded-b grid grid-cols-2 gap-3 w-full self-stretch text-sm">
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(parent.total_directs, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(parent.total_directs, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.directs') }}</span>
                                 </div>
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(parent.total_downlines, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(parent.total_downlines, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.networks') }}</span>
                                 </div>
                             </div>
@@ -452,19 +452,19 @@ const clearSearch = () => {
                                     {{ downline.username }}
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">${{ formatAmount(downline.capital_fund_sum) }}</span>
+                                    {{ $t('public.fund') }}: <span class="font-semibold text-primary">{{ formatAmount(downline.capital_fund_sum) }}</span>
                                 </div>
                                 <div class="w-full text-sm text-surface-400 truncate">
-                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">${{ formatAmount(downline.total_downline_capital_fund) }}</span>
+                                    {{ $t('public.team_capital') }}: <span class="font-semibold text-primary">{{ formatAmount(downline.total_downline_capital_fund) }}</span>
                                 </div>
                             </div>
                             <div class="pb-2 px-3 rounded-b grid grid-cols-2 gap-3 w-full self-stretch text-sm">
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(downline.total_directs, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(downline.total_directs, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.directs') }}</span>
                                 </div>
                                 <div class="flex flex-col items-center w-full bg-surface-100 dark:bg-surface-700 p-2">
-                                    <span class="font-medium">{{ formatAmount(downline.total_downlines, 0) }}</span>
+                                    <span class="font-medium">{{ formatAmount(downline.total_downlines, 0, '') }}</span>
                                     <span class="text-xs uppercase">{{ $t('public.networks') }}</span>
                                 </div>
                             </div>

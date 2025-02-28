@@ -126,7 +126,7 @@ const downloadQrCode = () => {
                                         {{ $t('public.total_referrals') }}
                                     </div>
                                     <div class="text-3xl font-semibold">
-                                        {{ formatAmount(total_directs, 0) }}
+                                        {{ formatAmount(total_directs, 0, '') }}
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@ const downloadQrCode = () => {
                                         {{ $t('public.total_networks') }}
                                     </div>
                                     <div class="text-3xl font-semibold">
-                                        {{ formatAmount(total_networks, 0) }}
+                                        {{ formatAmount(total_networks, 0, '') }}
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ const downloadQrCode = () => {
                                         {{ $t('public.total_earnings') }}
                                     </div>
                                     <div class="text-3xl font-semibold">
-                                        ${{ formatAmount(total_earnings, 4) }}
+                                        {{ formatAmount(total_earnings, 4) }}
                                     </div>
                                 </div>
                             </div>

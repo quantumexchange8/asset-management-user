@@ -10,7 +10,8 @@ import {
     IconDatabaseDollar,
     IconHomeShare,
     IconChartBar,
-    IconUsersGroup
+    IconUsersGroup,
+    IconUserDollar
 } from '@tabler/icons-vue';
 
 </script>
@@ -41,12 +42,12 @@ import {
     </SidebarLink>
 
     <SidebarLink
-        title="connections"
-        :href="route('connections')"
-        :active="route().current('connections')"
+        title="account"
+        :href="route('account')"
+        :active="route().current('account')"
     >
         <template #icon>
-            <IconHomeShare :size="20" stroke-width="1.5"/>
+            <IconUserDollar :size="20" stroke-width="1.5"/>
         </template>
     </SidebarLink>
 

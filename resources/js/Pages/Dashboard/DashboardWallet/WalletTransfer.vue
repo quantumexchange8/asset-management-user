@@ -4,6 +4,7 @@ import Card from "primevue/card";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Deposit from "@/Pages/Dashboard/DashboardWallet/Deposit.vue";
+import LinkAccount from "@/Pages/Dashboard/LinkAccount.vue";
 
 const props = defineProps({
     wallets: Array
@@ -21,17 +22,17 @@ const openDialog = (type) => {
 <template>
     <Card class="bg-white shadow-md rounded-lg">
         <template #title>
-            <span class="font-semibold">{{ $t('public.transfer') }}</span>
+            <span class="font-semibold">{{ $t('public.account') }}</span>
         </template>
         <template #content>
             <div class="flex flex-col gap-2 items-center">
                 <Button
-                    severity="success"
+                    severity="secondary"
                     size="small"
-                    :label="$t('public.deposit')"
+                    :label="$t('public.link_account')"
                     class="w-full"
                     :disabled="!wallets.length"
-                    @click="openDialog('deposit')"
+                    @click="openDialog('link_account')"
                 />
                 <Button
                     severity="danger"
@@ -51,9 +52,15 @@ const openDialog = (type) => {
         :header="$t(`public.${dialogType}`)"
         class="dialog-xs md:dialog-md"
     >
-        <template v-if="dialogType === 'deposit'">
-            <Deposit
-                :wallets="wallets"
+<!--        <template v-if="dialogType === 'deposit'">-->
+<!--            <Deposit-->
+<!--                :wallets="wallets"-->
+<!--                @update:visible="visible = $event"-->
+<!--            />-->
+<!--        </template>-->
+
+        <template v-if="dialogType === 'link_account'">
+            <LinkAccount
                 @update:visible="visible = $event"
             />
         </template>

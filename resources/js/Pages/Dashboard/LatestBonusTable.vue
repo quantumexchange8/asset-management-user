@@ -58,7 +58,7 @@ const {formatAmount} = generalFormat();
                         class="hidden md:table-cell w-40"
                     >
                         <template #body="{ data }">
-                            {{ formatAmount(data.amount, 4) }}
+                            {{ formatAmount(data.amount, 4, '') }}
                         </template>
                     </Column>
 
@@ -78,7 +78,7 @@ const {formatAmount} = generalFormat();
                                     </div>
                                 </div>
                                 <div class="text-base font-semibold">
-                                    ${{ formatAmount(data.amount, 4) }}
+                                    {{ formatAmount(data.amount, 4) }}
                                 </div>
                             </div>
                         </template>

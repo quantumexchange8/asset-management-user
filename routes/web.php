@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BrokerController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\DashboardController;
@@ -59,15 +60,15 @@ Route::middleware('auth')->group(function () {
 
     /**
      * ==============================
-     *          Connections
+     *            Account
      * ==============================
      */
-    Route::prefix('connections')->group(function () {
-        Route::get('/', [ConnectionController::class, 'index'])->name('connections');
-        Route::get('/getConnectionAccounts', [ConnectionController::class, 'getConnectionAccounts'])->name('connections.getConnectionAccounts');
-        Route::get('/getConnectionsData', [ConnectionController::class, 'getConnectionsData'])->name('connections.getConnectionsData');
+    Route::prefix('account')->group(function () {
+        Route::get('/', [AccountController::class, 'index'])->name('account');
+        Route::get('/getBrokerAccounts', [AccountController::class, 'getBrokerAccounts'])->name('account.getBrokerAccounts');
+        Route::get('/getConnectionsData', [AccountController::class, 'getConnectionsData'])->name('account.getConnectionsData');
 
-        Route::post('connectBroker', [ConnectionController::class, 'connectBroker'])->name('connections.connectBroker');
+        Route::post('linkAccount', [AccountController::class, 'linkAccount'])->name('account.linkAccount');
     });
 
     /**

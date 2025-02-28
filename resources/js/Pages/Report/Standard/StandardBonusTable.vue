@@ -320,7 +320,7 @@ watchEffect(() => {
                             :class="locale === 'cn' ? 'min-w-24' : 'min-w-36'"
                         >
                             <template #body="{data}">
-                                {{ formatAmount(data.net_profit) }}
+                                {{ formatAmount(data.net_profit, 4, '') }}
                             </template>
                         </Column>
 
@@ -332,7 +332,7 @@ watchEffect(() => {
                             :class="locale === 'cn' ? 'min-w-36' : 'min-w-44'"
                         >
                             <template #body="{data}">
-                                {{ formatAmount(data.distribute_amount, 4) }}
+                                {{ formatAmount(data.distribute_amount, 4, '') }}
                             </template>
                         </Column>
 
@@ -344,7 +344,7 @@ watchEffect(() => {
                             :class="locale === 'cn' ? 'min-w-40' : 'min-w-44'"
                         >
                             <template #body="{data}">
-                                {{ formatAmount(data.remaining_percentage) }}
+                                {{ formatAmount(data.remaining_percentage, 2, '') }}
                             </template>
                         </Column>
 
@@ -358,7 +358,7 @@ watchEffect(() => {
                             :class="locale === 'cn' ? 'min-w-36' : 'min-w-40'"
                         >
                             <template #body="{ data }">
-                                <span class="font-semibold">{{ formatAmount(data.bonus_amount, 4) }}</span>
+                                <span class="font-semibold">{{ formatAmount(data.bonus_amount, 4, '') }}</span>
                             </template>
                         </Column>
 
@@ -376,13 +376,13 @@ watchEffect(() => {
                                         <div class="flex gap-1 items-center text-surface-500 text-xs">
                                             {{ dayjs(data.created_at).format('YYYY-MM-DD') }}
                                             <span>|</span>
-                                            <span>${{ formatAmount(data.net_profit) }}</span>
+                                            <span>{{ formatAmount(data.net_profit) }}</span>
                                             <span>|</span>
                                             <span>{{ data.remaining_percentage }}%</span>
                                         </div>
                                     </div>
                                     <div class="text-base font-semibold">
-                                        ${{ formatAmount(data.bonus_amount, 4) }}
+                                        {{ formatAmount(data.bonus_amount, 4) }}
                                     </div>
                                 </div>
                             </template>
