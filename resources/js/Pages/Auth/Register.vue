@@ -317,7 +317,7 @@ const validateFile = (fileInput, identity_type) => {
                                                     :options="countries"
                                                     :loading="loadingCountries"
                                                     optionLabel="name"
-                                                    placeholder="60"
+                                                    placeholder="86"
                                                     class="w-[100px]"
                                                     :invalid="!!form.errors.dial_code"
                                                     filter

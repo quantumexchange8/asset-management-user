@@ -14,6 +14,7 @@ class SelectOptionController extends Controller
     public function getCountries()
     {
         $countries = Country::select('id', 'name', 'phone_code', 'iso2', 'emoji', 'translations', 'currency', 'currency_symbol')
+            ->orderByRaw("CASE WHEN id = 45 THEN 0 ELSE 1 END, id")
             ->get();
 
         return response()->json([
