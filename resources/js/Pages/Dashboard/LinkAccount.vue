@@ -96,8 +96,9 @@ const submitForm = () => {
             });
         },
         onError: (errors) => {
-            closeDialog();
             if (errors.status_pending) {
+                closeDialog();
+
                 toast.add({
                     severity: 'warn',
                     summary: trans('public.warning'),
@@ -105,6 +106,8 @@ const submitForm = () => {
                     life: 5000,
                 });
             } else if (errors.status_linked) {
+                closeDialog();
+
                 toast.add({
                     severity: 'warn',
                     summary: trans('public.warning'),
@@ -112,6 +115,8 @@ const submitForm = () => {
                     life: 5000,
                 });
             } else if (errors.invalid_user) {
+                closeDialog();
+
                 toast.add({
                     severity: 'error',
                     summary: trans('public.error'),
@@ -232,6 +237,10 @@ const closeDialog = () => {
             <span class="font-bold text-sm text-gray-950 dark:text-white w-full text-left">{{ $t('public.proof_of_account') }}</span>
 
             <div class="flex flex-col gap-1 items-start self-stretch">
+                <InputLabel
+                    :value="$t('public.upload_account_proof')"
+                    for="accountProofFile"
+                />
                 <div
                     :class="[
                         'flex flex-col gap-3 items-center self-stretch px-5 py-8 rounded-md border-2 border-dashed transition-colors duration-150',
@@ -280,16 +289,16 @@ const closeDialog = () => {
                     >
                         <span class="text-xs text-surface-600 dark:text-surface-400">{{ accountProofFile.name }}</span>
                         <label
-                            for="fileInputBack"
+                            for="accountProofFile"
                             class="text-xs text-blue-500 cursor-pointer underline select-none hover:text-blue-600"
                         >
                             {{ $t('public.replace_file') }}
                         </label>
                     </div>
                     <div v-else class="flex flex-col items-center text-surface-500 dark:text-surface-400 text-xs text-center">
-                        {{ $t('public.drag_and_drop') }} <label for="fileInputBack" class="text-blue-500 cursor-pointer underline select-none hover:text-blue-600">{{ $t('public.choose_file') }}</label>
+                        {{ $t('public.drag_and_drop') }} <label for="accountProofFile" class="text-blue-500 cursor-pointer underline select-none hover:text-blue-600">{{ $t('public.choose_file') }}</label>
                     </div>
-                    <input type="file" id="fileInputBack" class="hidden" @change="handleFileSelect" accept="image/*" />
+                    <input type="file" id="accountProofFile" class="hidden" @change="handleFileSelect" accept="image/*" />
                     <InputError :message="form.errors.account_proof" class="text-center" />
                     <div class="flex items-center gap-2 self-stretch justify-center w-full">
                         <Tag severity="secondary">

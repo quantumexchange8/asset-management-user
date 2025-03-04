@@ -52,10 +52,7 @@ class AccountController extends Controller
                     'user_id' => Auth::id(),
                     'broker_id' => $broker_id,
                     'broker_login' => $broker_login,
-                ])
-                ->whereIn('status', [
-                    'active',
-                    'removed'
+                    'status' => 'success'
                 ]);
 
             if ($data['filters']['global']['value']) {

@@ -206,4 +206,8 @@ return [
     "unlink" => "Unlink",
     "viewing_report" => "Viewing Report",
     "view_account_report" => "View Account Report",
+    "initial_join" => "Initial Join",
+    "top_up" => "Top Up",
+    "withdrawal" => "Withdrawal",
+    "upload_account_proof" => "Upload Account Proof",
 ];

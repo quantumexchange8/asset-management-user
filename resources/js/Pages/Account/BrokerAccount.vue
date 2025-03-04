@@ -148,14 +148,14 @@ const clearFilter = () => {
 
 const getSeverity = (status) => {
     switch (status) {
-        case 'removed':
+        case 'withdrawal':
             return 'danger';
 
-        case 'active':
+        case 'initial_join':
             return 'success';
 
-        case 'pending':
-            return 'info';
+        case 'top_up':
+            return 'success';
     }
 }
 </script>
@@ -244,13 +244,12 @@ const getSeverity = (status) => {
 
                         <template v-if="connections?.length > 0">
                             <Column
-                                field="joined_at"
-                                :header="$t('public.join_date')"
-                                sortable
-                                class="hidden md:table-cell min-w-36"
+                                field="date"
+                                :header="$t('public.date')"
+                                class="hidden md:table-cell"
                             >
                                 <template #body="{ data }">
-                                    {{ dayjs(data.joined_at).format('YYYY-MM-DD') }}
+                                    {{ dayjs(data.joined_at ?? data.removed_at).format('YYYY-MM-DD') }}
                                 </template>
                             </Column>
 
@@ -293,15 +292,14 @@ const getSeverity = (status) => {
                             </Column>
 
                             <Column
-                                field="status"
-                                :header="$t('public.status')"
-                                sortable
+                                field="connection_type"
+                                :header="$t('public.type')"
                                 class="hidden md:table-cell"
                             >
                                 <template #body="{ data }">
                                     <Tag
-                                        :value="$t(`public.${data.status}`)"
-                                        :severity="getSeverity(data.status)"
+                                        :value="$t(`public.${data.connection_type}`)"
+                                        :severity="getSeverity(data.connection_type)"
                                     />
                                 </template>
                             </Column>
