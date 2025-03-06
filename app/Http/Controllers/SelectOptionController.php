@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Broker;
 use App\Models\Country;
 use App\Models\DepositProfile;
+use App\Models\PaymentAccount;
 use App\Models\Rank;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SelectOptionController extends Controller
 {
@@ -44,6 +47,30 @@ class SelectOptionController extends Controller
 
         return response()->json([
             'brokers' => $brokers,
+        ]);
+    }
+
+    public function getPaymentAccounts()
+    {
+        $paymentAccounts = PaymentAccount::where([
+            'user_id' => Auth::id(),
+            'status' => 'active',
+        ])
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'paymentAccounts' => $paymentAccounts,
+        ]);
+    }
+
+    public function getWithdrawalWallets()
+    {
+        $wallets = Wallet::where('user_id', Auth::id());
+
+        return response()->json([
+            'wallets' => $wallets->get(),
+            'total_balance' => $wallets->sum('balance')
         ]);
     }
 }

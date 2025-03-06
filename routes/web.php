@@ -34,7 +34,8 @@ Route::get('/get_countries', [SelectOptionController::class, 'getCountries'])->n
 Route::middleware('auth')->group(function () {
     Route::get('/getDepositProfiles', [SelectOptionController::class, 'getDepositProfiles'])->name('getDepositProfiles');
     Route::get('/getBrokers', [SelectOptionController::class, 'getBrokers'])->name('getBrokers');
-
+    Route::get('/getPaymentAccounts', [SelectOptionController::class, 'getPaymentAccounts'])->name('getPaymentAccounts');
+    Route::get('/getWithdrawalWallets', [SelectOptionController::class, 'getWithdrawalWallets'])->name('getWithdrawalWallets');
     /**
      * ==============================
      *           Dashboard
@@ -46,6 +47,9 @@ Route::middleware('auth')->group(function () {
 
         // Deposit
         Route::post('/deposit', [WalletController::class, 'deposit'])->name('deposit');
+
+        // Withdrawal
+        Route::post('withdrawal', [WalletController::class, 'withdrawal'])->name('withdrawal');
     });
 
     /**

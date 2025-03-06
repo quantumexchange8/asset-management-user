@@ -14,7 +14,8 @@ export default {
             { 'first:ml-0 -ml-px': parent.instance.$name === 'InputGroup' && !props.showButtons },
 
             //Sizing
-            { '!w-16': props.showButtons && props.buttonLayout == 'vertical' }
+            { '!w-16': props.showButtons && props.buttonLayout == 'vertical' },
+            { '[&>input]:pl-10': true },
         ]
     }),
     pcInput: {

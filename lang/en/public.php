@@ -210,4 +210,10 @@ return [
     "top_up" => "Top Up",
     "withdrawal" => "Withdrawal",
     "upload_account_proof" => "Upload Account Proof",
+    "available_balance_to_withdraw" => "Available balance to withdraw",
+    "max" => "Max",
+    "withdrawal_amount" => "Withdrawal amount",
+    "withdrawal_charges" => "Withdrawal charges",
+    "receive_amount" => "Receive amount",
+    "to_account" => "To account",
 ];

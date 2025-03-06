@@ -5,6 +5,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Deposit from "@/Pages/Dashboard/DashboardWallet/Deposit.vue";
 import LinkAccount from "@/Pages/Dashboard/LinkAccount.vue";
+import Withdrawal from "./Withdrawal.vue";
 
 const props = defineProps({
     wallets: Array
@@ -39,7 +40,7 @@ const openDialog = (type) => {
                     size="small"
                     :label="$t('public.withdraw')"
                     class="w-full"
-                    disabled
+                    :disabled="!wallets.length"
                     @click="openDialog('withdrawal')"
                 />
             </div>
@@ -64,5 +65,12 @@ const openDialog = (type) => {
                 @update:visible="visible = $event"
             />
         </template>
+
+        <template v-if="dialogType === 'withdrawal'">
+            <Withdrawal
+                @update:visible="visible = $event"
+            />
+        </template>
+        
     </Dialog>
 </template>

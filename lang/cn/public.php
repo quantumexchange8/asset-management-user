@@ -209,5 +209,11 @@ return [
     "initial_join" => "首次入金",
     "top_up" => "充值",
     "withdrawal" => "提现",
-    "upload_account_proof" => "上传账户证明"
+    "upload_account_proof" => "上传账户证明",
+    "available_balance_to_withdraw" => "可提现余额",
+    "max" => "最大",
+    "withdrawal_amount" => "提现金额",
+    "withdrawal_charges" => "提现手续费",
+    "receive_amount" => "到账金额",
+    "to_account" => "帐户",
 ];
