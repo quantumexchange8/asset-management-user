@@ -9,7 +9,7 @@ defineProps({
 
 <template>
     <label
-        class="block font-medium text-sm"
+        class="block font-medium text-xs"
         :class="{
             'text-surface-700 dark:text-surface-300': !invalid,
             'text-error-500': invalid

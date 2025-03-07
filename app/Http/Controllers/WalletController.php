@@ -106,12 +106,12 @@ class WalletController extends Controller
         $transaction->to_payment_platform = $paymentAccount->payment_platform;
         $transaction->to_payment_platform_name = $paymentAccount->payment_platform_name;
         $transaction->to_payment_account_no = $paymentAccount->account_no;
-        $transaction->to_bank_sub_branch = $paymentAccount->bank_sub_branch;
-        $transaction->to_bank_branch_address = $paymentAccount->bank_branch_address;
+        $transaction->to_bank_sub_branch = $paymentAccount->bank_sub_branch ?? null;
+        $transaction->to_bank_branch_address = $paymentAccount->bank_branch_address ?? null;
         $transaction->amount = $request->amount;
         $transaction->transaction_charges = $request->transaction_charges;
         $transaction->from_currency = 'USD';
-        $transaction->to_currency = 'USD';
+        $transaction->to_currency = $paymentAccount->currency;
         $transaction->transaction_amount = $receive_amount;
         $transaction->fund_type = 'real_fund';
         $transaction->old_wallet_amount = $wallet->balance;

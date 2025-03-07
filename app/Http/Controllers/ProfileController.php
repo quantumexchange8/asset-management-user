@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\PaymentAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -123,5 +124,115 @@ class ProfileController extends Controller
         $user->save();
 
         return back()->with('toast');
+    }
+
+    public function getPaymentAccounts(Request $request)
+    {
+        $paymentAccounts = PaymentAccount::where([
+            'user_id' => Auth::id(),
+        ])
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'paymentAccounts' => $paymentAccounts,
+        ]);
+    }
+
+    public function addPaymentAccount(Request $request)
+    {
+        $attributeNames = [
+            'payment_platform' => trans('public.payment_account_type'),
+            'payment_account_name' => $request->payment_platform == 'crypto'
+                ? trans('public.wallet_name')
+                : trans('public.account_name'),
+            'payment_account_type' => trans('public.account_type'),
+            'payment_platform_name' => trans('public.bank'),
+            'account_no' => $request->payment_platform == 'crypto'
+                ? trans('public.token_address')
+                : trans('public.account_no'),
+            'bank_code' => trans('public.bank_code'),
+        ];
+
+        Validator::make($request->all(), [
+            'payment_platform' => ['required'],
+            'payment_account_name' => ['required'],
+            'payment_platform_name' => ['required'],
+            'account_no' => ['required'],
+            'bank_code' => ['required_if:payment_platform,bank'],
+        ])->setAttributeNames($attributeNames)->validate();
+
+        $payment_account = PaymentAccount::create([
+            'user_id' => Auth::id(),
+            'payment_account_name' => $request->payment_account_name,
+            'payment_platform' => $request->payment_platform,
+            'payment_platform_name' => $request->payment_platform_name,
+            'account_no' => $request->account_no,
+            'status' => 'active',
+        ]);
+
+        if ($payment_account->payment_platform == 'bank') {
+            $payment_account->update([
+                'bank_code' => $request->bank_code,
+                'country_id' => $request->country_id,
+                'currency' => $request->currency,
+            ]);
+        } else {
+            $payment_account->update([
+                'payment_platform_name' => 'USDT (' . strtoupper($payment_account->payment_platform_name) . ')',
+                'currency' => 'USDT-' . strtoupper($payment_account->payment_platform_name),
+            ]);
+        }
+
+        return back()->with('toast', 'success');
+    }
+
+    public function updatePaymentAccount(Request $request)
+    {
+        $attributeNames = [
+            'payment_platform' => trans('public.payment_account_type'),
+            'payment_account_name' => $request->payment_platform == 'crypto'
+                ? trans('public.wallet_name')
+                : trans('public.account_name'),
+            'payment_account_type' => trans('public.account_type'),
+            'payment_platform_name' => trans('public.bank'),
+            'account_no' => $request->payment_platform == 'crypto'
+                ? trans('public.token_address')
+                : trans('public.account_no'),
+            'bank_code' => trans('public.bank_code'),
+        ];
+
+        Validator::make($request->all(), [
+            'payment_platform' => ['required'],
+            'payment_account_name' => ['required'],
+            'payment_platform_name' => ['required'],
+            'account_no' => ['required'],
+            'bank_code' => ['required_if:payment_platform,bank'],
+        ])->setAttributeNames($attributeNames)->validate();
+
+        $payment_account = PaymentAccount::find($request->payment_account_id);
+
+        $payment_account->update([
+            'payment_account_name' => $request->payment_account_name,
+            'payment_platform' => $request->payment_platform,
+            'payment_platform_name' => $request->payment_platform_name,
+            'account_no' => $request->account_no,
+            'status' => 'active',
+        ]);
+
+        if ($payment_account->payment_platform == 'bank') {
+            $payment_account->update([
+                'bank_code' => $request->bank_code,
+                'country_id' => $request->country_id,
+                'currency' => $request->currency,
+            ]);
+        } else {
+            $payment_account->update([
+                'payment_platform_name' => 'USDT (' . strtoupper($payment_account->payment_platform_name) . ')',
+                'currency' => 'USDT-' . strtoupper($payment_account->payment_platform_name),
+            ]);
+        }
+
+        return back()->with('toast', 'success');
     }
 }

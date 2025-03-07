@@ -169,7 +169,6 @@ const submitForm = () => {
                     class="block w-full"
                     v-model="form.name"
                     :placeholder="$t('public.enter_name')"
-                    autofocus
                     autocomplete="name"
                     :invalid="!!form.errors.name"
                 />

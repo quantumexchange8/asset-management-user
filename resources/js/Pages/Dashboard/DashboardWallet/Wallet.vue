@@ -1,7 +1,8 @@
 <script setup>
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
 import {generalFormat} from "@/Composables/format.js";
 import Skeleton from "primevue/skeleton";
+import {usePage} from "@inertiajs/vue3";
 
 const wallets = ref([]);
 const loadingWallets = ref(false);
@@ -22,6 +23,12 @@ const getWallets = async () => {
 }
 
 getWallets();
+
+watchEffect(() => {
+    if (usePage().props.toast !== null) {
+        getWallets();
+    }
+});
 </script>
 
 <template>

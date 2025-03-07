@@ -6,6 +6,9 @@ import Dialog from "primevue/dialog";
 import Deposit from "@/Pages/Dashboard/DashboardWallet/Deposit.vue";
 import LinkAccount from "@/Pages/Dashboard/LinkAccount.vue";
 import Withdrawal from "./Withdrawal.vue";
+import {router, usePage} from "@inertiajs/vue3";
+import {useConfirm} from "primevue/useconfirm";
+import {trans} from "laravel-vue-i18n";
 
 const props = defineProps({
     wallets: Array
@@ -15,9 +18,44 @@ const visible = ref(false);
 const dialogType = ref('');
 
 const openDialog = (type) => {
-    visible.value = true;
-    dialogType.value = type;
+    if (usePage().props.auth.paymentAccountsCount === 0) {
+        requireConfirmation('add_payment_account')
+    } else {
+        visible.value = true;
+        dialogType.value = type;
+    }
 }
+
+const confirm = useConfirm();
+
+const requireConfirmation = (action_type) => {
+    const messages = {
+        add_payment_account: {
+            group: 'headless-info',
+            header: trans('public.missing_payment_account'),
+            text: trans('public.missing_payment_account_caption'),
+            cancelButton: trans('public.cancel'),
+            acceptButton: trans('public.proceed'),
+            action: () => {
+                window.location.href = route('profile', {tab: 'finance'});
+            }
+        },
+    };
+
+    const { group, header, text, dynamicText, suffix, actionType, cancelButton, acceptButton, action } = messages[action_type];
+
+    confirm.require({
+        group,
+        header,
+        actionType,
+        text,
+        dynamicText,
+        suffix,
+        cancelButton,
+        acceptButton,
+        accept: action
+    });
+};
 </script>
 
 <template>
@@ -68,9 +106,10 @@ const openDialog = (type) => {
 
         <template v-if="dialogType === 'withdrawal'">
             <Withdrawal
+                :wallets="wallets"
                 @update:visible="visible = $event"
             />
         </template>
-        
+
     </Dialog>
 </template>

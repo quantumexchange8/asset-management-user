@@ -10,6 +10,7 @@ import PrimeVue from "primevue/config";
 import { i18nVue } from 'laravel-vue-i18n';
 import iosZoomFix from '../js/Composables/ios-zoom-fix.js';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Volta Asia';
 
@@ -36,6 +37,7 @@ createInertiaApp({
                 pt: Aura
             })
             .use(ToastService)
+            .use(ConfirmationService)
 
         app.mount(el);
 

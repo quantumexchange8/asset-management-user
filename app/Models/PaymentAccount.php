@@ -3,8 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentAccount extends Model
 {
-    protected $table = 'payment_accounts';
+    use SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'payment_account_name',
+        'payment_platform',
+        'payment_platform_name',
+        'account_no',
+        'bank_sub_branch',
+        'bank_branch_address',
+        'bank_swift_code',
+        'bank_code',
+        'bank_code_type',
+        'country_id',
+        'currency',
+        'status',
+        'remarks',
+    ];
 }

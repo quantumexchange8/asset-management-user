@@ -115,6 +115,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', [ProfileController::class, 'update'])->name('profile.update'); // Fixed route
         Route::post('/uploadKyc', [ProfileController::class, 'uploadKyc'])->name('profile.uploadKyc');
         Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // Payment Account
+        Route::get('getPaymentAccounts', [ProfileController::class, 'getPaymentAccounts'])->name('profile.getPaymentAccounts');
+
+        Route::post('addPaymentAccount', [ProfileController::class, 'addPaymentAccount'])->name('profile.addPaymentAccount');
+        Route::post('updatePaymentAccount', [ProfileController::class, 'updatePaymentAccount'])->name('profile.updatePaymentAccount');
     });
 });
 

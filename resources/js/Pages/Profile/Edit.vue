@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {h, ref} from 'vue';
+import {h, onMounted, ref} from 'vue';
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
@@ -28,17 +28,33 @@ const tabs = ref([
     //     title: 'credentials',
     //     value: '1'
     // },
-    // {
-    //     title: 'payments',
-    //     value: '2'
-    // }
+    {
+        title: 'finance',
+        component: h(PaymentAccount, {
+            title: 'finance',
+        }),
+        value: '2'
+    }
 ]);
+
+const selectedType = ref('account');
+const activeIndex = ref('0');
+
+onMounted(() => {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+    if (params.tab === 'finance') {
+        selectedType.value = 'finance';
+        activeIndex.value = '2';
+    }
+});
 </script>
 
 <template>
     <AuthenticatedLayout title="profile">
         <div class="flex flex-col">
-            <Tabs value="0">
+            <Tabs v-model:value="activeIndex">
                 <TabList>
                     <Tab
                         v-for="tab in tabs"

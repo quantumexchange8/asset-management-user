@@ -13,48 +13,26 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import {trans} from "laravel-vue-i18n";
 
+const props = defineProps({
+    wallets: Array
+})
+
 const emit = defineEmits(['update:visible']);
 const {formatAmount} = generalFormat();
 const toast = useToast();
 
 const form = useForm({
     wallet_id: '',
-    transaction_charges: '',
+    transaction_charges: 0,
     payment_account_id: '',
     amount: 0,
 });
 
-//wallet
-const selectedWallet = ref();
-const wallets = ref([]);
-const loadingWallets = ref(false);
-const totalBalance = ref(0);
+const walletOptions = computed(() => props.wallets.filter(wallet => wallet.type === 'bonus_wallet'));
 
-const getWithdrawalWallets = async () => {
-    try {
-        loadingWallets.value = true
-        const response = await axios.get('/getWithdrawalWallets');
-        totalBalance.value = response.data.total_balance;
-        if (response.data.wallets.length > 1) {
-            wallets.value = [response.data.wallets[1]]; // Only show the bonus wallet
-            selectedWallet.value = wallets.value[0];
-            form.wallet_id = wallets.value[0].id;
-        } else {
-            wallets.value = [];
-            selectedWallet.value = null;
-            form.wallet = null;
-        }
-    } catch (error) {
-        console.error('Error fetching withdrawal wallets data:', error);
-    } finally {
-        loadingWallets.value = false
-    }
-};
+const selectedWallet = ref(walletOptions.value.length > 0 ? walletOptions.value[0] : null);
 
-//max balance
-const maxBalance = computed(() => Number(selectedWallet.value?.balance) || 0);
-
-//payment_acount
+//payment account
 const selectedPaymentAccount = ref();
 const paymentAccounts = ref([]);
 const loadingPaymentAccounts = ref(false);
@@ -66,7 +44,7 @@ const getPaymentAccounts = async () => {
         paymentAccounts.value = response.data.paymentAccounts;
         selectedPaymentAccount.value = paymentAccounts.value[0];
     } catch (error) {
-        console.error('Error fetching withdrawal wallets data:', error);
+        console.error('Error fetching payment accounts data:', error);
     } finally {
         loadingPaymentAccounts.value = false
     }
@@ -74,7 +52,6 @@ const getPaymentAccounts = async () => {
 
 onMounted(() => {
     getPaymentAccounts();
-    getWithdrawalWallets();
 });
 
 //fee
@@ -94,6 +71,7 @@ watch(() => form.amount, (newAmount) => {
 });
 
 const submitForm = () => {
+    form.wallet_id = selectedWallet.value.id;
     form.payment_account_id = selectedPaymentAccount.value.id;
     form.post(route('withdrawal'), {
         onSuccess: () => {
@@ -110,28 +88,22 @@ const submitForm = () => {
             console.error(errors);
         }
     })
-console.log(form);
 }
 
 </script>
 
 <template>
     <form @submit.prevent="submitForm" class="flex flex-col gap-5 self-start">
-        <div class="p-6 flex flex-col items-center gap-1 bg-gray-200 dark:bg-surface-800">
-            <div class="text-sm text-gray-600 dark:text-gray-400">
+        <div class="p-6 flex flex-col items-center gap-1 bg-surface-200 dark:bg-surface-800">
+            <div class="text-sm text-surface-600 dark:text-surface-400">
                 {{ $t('public.available_balance_to_withdraw')}}
             </div>
-            <Skeleton
-                v-if="loadingWallets"
-                width="8rem"
-                height="2rem"
-            />
-            <div v-else class="text-xl font-bold text-gray-950 dark:text-white">
-                {{ formatAmount(totalBalance) }}
+            <div class="text-xl font-bold text-surface-950 dark:text-white">
+                {{ formatAmount(selectedWallet.balance, 4) }}
             </div>
         </div>
 
-        <div class="flex gap-5 self-stretch w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
             <div class="flex flex-col gap-1 self-start w-full">
                 <InputLabel
                     :value="$t('public.wallet')"
@@ -141,11 +113,11 @@ console.log(form);
                     <template #icon>
                         <IconWallet :size="20" stroke-width="1.5"/>
                     </template>
-                    <Select 
+                    <Select
+                        input-id="wallet"
                         v-model="selectedWallet"
-                        :options="wallets"
+                        :options="walletOptions"
                         optionLabel="type"
-                        :loading="loadingWallets"
                         :placeholder="$t('public.select_wallet')"
                         class="pl-7 block w-full"
                         :invalid="!!form.errors.wallet_id"
@@ -161,7 +133,6 @@ console.log(form);
                             {{ $t(`public.${slotProps.option.type}`) }}
                         </template>
                     </Select>
-
                 </InputIconWrapper>
                 <InputError :message="form.errors.wallet_id"/>
             </div>
@@ -177,99 +148,97 @@ console.log(form);
                     </template>
                     <InputNumber
                         v-model="form.amount"
+                        input-id="amount"
                         class="block w-full"
                         :min="0"
-                        :max="maxBalance"
                         mode="currency"
+                        :max-fraction-digits="4"
                         currency="USD"
                         fluid
                         placeholder="$0.00"
                         :invalid="!!form.errors.amount"
-                        showButtons
-                        :step="100"
+                        :step="10"
                     />
                 </InputIconWrapper>
-                <div class="self-stretch text-gray-500 text-xs">
-                    {{ $t('public.max') }}:
-                    <span class="font-semibold text-sm dark:text-white">{{ formatAmount(maxBalance) }}</span>
+                <div class="self-stretch text-surface-500 text-xs">
+                    {{ $t('public.min') }}:
+                    <span class="font-semibold dark:text-white">{{ formatAmount(100) }}</span>
                 </div>
                 <InputError :message="form.errors.amount"/>
             </div>
-        </div>
 
-        <!-- To Payment Account -->
-        <div class="flex flex-col gap-1 self-start w-full">
-            <InputLabel
-                for="to_payment_account"
-                :value="$t('public.to_account')"
-            />
-            <InputIconWrapper>
-                <template #icon>
-                    <IconUserCheck size="20" stroke-width="1.5"/>
-                </template>
-                <Select
-                    input-id="to_payment_account"
-                    v-model="selectedPaymentAccount"
-                    :options="paymentAccounts"
-                    :placeholder="$t('public.select_account')"
-                    class="pl-7 block w-full"
-                    :invalid="!!form.errors.payment_account_id"
-                    :loading="loadingPaymentAccounts"
-                >
-                    <template #value="slotProps">
-                        <div v-if="slotProps.value">
-                            {{ slotProps.value.payment_platform_name }} ({{ slotProps.value.payment_account_name}})
-                        </div>
-                        <span v-else>{{ slotProps.placeholder }}</span>
+            <!-- To Payment Account -->
+            <div class="flex flex-col gap-1 self-start w-full md:col-span-2">
+                <InputLabel
+                    for="to_payment_account"
+                    :value="$t('public.payment_account')"
+                />
+                <InputIconWrapper>
+                    <template #icon>
+                        <IconUserCheck size="20" stroke-width="1.5"/>
                     </template>
-                    <template #option="slotProps">
-                        {{ slotProps.option.payment_platform_name }} ({{ slotProps.option.payment_account_name}})
-                    </template>
-                </Select>
-            </InputIconWrapper>
-            <InputError :message="form.errors.payment_account_id"/>
+                    <Select
+                        input-id="to_payment_account"
+                        v-model="selectedPaymentAccount"
+                        :options="paymentAccounts"
+                        :placeholder="$t('public.select_account')"
+                        class="pl-7 block w-full"
+                        :invalid="!!form.errors.payment_account_id"
+                        :loading="loadingPaymentAccounts"
+                    >
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value">
+                                {{ slotProps.value.payment_platform_name }} - ({{ slotProps.value.payment_account_name}})
+                            </div>
+                            <span v-else>{{ slotProps.placeholder }}</span>
+                        </template>
+                        <template #option="slotProps">
+                            {{ slotProps.option.payment_platform_name }} - ({{ slotProps.option.payment_account_name}})
+                        </template>
+                    </Select>
+                </InputIconWrapper>
+                <InputError :message="form.errors.payment_account_id"/>
+            </div>
         </div>
 
         <!-- withdrawal detail -->
-        <div class="flex flex-col gap-3 border-t border-gray-300 dark:border-gray-700 pt-5">
+        <div class="flex flex-col gap-3 border-t border-surface-300 dark:border-surface-700 pt-5">
             <!-- Withdraw Amount -->
             <div class="flex flex-col gap-1 self-stretch w-full">
                 <div class="flex items-center justify-between">
-                    <span class="text-sm dark:text-gray-400">{{$t('public.withdrawal_amount')}}</span>
-                    <span class="text-sm dark:text-white font-bold">{{ formatAmount(form.amount || 0) }}</span>
+                    <span class="text-xs dark:text-surface-400">{{ $t('public.withdrawal_amount')}}</span>
+                    <span class="text-sm dark:text-white font-bold">{{ formatAmount(form.amount || 0, 4) }}</span>
                 </div>
             </div>
 
             <!-- Fee -->
             <div class="flex items-start justify-between">
                 <div class="flex flex-col">
-                    <span class="text-sm dark:text-gray-400">{{ $t('public.withdrawal_charges') }}</span>
+                    <span class="text-xs dark:text-surface-400">{{ $t('public.withdrawal_charges') }}</span>
                 </div>
                 <div class="text-sm dark:text-white text-right font-bold">
-                    {{ formatAmount(form.transaction_charges) }}
+                    {{ formatAmount(form.transaction_charges, 4) }}
                 </div>
             </div>
 
             <!-- Withdraw Amount -->
             <div class="flex items-center justify-between">
-                <span class="text-sm dark:text-gray-400">{{$t('public.receive_amount')}}</span>
-                <span class="text-sm dark:text-white font-bold">{{ formatAmount(amountReceive) }}</span>
+                <span class="text-xs dark:text-surface-400">{{$t('public.receive_amount')}}</span>
+                <span class="text-sm dark:text-white font-bold">{{ formatAmount(amountReceive, 4) }}</span>
             </div>
         </div>
 
-        <div class="flex justify-end">
+        <div class="flex gap-3 justify-end">
             <Button
                 severity="secondary"
-                class="text-center mr-3"
-                :class="{ 'opacity-25': form.processing }"
+                class="w-full md:w-auto md:px-8"
                 :disabled="form.processing"
                 @click="$emit('update:visible', false)"
             >
                 {{ $t('public.cancel') }}
             </Button>
             <Button
-                class="text-center"
-                :class="{ 'opacity-25': form.processing }"
+                class="w-full md:w-auto md:!px-8"
                 :disabled="form.processing"
                 type="submit"
             >
