@@ -306,23 +306,6 @@ watchEffect(() => {
                         </Column>
 
                         <Column
-                            field="user_id"
-                            style="min-width: 11rem"
-                            class="hidden md:table-cell"
-                            sortable
-                        >
-                            <template #header>
-                                <span class="block">{{ $t('public.name') }}</span>
-                            </template>
-                            <template #body="{ data }">
-                                {{ data.user.name }}
-                                <div class="text-xs text-gray-500 mt-1">
-                                    {{ data.user.email }}
-                                </div>
-                            </template>
-                        </Column>
-
-                        <Column
                             field="transaction_number"
                             style="min-width: 15rem"
                             class="hidden md:table-cell"
@@ -398,10 +381,6 @@ watchEffect(() => {
                                         </span>
                                         
                                         <div class="flex gap-1 items-center text-surface-500 text-xs">
-                                            <div class="font-medium max-w-[180px] truncate">
-                                                {{ data.user.name }}
-                                            </div>
-                                            <span>|</span>
                                             <span class="font-bold dark:text-white/60">{{ data.transaction_number }}</span>
                                         </div>
                                     </div>

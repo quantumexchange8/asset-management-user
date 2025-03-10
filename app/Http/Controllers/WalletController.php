@@ -142,9 +142,6 @@ class WalletController extends Controller
             $query = Transaction::query()
                 ->with([
                     'user:id,name,email,upline_id',
-                    'user.upline:id,name,email',
-                    'from_wallet:id,type,address,currency_symbol',
-                    'to_wallet:id,type,address,currency_symbol',
                 ])
                 ->where('transaction_type', 'withdrawal')
                 ->where('user_id', Auth::id())
