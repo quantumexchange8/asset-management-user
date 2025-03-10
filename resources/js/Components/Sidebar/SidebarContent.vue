@@ -29,9 +29,9 @@ import {
         </template>
     </SidebarLink>
 
-    <!-- Withdrawal -->
+    <!-- History -->
     <SidebarLink
-        title="withdrawal"
+        title="history"
         :href="route('withdrawalHistory')"
         :active="route().current('withdrawalHistory')"
     >

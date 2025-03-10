@@ -251,4 +251,6 @@ return [
     "account_number" => "Account Number",
     "fee" => "Fee",
     "receive" => "Receive",
+    "remarks" => "Remarks",
+    "history" => "History",
 ];

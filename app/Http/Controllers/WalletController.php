@@ -154,8 +154,8 @@ class WalletController extends Controller
                     $keyword = $data['filters']['global']['value'];
 
                     // Filter on the 'name' column in the related 'user' table
-                    $q->where('name', 'like', '%' . $keyword . '%')
-                        ->orWhere('transaction_number', 'like', '%' . $keyword . '%');
+                    $q->Where('transaction_number', 'like', '%' . $keyword . '%')
+                        ->orWhere('to_payment_account_no', 'like', '%' . $keyword . '%');
                 });
             }
 

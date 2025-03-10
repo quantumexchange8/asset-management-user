@@ -19,7 +19,7 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { usePage } from '@inertiajs/vue3';
 import EmptyData from '@/Components/EmptyData.vue';
 import { generalFormat } from '@/Composables/format';
-import WithdrawalHistoryAction from './WithdrawalHistoryAction.vue';
+import WithdrawalHistoryDetail from './Detail/WithdrawalHistoryDetail.vue';
 
 const isLoading = ref(false);
 const dt = ref(null);
@@ -31,7 +31,6 @@ const rejectAmount = ref();
 const withdrawalHistoryCounts = ref();
 const {formatAmount} = generalFormat();
 
-//filteration type and methods
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     start_date: { value: null, matchMode: FilterMatchMode.EQUALS },
@@ -40,31 +39,28 @@ const filters = ref({
 });
 
 
-//get user data
-const lazyParams = ref({}); //track table parameters that need to be send to backend
+const lazyParams = ref({});
 
-const loadLazyData = (event) => { // event will retrieve from the datatable attribute
+const loadLazyData = (event) => { 
     isLoading.value = true;
 
-    lazyParams.value = { ...lazyParams.value, first: event?.first || first.value }; //...lazyParams.value(retain existing properties after update);
+    lazyParams.value = { ...lazyParams.value, first: event?.first || first.value };
 
     try {
         setTimeout(async () => {
 
-            //pagination, filter, sorting detail done by user through the event are pass into the params
-            const params = { //define query parameters for API
-                page: JSON.stringify(event?.page + 1), //retrieve page number from the event then send to BE
+           
+            const params = { 
+                page: JSON.stringify(event?.page + 1), 
                 sortField: event?.sortField,
                 sortOrder: event?.sortOrder,
-                include: [], //an empty array for additional query parameters
-                lazyEvent: JSON.stringify(lazyParams.value), //contain information about pagination, filtering, sorting
+                include: [], 
+                lazyEvent: JSON.stringify(lazyParams.value), 
             };
 
-            //send sorting/filter detail to BE
             const url = route('getWithdrawalHistoryData', params);
             const response = await fetch(url);
 
-            //BE send back result back to FE
             const results = await response.json();
             withdrawalHistory.value = results?.data?.data;
             totalRecords.value = results?.data?.total;
@@ -80,7 +76,6 @@ const loadLazyData = (event) => { // event will retrieve from the datatable attr
     }
 };
 
-// get deposit filter,paginate,sorting input and pass to the event of lazyParams into each const then to loadLazyData
 const onPage = (event) => {
     lazyParams.value = event;
     loadLazyData(event);
@@ -106,7 +101,6 @@ watch([successAmount, rejectAmount], () => {
     });
 });
 
-//Date Filter
 const selectedDate = ref([]);
 
 const clearDate = () => {
@@ -114,9 +108,9 @@ const clearDate = () => {
 };
 
 watch(selectedDate, (newDateRange) => {
-    if(Array.isArray(newDateRange)) { //ensure is an array with both start and end date
-        const [startDate, endDate] = newDateRange; // extract data from newDateRange
-        filters.value['start_date'].value = startDate; //update new date selected
+    if(Array.isArray(newDateRange)) {
+        const [startDate, endDate] = newDateRange; 
+        filters.value['start_date'].value = startDate; 
         filters.value['end_date'].value = endDate;
 
         if(startDate !== null && endDate !== null){
@@ -127,16 +121,13 @@ watch(selectedDate, (newDateRange) => {
     }
 });
 
-//filter status
 const status = ref(['success','rejected']);
 
-//filter toggle
 const op = ref();
 const toggle = (event) => {
     op.value.toggle(event);
 };
 
-//set a initial parameters when page first loaded then call loadLazyData to send initial parameters to BE
 onMounted(() => {
     lazyParams.value = {
         first: dt.value.first,
@@ -148,7 +139,6 @@ onMounted(() => {
     loadLazyData();
 });
 
-//monitor changes to global filter, debounce ensure loadLazyData tiggered 300ms after user stop typing
 watch(
     filters.value['global'],
     debounce(() => {
@@ -156,7 +146,6 @@ watch(
     }, 300)
 )
 
-//ensure table data is updated dynamically to reflect filter changes (immediate trigger after changes)
 watch([filters.value['status']], () => {
     loadLazyData()
 });
@@ -236,7 +225,7 @@ watchEffect(() => {
                                     <!-- Clear filter button -->
                                     <div
                                         v-if="filters['global'].value"
-                                        class="absolute top-1/2 -translate-y-1/2 right-4 text-gray-300 hover:text-gray-400 select-none cursor-pointer"
+                                        class="absolute top-1/2 -translate-y-1/2 right-4 text-surface-300 hover:text-surface-400 select-none cursor-pointer"
                                         @click="clearFilterGlobal"
                                     >
                                         <IconXboxX aria-hidden="true" :size="15" />
@@ -282,7 +271,7 @@ watchEffect(() => {
                             <ProgressSpinner
                                 strokeWidth="4"
                             />
-                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ $t('public.withdrawal_loading_caption') }}</span>
+                            <span class="text-sm text-surface-700 dark:text-surface-300">{{ $t('public.withdrawal_loading_caption') }}</span>
                         </div>
                     </template>
 
@@ -299,7 +288,7 @@ watchEffect(() => {
                             </template>
                             <template #body="{ data }">
                                 {{ dayjs(data.approval_at).format('YYYY-MM-DD') }}
-                                <div class="text-xs text-gray-500 mt-1">
+                                <div class="text-xs text-surface-500 mt-1">
                                     {{ dayjs(data.approval_at).add(8, 'hour').format('hh:mm:ss A') }}
                                 </div>
                             </template>
@@ -401,7 +390,7 @@ watchEffect(() => {
                             style="width: 5%"
                         >
                             <template #body="{ data }">
-                                <WithdrawalHistoryAction 
+                                <WithdrawalHistoryDetail 
                                     :withdrawalHistory="data"
                                 />
                             </template>
@@ -429,7 +418,7 @@ watchEffect(() => {
                     />
                     <div
                         v-if="selectedDate && selectedDate.length > 0"
-                        class="absolute top-2/4 -mt-2 right-2 text-gray-400 select-none cursor-pointer bg-transparent"
+                        class="absolute top-2/4 -mt-2 right-2 text-surface-400 select-none cursor-pointer bg-transparent"
                         @click="clearDate"
                     >
                         <IconX :size="15" strokeWidth="1.5"/>

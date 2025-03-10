@@ -1,12 +1,21 @@
 <script setup>
 import Tag from 'primevue/tag';
+import Dialog from 'primevue/dialog';
+import Button from "@/Components/Button.vue";
 import { generalFormat } from '@/Composables/format';
 import dayjs from 'dayjs';
 import { ref } from 'vue';
+import { IconInfoSquareRoundedFilled } from '@tabler/icons-vue';
 
 const props = defineProps({
     withdrawalHistory: Object,
 });
+
+const visible = ref(false);
+
+const openDialog = () => {
+    visible.value = true;
+}
 
 console.log(props.withdrawalHistory)
 
@@ -39,88 +48,115 @@ function copyToClipboard(text) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-4 divide-y dark:divide-surface-700 self-stretch">
-        <div class="flex flex-col-reverse md:flex-row md:items-center gap-3 self-stretch w-full">
-            <div class="flex flex-col items-start w-full">
-                <span class="text-surface-950 dark:text-white font-medium">{{ withdrawalHistory.user.name }}</span>
-                <span class="text-surface-500 text-sm">{{ withdrawalHistory.user.email }}</span>
-            </div>
-            <div class="min-w-[180px] text-surface-950 dark:text-white font-semibold text-xl md:text-right">
-                {{ formatAmount(withdrawalHistory.amount) }}
-            </div>
-        </div>
+    <Button
+        type="button"
+        variant="gray-text"
+        size="sm" 
+        iconOnly
+        pill
+        @click="openDialog"
+    >
+        <IconInfoSquareRoundedFilled size="20" stroke-width="1.5" class="text-primary"/>
+    </Button>
 
-        <div class="flex flex-col gap-3 items-start w-full pt-4">
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.date') }}
+    <Dialog
+        v-model:visible="visible"
+        modal
+        :header="$t('public.details')"
+        class="dialog-xs md:dialog-md"
+    >
+        <div class="flex flex-col items-center gap-4 divide-y dark:divide-surface-700 self-stretch">
+            <div class="flex flex-col-reverse md:flex-row md:items-center gap-3 self-stretch w-full">
+                <div class="flex flex-col items-start w-full">
+                    <span class="text-surface-950 dark:text-white font-medium">{{ withdrawalHistory.user.name }}</span>
+                    <span class="text-surface-500 text-sm">{{ withdrawalHistory.user.email }}</span>
                 </div>
-                <div class="text-surface-950 dark:text-white text-sm font-medium">
-                    {{ dayjs(withdrawalHistory.created_at).format('DD/MM/YYYY HH:mm:ss') }}
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.transaction_number') }}
-                </div>
-                <div class="text-surface-950 dark:text-white text-sm font-medium">
-                    {{ withdrawalHistory.transaction_number }}
+                <div class="min-w-[180px] text-surface-950 dark:text-white font-semibold text-xl md:text-right">
+                    {{ formatAmount(withdrawalHistory.amount) }}
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.to') }}
+            <div class="flex flex-col gap-3 items-start w-full pt-4">
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.date') }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        {{ dayjs(withdrawalHistory.created_at).format('DD/MM/YYYY HH:mm:ss') }}
+                    </div>
                 </div>
-                <div class="text-surface-950 dark:text-white text-sm font-medium">
-                    {{ withdrawalHistory.to_payment_account_name }}
-                </div>
-                <div class="text-surface-950 dark:text-white text-sm font-medium">
-                    <Tag
-                        :severity="withdrawalHistory.to_payment_platform === 'bank' ? 'info' : 'secondary'"
-                        :value="withdrawalHistory.to_currency"
-                    />
-                </div>
-            </div>
 
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.account_number') }}
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.transaction_number') }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        {{ withdrawalHistory.transaction_number }}
+                    </div>
                 </div>
-                <div class="flex flex-col items-start gap-1 self-stretch relative">
-                    <Tag
-                        v-if="tooltipText === 'copied'"
-                        class="absolute -top-1 right-[90px] md:-top-6 md:right-8 !bg-surface-950 !text-white"
-                        :value="$t(`public.${tooltipText}`)"
-                    ></Tag>
-                    <div
-                        class="break-words text-surface-950 dark:text-white text-sm font-medium hover:cursor-pointer select-none"
-                        @click="copyToClipboard(withdrawalHistory.to_payment_account_no)"
-                    >
-                        {{ withdrawalHistory.to_payment_account_no }}
+
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.to') }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        {{ withdrawalHistory.to_payment_account_name }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        <Tag
+                            :severity="withdrawalHistory.to_payment_platform === 'bank' ? 'info' : 'secondary'"
+                            :value="withdrawalHistory.to_currency"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.account_number') }}
+                    </div>
+                    <div class="flex flex-col items-start gap-1 self-stretch relative">
+                        <Tag
+                            v-if="tooltipText === 'copied'"
+                            class="absolute -top-1 right-[90px] md:-top-6 md:right-8 !bg-surface-950 !text-white"
+                            :value="$t(`public.${tooltipText}`)"
+                        ></Tag>
+                        <div
+                            class="break-words text-surface-950 dark:text-white text-sm font-medium hover:cursor-pointer select-none"
+                            @click="copyToClipboard(withdrawalHistory.to_payment_account_no)"
+                        >
+                            {{ withdrawalHistory.to_payment_account_no }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.fee') }}
+                    </div>
+                    <div class="text-red-500 text-sm font-medium">
+                        {{ formatAmount(withdrawalHistory.transaction_charges ?? 0) }}
+                    </div>
+                </div>
+
+                
+                <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.receive') }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        {{ formatAmount(withdrawalHistory.transaction_amount ?? 0) }}
+                    </div>
+                </div>
+
+                <div v-if="withdrawalHistory.status === 'rejected'" class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
+                    <div class="w-[140px] text-surface-500 text-xs font-medium">
+                        {{ $t('public.remarks') }}
+                    </div>
+                    <div class="text-surface-950 dark:text-white text-sm font-medium">
+                        {{ withdrawalHistory.remarks }}
                     </div>
                 </div>
             </div>
-
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.fee') }}
-                </div>
-                <div class="text-red-500 text-sm font-medium">
-                    {{ formatAmount(withdrawalHistory.transaction_charges ?? 0) }}
-                </div>
-            </div>
-
-            
-            <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
-                <div class="w-[140px] text-surface-500 text-xs font-medium">
-                    {{ $t('public.receive') }}
-                </div>
-                <div class="text-surface-950 dark:text-white text-sm font-medium">
-                    {{ formatAmount(withdrawalHistory.transaction_amount ?? 0) }}
-                </div>
-            </div>
         </div>
-    </div>
+    </Dialog>
 </template>

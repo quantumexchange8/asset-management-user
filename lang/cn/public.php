@@ -251,4 +251,6 @@ return [
     "account_number" => "账户号码",
     "fee" => "手续费",
     "receive" => "收款",
+    "remarks" => "备注",
+    "history" => "历史记录",
 ];
