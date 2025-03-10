@@ -11,7 +11,8 @@ import {
     IconHomeShare,
     IconChartBar,
     IconUsersGroup,
-    IconUserDollar
+    IconUserDollar,
+    IconClockDollar
 } from '@tabler/icons-vue';
 
 </script>
@@ -25,6 +26,17 @@ import {
     >
         <template #icon>
             <IconLayoutDashboard :size="20" stroke-width="1.5" />
+        </template>
+    </SidebarLink>
+
+    <!-- Withdrawal -->
+    <SidebarLink
+        title="withdrawal"
+        :href="route('withdrawalHistory')"
+        :active="route().current('withdrawalHistory')"
+    >
+        <template #icon>
+            <IconClockDollar :size="20" stroke-width="1.5" />
         </template>
     </SidebarLink>
 

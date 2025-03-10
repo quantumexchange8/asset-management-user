@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
 
         // Withdrawal
         Route::post('withdrawal', [WalletController::class, 'withdrawal'])->name('withdrawal');
+        Route::get('/withdrawalHistory', [WalletController::class, 'withdrawalHistory'])->name('withdrawalHistory');
+        Route::get('/get_withdrawal_history_data', [WalletController::class, 'getWithdrawalHistoryData'])->name('getWithdrawalHistoryData');
     });
 
     /**
