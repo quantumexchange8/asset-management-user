@@ -145,6 +145,7 @@ class WalletController extends Controller
                 ])
                 ->where('transaction_type', 'withdrawal')
                 ->where('user_id', Auth::id())
+                ->where('category', 'bonus_wallet')
                 ->whereNot('status', 'processing');
 
 
