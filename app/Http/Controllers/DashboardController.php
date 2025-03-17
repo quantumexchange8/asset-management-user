@@ -17,7 +17,8 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        $activeConnections = BrokerConnection::where('status', 'active');
+        $activeConnections = BrokerConnection::where('status', 'success')
+            ->whereNot('connection_type', 'withdrawal');
 
         $current_asset_capital = (clone $activeConnections)
             ->where('user_id', $user->id)
