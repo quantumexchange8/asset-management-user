@@ -48,13 +48,14 @@ class ReferralController extends Controller
                 DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
 
                 // Sum capital_fund from broker_connections where status is success
-                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
+                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
 
                 // Sum total capital_fund of all downlines
                 DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
                   FROM broker_connections AS bc
                   JOIN users AS u ON bc.user_id = u.id
                   WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')
+                    AND bc.deleted_at is null
                     AND bc.connection_type != 'withdrawal'
                     AND bc.status = 'success'), 0) as total_downline_capital_fund"),
 
@@ -119,7 +120,7 @@ class ReferralController extends Controller
                     DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
 
                     // Sum capital_fund from broker_connections where status is success
-                    DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
+                    DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
 
                     // Sum total capital_fund of all downlines
                     DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
@@ -127,6 +128,7 @@ class ReferralController extends Controller
                         JOIN users AS u ON bc.user_id = u.id
                         WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')
                         AND u.id != users.id
+                        AND bc.deleted_at is null
                         AND bc.connection_type != 'withdrawal'
                         AND bc.status = 'success'), 0) as total_downline_capital_fund")
                 ]);
@@ -139,7 +141,7 @@ class ReferralController extends Controller
                 DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
 
                 // Sum capital_fund from broker_connections where status is active
-                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
+                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
 
                 // Sum total capital_fund of all downlines
                 DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
@@ -147,6 +149,7 @@ class ReferralController extends Controller
                 JOIN users AS u ON bc.user_id = u.id
                 WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')
                 AND u.id != users.id
+                AND bc.deleted_at is null
                 AND bc.connection_type != 'withdrawal'
                 AND bc.status = 'success'), 0) as total_downline_capital_fund")
             ])
@@ -162,7 +165,7 @@ class ReferralController extends Controller
                 DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
 
                 // Sum capital_fund from broker_connections where status is active
-                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
+                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
 
                 // Sum total capital_fund of all downlines
                 DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
@@ -170,6 +173,7 @@ class ReferralController extends Controller
                 JOIN users AS u ON bc.user_id = u.id
                 WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')
                 AND u.id != users.id
+                AND bc.deleted_at is null
                 AND bc.connection_type != 'withdrawal'
                 AND bc.status = 'success'), 0) as total_downline_capital_fund")
             ])
