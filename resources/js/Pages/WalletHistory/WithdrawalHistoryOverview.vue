@@ -30,7 +30,7 @@ const { formatAmount } = generalFormat();
                             </div>
 
                             <div v-else>
-                                {{ formatAmount(props.successAmount ?? 0) }}
+                                {{ formatAmount(props.successAmount ?? 0, 4) }}
                             </div>
 
                         </div>
@@ -55,9 +55,9 @@ const { formatAmount } = generalFormat();
                             <div v-if="isLoading">
                                 <Skeleton width="5rem" height="2rem"></Skeleton>
                             </div>
-                            
+
                             <div v-else>
-                                {{ formatAmount(props.rejectAmount ?? 0) }}
+                                {{ formatAmount(props.rejectAmount ?? 0, 4) }}
                             </div>
                         </div>
                     </div>

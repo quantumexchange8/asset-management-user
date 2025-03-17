@@ -1,11 +1,11 @@
 <script setup>
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
-import Button from "@/Components/Button.vue";
+import Button from "primevue/button";
 import { generalFormat } from '@/Composables/format';
 import dayjs from 'dayjs';
 import { ref } from 'vue';
-import { IconInfoSquareRoundedFilled } from '@tabler/icons-vue';
+import { IconFileSearch } from '@tabler/icons-vue';
 
 const props = defineProps({
     withdrawalHistory: Object,
@@ -16,8 +16,6 @@ const visible = ref(false);
 const openDialog = () => {
     visible.value = true;
 }
-
-console.log(props.withdrawalHistory)
 
 const {formatAmount} = generalFormat();
 
@@ -50,13 +48,14 @@ function copyToClipboard(text) {
 <template>
     <Button
         type="button"
-        variant="gray-text"
-        size="sm" 
-        iconOnly
-        pill
+        severity="secondary"
+        size="small"
+        rounded
+        outlined
+        class="!p-2"
         @click="openDialog"
     >
-        <IconInfoSquareRoundedFilled size="20" stroke-width="1.5" class="text-primary"/>
+        <IconFileSearch size="16" stroke-width="1.5" />
     </Button>
 
     <Dialog
@@ -138,7 +137,7 @@ function copyToClipboard(text) {
                     </div>
                 </div>
 
-                
+
                 <div class="flex flex-col md:flex-row md:items-center gap-1 self-stretch">
                     <div class="w-[140px] text-surface-500 text-xs font-medium">
                         {{ $t('public.receive') }}

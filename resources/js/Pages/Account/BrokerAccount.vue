@@ -155,7 +155,7 @@ const getSeverity = (status) => {
             return 'success';
 
         case 'top_up':
-            return 'success';
+            return 'info';
     }
 }
 </script>

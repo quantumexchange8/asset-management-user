@@ -15,14 +15,14 @@ const handleOverview = (data) => {
 
 
 <template>
-    <AuthenticatedLayout :title="'withdrawal_history'">
+    <AuthenticatedLayout title="history">
         <div class="flex flex-col items-center gap-5">
-            <WithdrawalHistoryOverview 
+            <WithdrawalHistoryOverview
                 :successAmount="successAmount"
                 :rejectAmount="rejectAmount"
             />
 
-            <WithdrawalHistoryTable 
+            <WithdrawalHistoryTable
                 @updateWithdrawalHistory="handleOverview"
             />
         </div>

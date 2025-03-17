@@ -43,7 +43,6 @@ const selectPaymentAccountType = (type) => {
 const selectedCryptoNetwork = ref('trc20');
 const cryptoNetworks = ref([
     'trc20',
-    'erc20',
     'bep20'
 ]);
 

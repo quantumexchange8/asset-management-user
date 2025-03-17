@@ -17,6 +17,9 @@ defineProps({
     totalBonus: {
         type: [String, Number]
     },
+    accumulatedPersonalShare: {
+        type: [String, Number]
+    },
     latestBonuses: Array
 });
 
@@ -41,7 +44,9 @@ const wallets = ref([]);
                 />
 
                 <!-- Accumulate Bonus -->
-                <AccumulateBonus />
+                <AccumulateBonus
+                    :accumulatedPersonalShare="accumulatedPersonalShare"
+                />
             </div>
 
             <!-- Extra features -->

@@ -227,7 +227,7 @@ const clearSearch = () => {
                                 <span class="font-semibold">{{ formatAmount(user.total_downline_capital_fund) }}</span>
                             </div>
                         </div>
-                        <div class="flex flex-col flex justify-end text-right">
+                        <div class="flex flex-col justify-end text-right">
                             <span class="font-semibold">{{ formatAmount(user.capital_fund_sum) }}</span>
                             <span class="text-xs">{{ $t('public.current_asset_capital') }}</span>
                         </div>

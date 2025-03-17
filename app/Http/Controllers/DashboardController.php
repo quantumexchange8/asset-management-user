@@ -6,6 +6,7 @@ use App\Models\BrokerConnection;
 use App\Models\User;
 use App\Models\WalletLog;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -33,13 +34,28 @@ class DashboardController extends Controller
                 'user_id' => $user->id,
                 'category' => 'bonus'
             ])
+            ->whereNot('purpose', 'personal_share')
             ->where('created_at', '<=', $lastSaturday)
+            ->sum('amount');
+
+        // Accumulated personal share
+        $startOfWeek = now()->startOfWeek(CarbonInterface::SATURDAY);
+        $endOfWeek = now()->endOfWeek(CarbonInterface::FRIDAY);
+
+        $accumulated_personal_share = WalletLog::query()
+            ->where([
+                'user_id' => $user->id,
+                'category' => 'bonus',
+                'purpose' => 'personal_share',
+            ])
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->sum('amount');
 
         return Inertia::render('Dashboard/Dashboard', [
             'currentAssetCapital' => $current_asset_capital,
             'currentTeamCapital' => $current_team_capital,
             'totalBonus' => $total_bonus,
+            'accumulatedPersonalShare' => $accumulated_personal_share,
         ]);
     }
 

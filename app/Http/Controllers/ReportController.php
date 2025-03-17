@@ -6,6 +6,7 @@ use App\Models\BonusHistory;
 use App\Models\TradeRebateSummary;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -56,6 +57,11 @@ class ReportController extends Controller
                 $query->whereBetween('created_at', [$start_join_date, $end_join_date]);
             }
 
+            $maxBonusAmount = (clone $query)
+                ->orderByDesc('bonus_amount')
+                ->first()
+                ?->bonus_amount;
+
             if ($data['sortField'] && $data['sortOrder']) {
                 $order = $data['sortOrder'] == 1 ? 'asc' : 'desc';
                 $query->orderBy($data['sortField'], $order);
@@ -65,11 +71,6 @@ class ReportController extends Controller
 
             $totalBonusAmount = (clone $query)
                 ->sum('bonus_amount');
-
-            $maxBonusAmount = (clone $query)
-                ->orderByDesc('bonus_amount')
-                ->first()
-                ?->bonus_amount;
 
             $connections = $query->paginate($data['rows']);
 
