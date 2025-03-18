@@ -255,4 +255,9 @@ return [
     "bonus" => "Bonus",
     "accumulating" => "Accumulating",
     "view_report" => "View Report",
+    "structure" => "Structure",
+    "listing" => "Listing",
+    "no_user_found" => "No User Found",
+    "no_user_found_caption" => "Try to search another keyword or check whether current keyword is correct",
+    "referrer" => "Referrer",
 ];

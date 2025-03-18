@@ -156,7 +156,7 @@ return [
     "my_referrals" => "我的推荐",
     "user" => "用户",
     "bonus_from_user" => "来自用户的奖金",
-    "level" => "等级",
+    "level" => "排列",
     "directs" => "直系",
     "networks" => "团队",
     "team_capital" => "团队资金",
@@ -255,4 +255,9 @@ return [
     "bonus" => "奖金",
     "accumulating" => "积累中",
     "view_report" => "查看报告",
+    "structure" => "构架",
+    "listing" => "列表",
+    "no_user_found" => "未找到用户",
+    "no_user_found_caption" => "尝试搜索另一个关键字或检查当前关键字是否正确",
+    "referrer" => "推荐人",
 ];

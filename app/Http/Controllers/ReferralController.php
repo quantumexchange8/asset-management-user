@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BonusHistory;
 use App\Models\TradeRebateSummary;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,16 +97,25 @@ class ReferralController extends Controller
 
     public function getDownlineData(Request $request)
     {
-        $upline_id = $request->upline_id ?? Auth::id();
-        $parent_id = $request->parent_id ?: $upline_id;
+        $upline_id = $request->upline_id;
+        $parent_id = $request->parent_id ?: Auth::id();
 
         if ($request->filled('search')) {
             $search = '%' . $request->input('search') . '%';
             $parent = User::query()
-                ->where('id_number', 'LIKE', $search)
-                ->orWhere('username', 'LIKE', $search)
-                ->orWhere('email', 'LIKE', $search)
+                ->where(function ($query) use ($search) {
+                    $query->where('id_number', 'LIKE', $search)
+                        ->orWhere('username', 'LIKE', $search)
+                        ->orWhere('email', 'LIKE', $search);
+                })
                 ->first();
+
+            if (empty($parent)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'user not found'
+                ]);
+            }
 
             $parent_id = $parent->id;
             $upline_id = $parent->upline_id;
@@ -156,19 +166,17 @@ class ReferralController extends Controller
             ->where('id', $parent_id)
             ->first();
 
-        $upline = null;
-        if ($upline_id && $upline_id != Auth::user()->upline_id) {
-            $upline = User::select([
-                'users.*',
+        $upline = User::select([
+            'users.*',
 
-                // Count total downlines
-                DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
+            // Count total downlines
+            DB::raw("(SELECT COUNT(*) FROM users AS u WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')) as total_downlines"),
 
-                // Sum capital_fund from broker_connections where status is active
-                DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
+            // Sum capital_fund from broker_connections where status is active
+            DB::raw("COALESCE((SELECT SUM(capital_fund) FROM broker_connections WHERE broker_connections.user_id = users.id AND broker_connections.deleted_at is null AND broker_connections.connection_type != 'withdrawal' AND broker_connections.status = 'success'), 0) as capital_fund_sum"),
 
-                // Sum total capital_fund of all downlines
-                DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
+            // Sum total capital_fund of all downlines
+            DB::raw("COALESCE((SELECT SUM(bc.capital_fund)
                 FROM broker_connections AS bc
                 JOIN users AS u ON bc.user_id = u.id
                 WHERE u.hierarchyList LIKE CONCAT('%-', users.id, '-%')
@@ -176,10 +184,9 @@ class ReferralController extends Controller
                 AND bc.deleted_at is null
                 AND bc.connection_type != 'withdrawal'
                 AND bc.status = 'success'), 0) as total_downline_capital_fund")
-            ])
-                ->where('id', $upline_id)
-                ->first();
-        }
+        ])
+            ->where('id', $upline_id)
+            ->first();
 
         $parent_data = $this->formatUserData($parent);
         $upline_data = $upline ? $this->formatUserData($upline) : null;
@@ -189,6 +196,7 @@ class ReferralController extends Controller
         });
 
         return response()->json([
+            'success' => true,
             'upline' => $upline_data,
             'parent' => $parent_data,
             'direct_children' => $direct_children,
@@ -216,7 +224,6 @@ class ReferralController extends Controller
         );
     }
 
-
     private function calculateLevel($hierarchyList)
     {
         if (is_null($hierarchyList) || $hierarchyList === '') {
@@ -227,10 +234,61 @@ class ReferralController extends Controller
         return substr_count($split[1], '-') + 1;
     }
 
-    private function getChildrenCount($role, $user_id): int
+    public function getDownlineListingData(Request $request)
     {
-        return User::where('role', $role)
-            ->where('hierarchyList', 'like', '%-' . $user_id . '-%')
-            ->count();
+        if ($request->has('lazyEvent')) {
+            $data = json_decode($request->only(['lazyEvent'])['lazyEvent'], true);
+            $childrenIds = Auth::user()->getChildrenIds();
+
+            $query = User::with([
+                'upline',
+                'active_connections',
+                'rank'
+            ])
+                ->whereIn('id', $childrenIds)
+                ->withSum('active_connections', 'capital_fund');
+
+            if ($data['filters']['global']['value']) {
+                $keyword = $data['filters']['global']['value'];
+
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhere('email', 'like', '%' . $keyword . '%')
+                        ->orWhere('username', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('upline', function ($q) use ($keyword) {
+                            $q->where('name', 'like', '%' . $keyword . '%')
+                                ->orWhere('username', 'like', '%' . $keyword . '%')
+                                ->orWhere('email', 'like', '%' . $keyword . '%');
+                        });
+                });
+            }
+
+            if (!empty($data['filters']['start_join_date']['value']) && !empty($data['filters']['end_join_date']['value'])) {
+                $start_join_date = Carbon::parse($data['filters']['start_join_date']['value'])->addDay()->startOfDay();
+                $end_join_date = Carbon::parse($data['filters']['end_join_date']['value'])->addDay()->endOfDay();
+
+                $query->whereBetween('created_at', [$start_join_date, $end_join_date]);
+            }
+
+            if ($data['sortField'] && $data['sortOrder']) {
+                $order = $data['sortOrder'] == 1 ? 'asc' : 'desc';
+                $query->orderBy($data['sortField'], $order);
+            } else {
+                $query->orderByDesc('created_at');
+            }
+
+            $connections = $query->paginate($data['rows']);
+
+            $connections->each(function ($user) {
+                $user->level = $this->calculateLevel($user->hierarchyList);
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $connections,
+            ]);
+        }
+
+        return response()->json(['success' => false, 'data' => []]);
     }
 }

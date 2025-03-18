@@ -1,26 +1,51 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import ReferralOverview from "@/Pages/Referrals/ReferralOverview.vue";
-import ReferralView from "@/Pages/Referrals/ReferralView.vue";
+import {ref, h} from "vue";
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+import ReferralView from "@/Pages/Referrals/Structure/ReferralView.vue";
+import ReferralListing from "@/Pages/Referrals/Listing/ReferralListing.vue";
 
-defineProps({
-    total_directs: Number,
-    total_networks: Number,
-    total_earnings: Number,
-})
+const tabs = ref([
+    {
+        title: 'structure',
+        component: h(ReferralView),
+        value: '0'
+    },
+    {
+        title: 'listing',
+        component: h(ReferralListing),
+        value: '1'
+    }
+]);
+
+const activeIndex = ref('0');
 </script>
 
 <template>
     <AuthenticatedLayout title="referral_programme">
-        <div class="flex flex-col gap-5 items-center self-stretch">
-            <ReferralOverview
-                :total_directs="total_directs"
-                :total_networks="total_networks"
-                :total_earnings="total_earnings"
-            />
-
-            <ReferralView
-            />
-        </div>
+        <Tabs v-model:value="activeIndex">
+            <TabList>
+                <Tab
+                    v-for="tab in tabs"
+                    :key="tab.title"
+                    :value="tab.value"
+                >
+                    {{ $t(`public.${tab.title}`) }}
+                </Tab>
+            </TabList>
+            <TabPanels>
+                <TabPanel
+                    v-for="tab in tabs"
+                    :key="tab.value"
+                    :value="tab.value"
+                >
+                    <component :is="tab.component" />
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
     </AuthenticatedLayout>
 </template>

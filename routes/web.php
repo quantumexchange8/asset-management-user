@@ -84,8 +84,8 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('referral_programme')->group(function () {
         Route::get('/', [ReferralController::class, 'index'])->name('referral_programme');
-        Route::get('/getReferralsData', [ReferralController::class, 'getReferralsData'])->name('referral_programme.getReferralsData');
         Route::get('/getDownlineData', [ReferralController::class, 'getDownlineData'])->name('referral_programme.getDownlineData');
+        Route::get('/getDownlineListingData', [ReferralController::class, 'getDownlineListingData'])->name('referral_programme.getDownlineListingData');
     });
 
     /**
