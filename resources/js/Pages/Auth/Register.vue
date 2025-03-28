@@ -565,7 +565,7 @@ const validateFile = (fileInput, identity_type) => {
                                             </div>
                                         </div>
                                         <div class="text-xs text-right w-full text-surface-500 dark:text-surface-400">
-                                            {{ $t('public.max_size') }}: 2MB
+                                            {{ $t('public.max_size') }}: 8MB
                                         </div>
                                     </div>
 
@@ -644,7 +644,7 @@ const validateFile = (fileInput, identity_type) => {
                                             </div>
                                         </div>
                                         <div class="text-xs text-right w-full text-surface-500 dark:text-surface-400">
-                                            {{ $t('public.max_size') }}: 2MB
+                                            {{ $t('public.max_size') }}: 8MB
                                         </div>
                                     </div>
                                 </div>

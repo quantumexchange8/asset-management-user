@@ -84,8 +84,8 @@ class ProfileController extends Controller
     public function uploadKyc(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'front_identity' => ['required'],
-            'back_identity' => ['required'],
+            'front_identity' => ['required', 'image', 'max:8000'],
+            'back_identity' => ['required', 'image', 'max:8000'],
         ])->setAttributeNames([
             'front_identity' => trans('public.front_identity'),
             'back_identity' => trans('public.back_identity'),

@@ -83,8 +83,8 @@ class RegisteredUserController extends Controller
 
             case 3:
                 $rules['password'] = ['required', 'confirmed', Password::min(8)->letters()->symbols()->numbers()->mixedCase()];
-                $rules['front_identity'] = ['nullable', 'image', 'max:2000'];
-                $rules['back_identity'] = ['nullable', 'image', 'max:2000'];
+                $rules['front_identity'] = ['nullable', 'image', 'max:8000'];
+                $rules['back_identity'] = ['nullable', 'image', 'max:8000'];
                 $rules['referral_code'] = ['nullable'];
                 $rules['identity_number'] = ['required'];
 
